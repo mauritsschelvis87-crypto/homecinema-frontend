@@ -1,0 +1,31 @@
+<div class="gift-movie-container">
+  <h2>Gift a Movie</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-group">
+      <label for="type">Select Type</label>
+      <select id="type" formControlName="type" [disabled]="submitting">
+        <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="recipientEmail">Recipient Email</label>
+      <input
+        id="recipientEmail"
+        type="email"
+        formControlName="recipientEmail"
+        [disabled]="submitting"
+        placeholder="Enter recipient's email"
+      />
+      <div *ngIf="recipientEmail?.invalid && recipientEmail?.touched" class="error">
+        Please enter a valid email address.
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="submitting">Buy Gift Code</button>
+  </form>
+
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</div>

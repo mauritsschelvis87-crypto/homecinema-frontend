@@ -1,0 +1,14 @@
+<div class="search-page">
+  <h2 *ngIf="results.length">Resultaten voor "{{ query }}"</h2>
+  <h2 *ngIf="!results.length">Geen resultaten voor "{{ query }}"</h2>
+
+  <div class="film-list">
+    <a *ngFor="let film of results" [routerLink]="['/product', film.id]" class="film-item">
+      <img [src]="film.imageUrl" alt="{{film.title}}" />
+      <div class="info">
+        <h3>{{ film.title }}</h3>
+        <p>{{ film.year }} • {{ film.director }}</p>
+      </div>
+    </a>
+  </div>
+</div>

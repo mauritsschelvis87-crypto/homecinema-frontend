@@ -1,0 +1,17 @@
+<h2>Registreren</h2>
+
+<form (ngSubmit)="onSubmit()" #form="ngForm" novalidate>
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" [(ngModel)]="email" required />
+
+  <label for="password">Wachtwoord:</label>
+  <input type="password" id="password" name="password" [(ngModel)]="password" required />
+
+  <button type="submit" [disabled]="form.invalid">Registreer</button>
+</form>
+
+@if (errorMessage) {
+  <div>
+    {{ errorMessage }}
+  </div>
+}

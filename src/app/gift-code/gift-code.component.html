@@ -1,0 +1,32 @@
+<div class="gift-code-container">
+  <label for="giftCodeInput">Enter your gift code:</label>
+  <input
+    id="giftCodeInput"
+    type="text"
+    [(ngModel)]="giftCode"
+    [disabled]="loading"
+    placeholder="Enter gift code here"
+  />
+  <button (click)="onValidateCode()" [disabled]="loading">Validate</button>
+
+  <div *ngIf="loading" class="loading-message">Validating...</div>
+
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <div *ngIf="validationResult">
+    <div *ngIf="validationResult.valid" class="success-message">
+      Gift code is valid!
+      <div *ngIf="validationResult.discountAmount">
+        You get a discount of €{{ validationResult.discountAmount.toFixed(2) }}.
+      </div>
+      <div *ngIf="validationResult.freeFilmId">
+        You unlocked a free film with ID: {{ validationResult.freeFilmId }}.
+      </div>
+    </div>
+
+    <div *ngIf="!validationResult.valid" class="error-message">
+      Gift code is invalid or expired.
+      <div *ngIf="validationResult.message">{{ validationResult.message }}</div>
+    </div>
+  </div>
+</div>

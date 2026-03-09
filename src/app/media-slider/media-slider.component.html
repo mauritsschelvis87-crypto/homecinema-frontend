@@ -1,0 +1,24 @@
+<div class="media-slider">
+  <button (click)="prev()" aria-label="Previous">‹</button>
+
+  @if (items.length) {
+    <div class="media-content">
+      @switch (items[currentIndex].type) {
+        @case ('image') {
+          <img [src]="items[currentIndex].url" alt="Media image" />
+        }
+        @case ('video') {
+          <iframe
+            [src]="items[currentIndex].url | safeUrl"
+            frameborder="0"
+            allowfullscreen
+            width="560"
+            height="315"
+          ></iframe>
+        }
+      }
+    </div>
+  }
+
+  <button (click)="next()" aria-label="Next">›</button>
+</div>

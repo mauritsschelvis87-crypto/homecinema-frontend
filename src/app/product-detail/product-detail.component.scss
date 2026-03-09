@@ -1,0 +1,243 @@
+.page-gray-screen {
+  min-height: 100vh;
+  background-color: #666;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.page-content {
+  max-width: 1100px;
+  width: 68%;
+  background-color: #f9f9f9;
+  color: black;
+  padding: 30px;
+  margin-top: 80px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+
+.film-page-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .film-page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: black;
+    flex-grow: 1;
+    margin-left: 20px;
+  }
+
+  .share-icons-inline {
+    display: flex;
+    gap: 1rem;
+
+    a {
+      color: var(--color-secundary-text);
+      font-size: 1.5rem;
+      transition: color 0.2s ease-in-out;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+}
+
+.label-with-collection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.collection-left-badge {
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-left: 20px;
+  color: var(--color-secundary-text);
+}
+
+.film-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-secundary-text);
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.film-details-wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.left-side-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.film-image-container {
+  position: relative;
+  flex: 0 0 380px;
+  height: 400px;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    height: 300px;
+    width: 100%;
+  }
+}
+
+.film-image {
+  width: auto;
+  height: 90%;
+  object-fit: cover;
+  display: block;
+  margin-left: 15px;
+}
+
+.specs-container {
+  flex: 1 1 400px;
+  background-color: #f9f9f9;
+  text-align: left;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+.specs-list {
+  list-style: disc;
+  padding-left: 16px;
+  color: #444;
+  font-size: 0.875rem;
+
+  li {
+    margin-bottom: 8px;
+    color: #000;
+  }
+
+  .film-label {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: black;
+    margin-bottom: 12px;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+}
+
+.btn {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover,
+.btn:focus {
+  background-color: #555;
+  outline: none;
+}
+
+.btn-cart {
+  background-color: var(--color-secundary-text);
+  color: white;
+
+  width: 130px;
+  padding: 10px 20px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-cart:hover,
+.btn-cart:focus {
+  background-color: #555;
+  outline: none;
+  color: white;
+}
+
+.btn-wishlist,
+.btn-collection {
+  background-color: gray;
+  width: 200px;
+  color: white;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 10px 20px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-sizing: border-box;
+
+  .btn-wishlist:hover,
+  .btn-collection:hover {
+    background-color: #555;
+  }
+
+  .btn-wishlist.in-wishlist,
+  .btn-collection.in-collection {
+    background-color: var(--color-secundary-text);
+    color: white;
+    padding: 10px 20px;
+    box-shadow: none;
+    font-weight: 500;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    width: 200px;
+    box-sizing: border-box;
+  }
+
+  .btn-wishlist.in-wishlist:hover,
+  .btn-collection.in-collection:hover {
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+  }
+}

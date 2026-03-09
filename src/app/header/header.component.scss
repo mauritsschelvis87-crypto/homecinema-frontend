@@ -1,0 +1,200 @@
+.header-criterion {
+  position: fixed;
+  top: 1.6rem;
+  right: 0;
+  left: auto;
+  transform: none;
+  width: 96.8%;
+  z-index: 10;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding: 0.3rem 1rem;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.nav-right {
+  display: flex;
+  gap: 0.31rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+a.shop-link,
+a.btn-news {
+  display: inline-block;
+  text-align: right;
+  color: var(--color-primary-text);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+a.shop-link:hover,
+a.btn-news:hover {
+  color: var(--color-header-hover);
+}
+
+.btn-news {
+  background: none;
+  border: none;
+  color: var(--color-primary-text);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  text-align: right;
+  display: inline-block;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+}
+
+.icon-btn svg {
+  stroke: white;
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: stroke 0.3s ease;
+}
+
+.icon-btn.search-btn:hover svg,
+.icon-btn.cart-btn:hover svg,
+.icon-btn.account-btn:hover svg {
+  stroke: grey;
+}
+
+.icon-btn.hamburger-btn svg {
+  width: 1.5rem;
+  height: 1.7rem;
+  stroke: white;
+  transition: stroke 0.3s ease;
+}
+
+.icon-btn.hamburger-btn:hover svg {
+  stroke: var(--color-secundary-text);
+}
+
+.hamburger-menu {
+  position: fixed;
+  top: 4.6rem;
+  right: 0;
+  background-color: rgba(20, 20, 20, 0.4);
+  width: 90%;
+  max-width: 360px;
+  height: calc(100vh - 5rem);
+  padding: 2rem 1.5rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 10000;
+}
+
+.hamburger-menu.open {
+  transform: translateY(0%);
+}
+
+.hamburger-menu .vertical-text {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-secundary-text);
+  user-select: none;
+  pointer-events: auto;
+  text-decoration: none;
+
+  opacity: 0;
+  transform: translateY(650px);
+  transition: opacity 0.6s ease 0.3s, transform 1.35s ease 0.3s;
+}
+
+.hamburger-menu.open .vertical-text {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+.hamburger-menu h1 {
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--color-secundary-text);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 2rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+}
+
+.hamburger-menu h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: var(--color-line-transparant);
+  transition: width 0.5s ease;
+}
+
+.hamburger-menu.open h1::after {
+  width: 75%;
+  transition-delay: 0.3s;
+}
+
+.hamburger-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.hamburger-menu ul li {
+  margin-bottom: 1.25rem;
+}
+
+.hamburger-menu ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.hamburger-menu ul li a:hover {
+  color: var(--color-header-hover);
+}
+
+@media (max-width: 768px) {
+  .header-criterion {
+    top: 1rem;
+    padding: 0.5rem;
+    max-width: 95%;
+  }
+
+  .shop-link,
+  .btn-news {
+    font-size: 1rem;
+  }
+
+  .hamburger-menu {
+    right: 1rem;
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .vertical-text {
+    font-size: 0.9rem;
+  }
+
+  ul li a {
+    font-size: 1rem;
+  }
+}

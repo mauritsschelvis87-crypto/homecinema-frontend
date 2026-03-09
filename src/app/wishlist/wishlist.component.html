@@ -1,0 +1,178 @@
+<div class="top-spacing"></div>
+
+<div class="shopping-page-container">
+
+  <section
+    class="filters-container"
+    *ngIf="!loading && filteredWishlist.length > 0"
+    aria-label="Film filters"
+  >
+    <form class="filter-bar" novalidate>
+      <input
+        type="text"
+        placeholder="Search by title"
+        [(ngModel)]="filters.title"
+        name="title"
+        class="filter-input"
+        (ngModelChange)="onFilterChange()"
+      />
+
+      <select
+        [(ngModel)]="filters.country"
+        name="country"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Country</option>
+        <option *ngFor="let country of filteredCountries" [value]="country">
+          {{ country }}
+        </option>
+      </select>
+
+      <select
+        [(ngModel)]="filters.director"
+        name="director"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Director</option>
+        <option *ngFor="let director of filteredDirectors" [value]="director">
+          {{ director }}
+        </option>
+      </select>
+
+      <select
+        [(ngModel)]="filters.year"
+        name="year"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Year</option>
+        <option *ngFor="let year of filteredYears" [value]="year">
+          {{ year }}
+        </option>
+      </select>
+
+      <select
+        [(ngModel)]="filters.type"
+        name="type"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Format</option>
+        <option *ngFor="let type of filteredTypes" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+
+      <select
+        [(ngModel)]="filters.brand"
+        name="brand"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Label</option>
+        <option *ngFor="let brand of filteredBrands" [value]="brand">
+          {{ brand }}
+        </option>
+      </select>
+
+      <button
+        type="button"
+        class="filter-button"
+        (click)="resetFilters()"
+      >
+        Reset
+      </button>
+
+      <button
+        type="button"
+        class="filter-icon-button"
+        (click)="toggleView()"
+        [attr.aria-label]="showGrid ? 'Switch to list view' : 'Switch to grid view'"
+        title="Toggle view"
+      >
+        <svg
+          *ngIf="showGrid; else listIcon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+        >
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        <ng-template #listIcon>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+          >
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </ng-template>
+      </button>
+    </form>
+  </section>
+
+  <div
+    class="wishlist-empty cart-container"
+    *ngIf="!loading && filteredWishlist.length === 0"
+    aria-live="polite"
+  >
+    <h2 class="empty-title">Your wishlist is empty</h2>
+    <p class="empty-text">You haven’t added any films to your wishlist yet.</p>
+    <a routerLink="/shopping" class="empty-button">Browse Films</a>
+  </div>
+
+  <!-- Wishlist items -->
+  <section
+    *ngIf="!loading && filteredWishlist.length > 0"
+    [ngClass]="{ 'film-grid': showGrid, 'film-list': !showGrid }"
+    aria-label="Wishlist films"
+  >
+    <a
+      *ngFor="let film of filteredWishlist"
+      class="film-card"
+      [routerLink]="['/product', film.id]"
+      tabindex="0"
+      role="link"
+      [attr.aria-label]="'View ' + film.title"
+    >
+      <img [src]="film.imageUrl" [alt]="film.title" />
+      <div class="film-info">
+        <h3 class="film-title">{{ film.title }}</h3>
+        <div class="meta-info">
+          <ng-container *ngIf="!showGrid; else compact">
+            <p>{{ film.director }}</p>
+            <p>{{ film.country }}</p>
+            <p>{{ film.year }}</p>
+            <p>{{ film.type }}</p>
+            <p *ngIf="film.brand?.name">{{ film.brand.name }}</p>
+          </ng-container>
+          <ng-template #compact>
+            <p>{{ film.director }}<br />{{ film.year }}</p>
+          </ng-template>
+        </div>
+      </div>
+    </a>
+  </section>
+</div>

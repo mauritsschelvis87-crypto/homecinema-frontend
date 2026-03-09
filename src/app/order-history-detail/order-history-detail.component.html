@@ -1,0 +1,36 @@
+<div class="order-detail-container" *ngIf="!isLoading && order; else loadingOrError">
+  <h2>Bestelling #{{ order.id }}</h2>
+  <p>
+    <strong>Datum:</strong> {{ order.orderDate | date:'medium' }}<br />
+    <strong>Totaalbedrag:</strong> € {{ order.totalPrice.toFixed(2) }}
+  </p>
+
+  <div class="order-items">
+    <div class="order-item" *ngFor="let item of order.orderItems">
+      <img [src]="item.film.imageUrl" [alt]="item.film.title" class="product-image" />
+      <div class="item-info">
+        <h4>{{ item.film.title }}</h4>
+        <p><strong>Brand:</strong> {{ item.film.brand.name }}</p>
+        <p><strong>Type:</strong> {{ item.film.type || 'Onbekend' }}</p>
+
+        <p><strong>Prijs per stuk:</strong> € {{ item.film.price.toFixed(2) }}</p>
+        <p><strong>Aantal:</strong> {{ item.quantity }}</p>
+        <p><strong>Subtotaal:</strong> € {{ (item.price * item.quantity).toFixed(2) }}</p>
+
+        <div *ngIf="item.film.stills && item.film.stills.length > 0" class="stills-container">
+          <img *ngFor="let still of item.film.stills" [src]="still" [alt]="'Still van ' + item.film.title" class="still-image" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-summary">
+    <h3>Totaal: € {{ getTotal().toFixed(2) }}</h3>
+    <a routerLink="/account" class="back-button">← Terug naar account</a>
+  </div>
+</div>
+
+<ng-template #loadingOrError>
+  <div *ngIf="isLoading">Laden...</div>
+  <div *ngIf="error">{{ error }}</div>
+</ng-template>

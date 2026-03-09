@@ -1,0 +1,18 @@
+.confirmation-page {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    color: #007bff;
+    text-decoration: underline;
+  }
+}

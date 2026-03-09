@@ -1,0 +1,22 @@
+.media-slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.media-content {
+  width: 600px;
+  height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.media-content img,
+.media-content iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

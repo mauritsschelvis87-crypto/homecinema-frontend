@@ -1,0 +1,15 @@
+<div class="news-container">
+  <h1>News</h1>
+
+  @for (item of news; track item) {
+    <div class="news-card">
+      <h2>{{ item.title }}</h2>
+      <p class="date">{{ item.orderDate }}</p>
+      <p class="summary">{{ item.summary }}</p>
+      <details>
+        <summary>Lees meer</summary>
+        <p class="content">{{ item.content }}</p>
+      </details>
+    </div>
+  }
+</div>

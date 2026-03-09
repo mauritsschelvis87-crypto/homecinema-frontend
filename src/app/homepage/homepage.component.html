@@ -1,0 +1,82 @@
+<section class="hero comedy-hero">
+  <div class="hero-content">
+    <h1>The Collection</h1>
+    <p>Discover timeless classics</p>
+    <a routerLink="/shopping" class="hero-button">Shop Now</a>
+  </div>
+</section>
+
+<section class="hero french-new-wave-hero">
+  <div class="hero-content">
+    <h1>French New Wave</h1>
+    <p>Revolutionary cinema from the 1950s–60s</p>
+    <a
+      [routerLink]="['/shopping']"
+      [queryParams]="{ country: 'France', year: '1958-1969' }"
+      class="hero-button"
+    >Shop Now</a>
+  </div>
+</section>
+
+<section class="hero italian-classics-hero">
+  <div class="hero-content">
+    <h1>Italian Classics</h1>
+    <p>Masterpieces of Visconti, Fellini &amp; more</p>
+    <a
+      [routerLink]="['/shopping']"
+      [queryParams]="{ country: 'Italy', year: '1945-1975' }"
+      class="hero-button"
+    >Shop Now</a>
+  </div>
+</section>
+
+<section class="hero silent-films-hero">
+  <div class="hero-content">
+    <h1>Silent Films</h1>
+    <p>Experience cinema’s early masterpieces</p>
+    <a
+      [routerLink]="['/shopping']"
+      [queryParams]="{ silent: true }"
+      class="hero-button"
+    >Shop Now</a>
+  </div>
+</section>
+
+<section class="hero technicolor-hero">
+  <div class="hero-content">
+    <h1>Technicolor</h1>
+    <p>Vibrant color films from the golden era</p>
+    <a
+      [routerLink]="['/shopping']"
+      [queryParams]="{ colorOrBlackAndWhite: 'Technicolor' }"
+      class="hero-button"
+    >Shop Now</a>
+  </div>
+</section>
+
+
+<section class="hero nosferatu-hero">
+  <div class="hero-content">
+    <h1>Horror?</h1>
+    <p>Classic horror masterpieces</p>
+    <a
+      [routerLink]="['/shopping']"
+      [queryParams]="{ genre: 'Horror', silent: true }"
+      class="hero-button"
+    >Discover Silent Horror</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <!-- Footer content -->
+</footer>
+
+<!-- Scroll controls -->
+<div class="bottom-controls" *ngIf="currentIndex < sections.length - 1">
+  <button class="scroll-arrow-btn" aria-label="Scroll up" (click)="scrollUp()" [disabled]="currentIndex===0">
+    <!-- up arrow SVG -->
+  </button>
+  <button class="scroll-arrow-btn" aria-label="Scroll down" (click)="scrollDown()" [disabled]="currentIndex===sections.length-2">
+    <!-- down arrow SVG -->
+  </button>
+</div>

@@ -1,0 +1,140 @@
+.hero {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: var(--color-primary-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &.comedy-hero {
+    background-image: url('/assets/stills/Harold-Lloyd-Safety-Last-1923.jpg');
+  }
+
+  &.french-new-wave-hero {
+    background-image: url('/assets/stills/vivre_sa_vie.jpg');
+  }
+  &.silent-films-hero      { background-image: url('/assets/stills/nosferatu2-1922.jpg');}
+
+  &.film-noir-hero {
+    background-image: url('/assets/stills/Third_man2.jpg');
+  }
+
+  &.italian-classics-hero {
+    background-image: url('/assets/stills/Satyricon.jpg');
+  }
+
+  &.technicolor-hero {
+    background-image: url('/assets/stills/red_shoes.jpg');
+  }
+
+  &.nosferatu-hero {
+    background-image: url('/assets/stills/nosferatu2-1922.jpg');
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-button {
+    background-color: var(--color-primary-button);
+    padding: 12px 30px;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.8;
+      cursor: pointer;
+    }
+  }
+}
+
+
+.bottom-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+}
+
+.scroll-arrow-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.7));
+  transition: transform 0.2s ease;
+  width: 50px;
+  height: 50px;
+}
+
+.scroll-arrow-btn:hover:not(:disabled) {
+  transform: translateY(5px);
+}
+
+.scroll-arrow-btn:disabled {
+  cursor: default;
+  opacity: 0.4;
+  filter: none;
+}
+
+.vertical-text-right {
+  position: absolute;
+  top: 0;
+  right: -790px;
+  height: 95%;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-secundary-text);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.1em;
+  padding-right: 5px;
+  z-index: 2;
+}

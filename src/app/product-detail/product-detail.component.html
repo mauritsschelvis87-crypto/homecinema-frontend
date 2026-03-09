@@ -1,0 +1,101 @@
+<div class="page-gray-screen">
+  <div class="page-content" *ngIf="product">
+    <div class="film-page-title-row">
+      <h1 class="film-page-title">{{ product.title }}</h1>
+      <div class="share-icons-inline">
+        <a
+          [href]="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
+          target="_blank"
+          aria-label="Deel op Facebook"
+        >
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a
+          [href]="'https://twitter.com/intent/tweet?url=' + shareUrl + '&text=Kijk%20eens%20naar%20dit%20product!'"
+          target="_blank"
+          aria-label="Deel op Twitter"
+        >
+          <i class="fab fa-x-twitter"></i>
+        </a>
+        <a
+          [href]="'https://wa.me/?text=' + shareUrl"
+          target="_blank"
+          aria-label="Deel op WhatsApp"
+        >
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="label-with-collection">
+      <span *ngIf="collectionService.isInCollection(product.id)" class="collection-left-badge">
+        ★ In your collection
+      </span>
+    </div>
+
+    <div class="film-details-wrapper">
+      <div class="left-side-wrapper">
+        <div class="film-image-container">
+          <img [src]="product.imageUrl" [alt]="product.title" class="film-image" />
+        </div>
+      </div>
+
+      <div class="right-side-wrapper">
+        <div class="specs-container">
+          <ul class="specs-list">
+            <li><strong>Director:</strong> {{ product.director }}</li>
+            <li><strong>Country:</strong> {{ product.country }}</li>
+            <li><strong>Year:</strong> {{ product.year }}</li>
+            <li><strong>Genre:</strong> {{ product.genre }}</li>
+            <li><strong>Label:</strong> {{ product.brand.name }}</li>
+            <li><strong>Format:</strong> {{ product.type }}</li>
+            <li><strong>Color:</strong> {{ product.colorOrBlackAndWhite }}</li>
+            <li><strong>Duration:</strong> {{ product.runtime }} min</li>
+            <li><strong>Aspect Ratio:</strong> {{ product.aspectRatio }}</li>
+            <li><strong>Price:</strong> €{{ product.price.toFixed(2) }}</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <button (click)="addToCart()" class="btn btn-cart">Add to Cart</button>
+
+          <button
+            (click)="toggleWishlist()"
+            (mouseenter)="wishlistHover = true"
+            (mouseleave)="wishlistHover = false"
+            class="btn btn-wishlist"
+            [ngClass]="{ 'in-wishlist': isInWishlist() }"
+          >
+            {{
+              wishlistClickLock
+                ? (isInWishlist() ? '★ In your wishlist' : 'Add to Wishlist')
+                : (wishlistHover
+                  ? (isInWishlist() ? 'Remove' : 'Add to Wishlist')
+                  : (isInWishlist() ? '★ In your wishlist' : 'Add to Wishlist'))
+            }}
+          </button>
+
+          <button
+            (click)="toggleCollection()"
+            (mouseenter)="collectionHover = true"
+            (mouseleave)="collectionHover = false"
+            class="btn btn-collection"
+            [ngClass]="{ 'in-collection': isInCollection() }"
+          >
+            {{
+              collectionClickLock
+                ? (isInCollection() ? '★ In your collection' : 'Add to Collection')
+                : (collectionHover
+                  ? (isInCollection() ? 'Remove' : 'Add to Collection')
+                  : (isInCollection() ? '★ In your collection' : 'Add to Collection'))
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-slider-wrapper" *ngIf="mediaArray.length > 0">
+      <app-media-slider [items]="mediaArray"></app-media-slider>
+    </div>
+  </div>
+</div>
