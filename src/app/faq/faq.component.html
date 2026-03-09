@@ -1,0 +1,26 @@
+<div class="cart-container faq-page">
+  <h1>Frequently Asked Questions</h1>
+
+  <div class="faq-accordion">
+    <div *ngFor="let faq of faqs; let i = index" class="faq-item">
+      <button
+        class="faq-question"
+        [attr.aria-expanded]="faq.expanded"
+        [attr.aria-controls]="'faq' + i"
+        [id]="'faq' + i + '-btn'"
+        (click)="toggle(i)"
+      >
+        {{ faq.question }}
+      </button>
+      <div
+        class="faq-answer"
+        [id]="'faq' + i"
+        role="region"
+        [attr.aria-labelledby]="'faq' + i + '-btn'"
+        [hidden]="!faq.expanded"
+      >
+        {{ faq.answer }}
+      </div>
+    </div>
+  </div>
+</div>

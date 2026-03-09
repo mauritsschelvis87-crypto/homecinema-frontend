@@ -1,0 +1,108 @@
+<section class="hero split-feature-hero-1">
+  <div class="split-container">
+    <div class="split-left">
+      <div class="hero-content">
+        <h1>Jean Luc Godard</h1>
+        <p>Avant Garde</p>
+        <a routerLink="/directors/jean-luc-godard" class="hero-button">Explore</a>
+      </div>
+    </div>
+    <div class="split-right">
+      <div class="hero-content">
+        <h1>Powell & Pressburger</h1>
+        <p>The Archers</p>
+        <a routerLink="/directors/powell-pressburger" class="hero-button">Explore</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero split-feature-hero-2">
+  <div class="split-container">
+    <div class="split-left">
+      <div class="hero-content">
+        <h1>Akira Kurosawa</h1>
+        <p>The Master</p>
+        <a routerLink="/directors/akira-kurosawa" class="hero-button">Explore</a>
+      </div>
+    </div>
+    <div class="split-right">
+      <div class="hero-content">
+        <h1>Jean Renoir</h1>
+        <p>Le Patron</p>
+        <a routerLink="/directors/jean-renoir" class="hero-button">Explore</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero split-feature-hero-3">
+  <div class="split-container">
+    <div class="split-left">
+      <div class="hero-content">
+        <h1>Andrei Tarkovsky</h1>
+        <p>Poetry</p>
+        <a routerLink="/directors/andrei-tarkovsky" class="hero-button">Explore</a>
+      </div>
+    </div>
+    <div class="split-right">
+      <div class="hero-content">
+        <h1>Friedrich W. Murnau</h1>
+        <p>Expressionism</p>
+        <a routerLink="/directors/friedrich-murnau" class="hero-button">Explore</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+</footer>
+
+
+<div class="bottom-controls" *ngIf="currentIndex < sections.length - 1">
+  <button
+    class="scroll-arrow-btn"
+    aria-label="Scroll up"
+    (click)="scrollUp()"
+    [disabled]="currentIndex === 0"
+  >
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <polyline
+        points="18 15 12 9 6 15"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+
+  <button
+    class="scroll-arrow-btn"
+    aria-label="Scroll down"
+    (click)="scrollDown()"
+    [disabled]="currentIndex >= sections.length - 1"
+  >
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <polyline
+        points="6 9 12 15 18 9"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+</div>

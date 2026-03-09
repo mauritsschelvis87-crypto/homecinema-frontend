@@ -1,0 +1,30 @@
+@if (director) {
+  <div>
+    <h1>{{ director.name }}</h1>
+    <img [src]="director.image" alt="{{ director.name }}">
+    <p>{{ director.bio }}</p>
+    <p><strong>Geboren:</strong> {{ director.birthPlace }} ({{ director.birthYear }})</p>
+    @if (director.deathYear) {
+      <p><strong>Overleden:</strong> {{ director.deathYear }}</p>
+    }
+    <p><strong>Opleiding:</strong> {{ director.education }}</p>
+  </div>
+}
+
+<div class="films-section">
+  <h2>Films van {{ director?.name }}</h2>
+  <div class="film-grid">
+    @for (film of films; track film) {
+      <a
+        class="film-card"
+        [routerLink]="['/product', film.id]"
+        >
+        <img [src]="film.imageUrl" [alt]="film.title" />
+        <h3>{{ film.title }}</h3>
+        <p>{{ film.year }}</p>
+        <p><strong>Uitgave:</strong> {{ film.brand.name }}</p>
+        <p><strong>Type:</strong> {{ film.type }}</p>
+      </a>
+    }
+  </div>
+</div>

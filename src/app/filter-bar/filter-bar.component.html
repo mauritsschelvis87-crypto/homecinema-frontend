@@ -1,0 +1,45 @@
+<div class="filter-bar">
+  <input
+    type="text"
+    placeholder="Zoek op titel..."
+    [(ngModel)]="title"
+    (input)="emitFilters()"
+    />
+
+    <select [(ngModel)]="selectedCountry" (change)="emitFilters()">
+      <option value="">Alle landen</option>
+      @for (country of countries; track country) {
+        <option [value]="country">{{ country }}</option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedDirector" (change)="emitFilters()">
+      <option value="">Alle regisseurs</option>
+      @for (director of directors; track director) {
+        <option [value]="director">{{ director }}</option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedYear" (change)="emitFilters()">
+      <option value="">Alle jaren</option>
+      @for (year of years; track year) {
+        <option [value]="year">{{ year }}</option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedType" (change)="emitFilters()">
+      <option value="">Alle types</option>
+      @for (type of types; track type) {
+        <option [value]="type">{{ type }}</option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedBrand" (change)="emitFilters()">
+      <option value="">Alle merken</option>
+      @for (brand of brands; track brand) {
+        <option [value]="brand">{{ brand }}</option>
+      }
+    </select>
+
+    <button (click)="resetFilters()">Reset filters</button>
+  </div>

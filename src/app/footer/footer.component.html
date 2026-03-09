@@ -1,0 +1,78 @@
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-account">
+      <h3>Account</h3>
+      <ul>
+        <li><a routerLink="/account">Login & Register</a></li>
+        <li><a routerLink="/wishlist">My Wishlist</a></li>
+        <li><a routerLink="/my-collection">My Collection</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-collection">
+      <h3>The Collection</h3>
+      <ul>
+        <li>
+          <a
+            routerLink="/shopping"
+            [queryParams]="{ type: 'DVD' }"
+          >DVD</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/shopping"
+            [queryParams]="{ type: 'Blu-ray' }"
+          >Blu‑ray</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/shopping"
+            [queryParams]="{ type: '4K Ultra HD' }"
+          >4K UHD</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/shopping"
+            [queryParams]="{ type: 'Boxsets' }"
+          >Boxsets</a
+          >
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="footer-giftcards">
+      <h3>Gift Cards</h3>
+      <ul>
+        <li><a routerLink="/giftcards/digital">Digital Gift Cards</a></li>
+        <li><a routerLink="/giftcards/physical">Physical Gift Cards</a></li>
+        <li><a routerLink="/giftcards/redeem">Redeem a Card</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-newsletter">
+      <h3>Subscribe to our Newsletter</h3>
+      <form (submit)="subscribeNewsletter(emailInput.value); emailInput.value=''">
+        <input #emailInput type="email" placeholder="Your email address" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+
+    <div class="footer-manufacturers">
+      <h3>Manufacturers</h3>
+      <ul>
+        <li><a routerLink="/manufacturer/criterion">Criterion Collection</a></li>
+        <li><a routerLink="/manufacturer/arrow">Masters of Cinema</a></li>
+        <li><a routerLink="/manufacturer/kino">British Film Institute</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 Home Cinema Project. All rights reserved.</p>
+  </div>
+</footer>

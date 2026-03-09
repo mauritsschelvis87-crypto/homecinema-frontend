@@ -1,0 +1,41 @@
+.films-section {
+  margin-top: 2rem;
+
+  .film-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .film-card {
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #fff;
+    transition: transform 0.2s ease;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    h3 {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  }
+}
