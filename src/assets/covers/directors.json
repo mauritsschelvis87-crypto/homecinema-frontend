@@ -1,0 +1,269 @@
+[
+  {
+    "slug": "kenji-mizoguchi",
+    "name": "Kenji Mizoguchi",
+    "birthPlace": "Kanagawa, Japan",
+    "birthYear": 1898,
+    "deathYear": 1956,
+    "image": "/assets/directors/mizoguchi.jpg",
+    "bio": "Kenji Mizoguchi was a renowned Japanese filmmaker known for his meticulous craftsmanship and focus on the plight of women.",
+    "education": [
+      "Osaka Prefectural School of Fine Arts"
+    ]
+  },
+  {
+    "slug": "alfred-hitchcock",
+    "name": "Alfred Hitchcock",
+    "birthPlace": "London, England",
+    "birthYear": 1899,
+    "deathYear": 1980,
+    "image": "/assets/directors/hitchcock.jpg",
+    "bio": "Alfred Hitchcock, known as 'The Master of Suspense', revolutionized the thriller genre with iconic films such as Psycho and Vertigo.",
+    "education": [
+      "St. Ignatius' College"
+    ]
+  },
+  {
+    "name": "Michael Powell & Emeric Pressburger",
+    "slug": "powell-pressburger",
+    "birthPlace": "England",
+    "birthYear": 1905,
+    "deathYear": 1990,
+    "image": "/assets/directors/powell_pressburger.jpg",
+    "bio": "Michael Powell and Emeric Pressburger formed one of the most celebrated partnerships in British cinema. Together, they created visually stunning and thematically rich films such as 'The Red Shoes' and 'A Matter of Life and Death'. Their work often blended realism with fantasy and is known for its bold experimentation and emotional depth.",
+    "education": "Michael Powell studied at Dulwich College; Emeric Pressburger studied at the University of Prague."
+  },
+
+  {
+    "slug": "orson-welles",
+    "name": "Orson Welles",
+    "birthPlace": "Kenosha, Wisconsin, USA",
+    "birthYear": 1915,
+    "deathYear": 1985,
+    "image": "/assets/directors/welles.jpg",
+    "bio": "Orson Welles was an innovative American director, actor, and writer best known for his groundbreaking film Citizen Kane.",
+    "education": [
+      "Todd School for Boys",
+      "Walden School"
+    ]
+  },
+  {
+    "slug": "charles-chaplin",
+    "name": "Charles Chaplin",
+    "birthPlace": "London, England",
+    "birthYear": 1889,
+    "deathYear": 1977,
+    "image": "/assets/directors/chaplin.jpg",
+    "bio": "Charles Chaplin was a legendary actor and director famous for his silent film persona 'The Tramp' and timeless classics.",
+    "education": [
+      "South London Theatre School"
+    ]
+  },
+  {
+    "slug": "jean-renoir",
+    "name": "Jean Renoir",
+    "birthPlace": "Paris, France",
+    "birthYear": 1894,
+    "deathYear": 1979,
+    "image": "/assets/directors/renoir.jpg",
+    "bio": "Jean Renoir was a celebrated French filmmaker, known for his humanistic approach and masterpieces like The Rules of the Game.",
+    "education": [
+      "Lycée Condorcet"
+    ]
+  },
+  {
+    "slug": "andrei-tarkovsky",
+    "name": "Andrei Tarkovsky",
+    "birthPlace": "Zavrazhye, Russia",
+    "birthYear": 1932,
+    "deathYear": 1986,
+    "image": "/assets/directors/tarkovsky.jpg",
+    "bio": "Andrei Tarkovsky was a visionary Russian director known for his poetic and spiritual films like Solaris and Stalker.",
+    "education": [
+      "Gerasimov Institute of Cinematography (VGIK)"
+    ]
+  },
+  {
+    "slug": "akira-kurosawa",
+    "name": "Akira Kurosawa",
+    "birthPlace": "Tokyo, Japan",
+    "birthYear": 1910,
+    "deathYear": 1998,
+    "image": "/assets/directors/kurosawa.jpg",
+    "bio": "Akira Kurosawa was a legendary Japanese filmmaker famous for epic narratives such as Seven Samurai and Rashomon.",
+    "education": [
+      "Japanese Film School"
+    ]
+  },
+  {
+    "slug": "yosujirou-ozu",
+    "name": "Yasujirō Ozu",
+    "birthPlace": "Tokyo, Japan",
+    "birthYear": 1903,
+    "deathYear": 1963,
+    "image": "/assets/directors/ozu.jpg",
+    "bio": "Yasujirō Ozu was a pioneering Japanese director known for his subtle storytelling and focus on family dynamics.",
+    "education": [
+      "Tokyo School of Commerce"
+    ]
+  },
+  {
+    "slug": "jean-luc-godard",
+    "name": "Jean-Luc Godard",
+    "birthPlace": "Paris, France",
+    "birthYear": 1930,
+    "deathYear": 2022,
+    "image": "/assets/directors/godard.jpg",
+    "bio": "Jean-Luc Godard was a French-Swiss director and key figure of the French New Wave, known for his innovative narrative techniques.",
+    "education": [
+      "École Louis-Le-Grand",
+      "University of Paris"
+    ]
+  },
+  {
+    "slug": "federico-fellini",
+    "name": "Federico Fellini",
+    "birthPlace": "Rimini, Italy",
+    "birthYear": 1920,
+    "deathYear": 1993,
+    "image": "/assets/directors/fellini.jpg",
+    "bio": "Federico Fellini was an iconic Italian filmmaker, famous for his distinctive style blending fantasy and baroque imagery.",
+    "education": [
+      "University of Rome"
+    ]
+  },
+  {
+    "slug": "michelangelo-antonioni",
+    "name": "Michelangelo Antonioni",
+    "birthPlace": "Ferrara, Italy",
+    "birthYear": 1912,
+    "deathYear": 2007,
+    "image": "/assets/directors/antonioni.jpg",
+    "bio": "Michelangelo Antonioni was an Italian director noted for his exploration of modern alienation and complex narrative style.",
+    "education": [
+      "University of Bologna"
+    ]
+  },
+  {
+    "slug": "vittorio-de-sica",
+    "name": "Vittorio De Sica",
+    "birthPlace": "Sora, Italy",
+    "birthYear": 1901,
+    "deathYear": 1974,
+    "image": "/assets/directors/desica.jpg",
+    "bio": "Vittorio De Sica was an influential Italian neorealist director, best known for films like Bicycle Thieves and Umberto D.",
+    "education": [
+      "Academy of Dramatic Arts"
+    ]
+  },
+  {
+    "slug": "robert-bresson",
+    "name": "Robert Bresson",
+    "birthPlace": "Paris, France",
+    "birthYear": 1901,
+    "deathYear": 1999,
+    "image": "/assets/directors/bresson.jpg",
+    "bio": "Robert Bresson was a French filmmaker noted for his minimalist style and spiritual themes.",
+    "education": [
+      "École des Beaux-Arts"
+    ]
+  },
+  [
+    {
+      "slug": "agnes-varda",
+      "name": "Agnes Varda",
+      "birthPlace": "Brussels, Belgium",
+      "birthYear": 1928,
+      "deathYear": 2019,
+      "image": "/assets/directors/varda.jpg",
+      "bio": "Agnes Varda was a Belgian-born French film director and a leading figure of the French New Wave, known for her unique feminist perspective.",
+      "education": [
+        "École du Louvre"
+      ]
+    },
+    {
+      "slug": "carl-theodor-dreyer",
+      "name": "Carl Theodor Dreyer",
+      "birthPlace": "Copenhagen, Denmark",
+      "birthYear": 1889,
+      "deathYear": 1968,
+      "image": "/assets/directors/dreyer.jpg",
+      "bio": "Carl Theodor Dreyer was a Danish filmmaker, famous for his austere style and masterpieces like The Passion of Joan of Arc.",
+      "education": [
+        "University of Copenhagen"
+      ]
+    },
+    {
+      "slug": "ingmar-bergman",
+      "name": "Ingmar Bergman",
+      "birthPlace": "Uppsala, Sweden",
+      "birthYear": 1918,
+      "deathYear": 2007,
+      "image": "/assets/directors/bergman.jpg",
+      "bio": "Ingmar Bergman was a Swedish director renowned for his profound exploration of human psychology and existential questions.",
+      "education": [
+        "Stockholm University"
+      ]
+    },
+    {
+      "slug": "wong-kar-wai",
+      "name": "Wong Kar Wai",
+      "birthPlace": "Shanghai, China",
+      "birthYear": 1958,
+      "image": "/assets/directors/wong-kar-wai.jpg",
+      "bio": "Wong Kar Wai is a Hong Kong filmmaker known for his visually unique style and films like In the Mood for Love.",
+      "education": [
+        "Hong Kong Design Institute"
+      ]
+    },
+    {
+      "slug": "friedrich-w-murnau",
+      "name": "Friedrich W. Murnau",
+      "birthPlace": "Bielefeld, Germany",
+      "birthYear": 1888,
+      "deathYear": 1931,
+      "image": "/assets/directors/murnau.jpg",
+      "bio": "Friedrich Wilhelm Murnau was a German film director and a pioneer of German Expressionism, known for Nosferatu and Sunrise.",
+      "education": [
+        "University of Heidelberg"
+      ]
+    },
+    {
+      "slug": "john-cassavetes",
+      "name": "John Cassavetes",
+      "birthPlace": "New York City, USA",
+      "birthYear": 1929,
+      "deathYear": 1989,
+      "image": "/assets/directors/cassavetes.jpg",
+      "bio": "John Cassavetes was an American actor and filmmaker, considered a pioneer of American independent cinema.",
+      "education": [
+        "The New School"
+      ]
+    },
+    {
+      "slug": "david-lean",
+      "name": "David Lean",
+      "birthPlace": "Croydon, England",
+      "birthYear": 1908,
+      "deathYear": 1991,
+      "image": "/assets/directors/lean.jpg",
+      "bio": "David Lean was a British filmmaker celebrated for epic films such as Lawrence of Arabia and Doctor Zhivago.",
+      "education": [
+        "RADA (Royal Academy of Dramatic Art)"
+      ]
+    },
+    {
+      "slug": "david-lynch",
+      "name": "David Lynch",
+      "birthPlace": "Missoula, Montana, USA",
+      "birthYear": 1946,
+      "deathYear": 2025,
+      "image": "/assets/directors/lynch.jpg",
+      "bio": "David Lynch is an American filmmaker known for his surreal and often disturbing films, including Blue Velvet and Mulholland Drive.",
+      "education": [
+        "Pennsylvania Academy of Fine Arts"
+      ]
+    }
+  ]
+
+]

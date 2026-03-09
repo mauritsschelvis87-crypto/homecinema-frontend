@@ -1,0 +1,20 @@
+<svg width="120" height="120" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bord (body) -->
+  <rect x="20" y="70" width="160" height="100" rx="8" ry="8" fill="#222" stroke="#444" stroke-width="3"></rect>
+
+  <!-- Klap bovenkant -->
+  <g transform="rotate(-10 100 70)">
+    <rect x="20" y="40" width="160" height="30" rx="4" ry="4" fill="#333" stroke="#555" stroke-width="2"></rect>
+    <!-- Zwarte/witte blokjes -->
+    <rect x="25" y="45" width="25" height="20" fill="white"></rect>
+    <rect x="50" y="45" width="25" height="20" fill="black"></rect>
+    <rect x="75" y="45" width="25" height="20" fill="white"></rect>
+    <rect x="100" y="45" width="25" height="20" fill="black"></rect>
+    <rect x="125" y="45" width="25" height="20" fill="white"></rect>
+    <rect x="150" y="45" width="25" height="20" fill="black"></rect>
+  </g>
+
+  <!-- Tekst op bord -->
+  <text x="100" y="120" fill="white" font-size="16" font-family="Arial" text-anchor="middle">SCENE 1</text>
+  <text x="100" y="140" fill="white" font-size="14" font-family="Arial" text-anchor="middle">TAKE 3</text>
+</svg>
