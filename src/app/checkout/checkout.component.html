@@ -1,0 +1,83 @@
+<div class="top-spacing"></div>
+
+<div class="account-container-layout">
+  <div class="left-column">
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+
+      <h3 class="section-title">Checkout</h3>
+
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="Email"
+        required
+      />
+
+      <input
+        id="street"
+        type="text"
+        formControlName="street"
+        placeholder="Street"
+        required
+      />
+
+      <input
+        id="postalCode"
+        type="text"
+        formControlName="postalCode"
+        placeholder="Postal Code"
+        required
+      />
+
+      <input
+        id="city"
+        type="text"
+        formControlName="city"
+        placeholder="City"
+        required
+      />
+
+      <select id="country" formControlName="country" required>
+        <option value="" disabled selected>Select Country</option>
+        <option *ngFor="let country of euCountries" [value]="country.code">
+          {{ country.name }}
+        </option>
+      </select>
+
+      <select id="paymentMethod" formControlName="paymentMethod" required>
+        <option value="" disabled selected>Select Payment Method</option>
+        <option *ngFor="let option of paymentOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+
+      <div class="total-price">
+        <span>Shipping:</span>
+        <span class="price-amount shipping-price">
+    €{{ shippingCost | number:'1.2-2' }}
+  </span>
+      </div>
+
+      <div class="total-price">
+        <span>Total Price:</span>
+        <span class="price-amount total-price-amount">
+    €{{ getTotalPrice() | number:'1.2-2' }}
+  </span>
+      </div>
+
+
+      <button type="submit" class="save-btn">Place Order</button>
+
+      <p
+        *ngIf="addressUpdateMessage"
+        [ngClass]="{
+          'success-msg': addressUpdateSuccess,
+          'error-msg': !addressUpdateSuccess
+        }"
+      >
+        {{ addressUpdateMessage }}
+      </p>
+    </form>
+  </div>
+</div>

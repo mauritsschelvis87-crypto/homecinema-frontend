@@ -1,0 +1,101 @@
+<div class="account-container">
+  <div class="left-column">
+    <div *ngIf="!currentUser" class="auth-box">
+      <h3 class="section-subtitle">Login</h3>
+      <input type="email" [(ngModel)]="loginEmail" placeholder="Email address" />
+      <input type="password" [(ngModel)]="loginPassword" placeholder="Password" />
+      <button class="login-btn" (click)="login()" [disabled]="loginLoading">Log In</button>
+      <p *ngIf="loginMessage">{{ loginMessage }}</p>
+
+      <h3 class="section-subtitle section-subtitle--with-margin">Register</h3>
+      <input type="email" [(ngModel)]="registerEmail" placeholder="Email address" />
+      <input type="password" [(ngModel)]="registerPassword" placeholder="Password" />
+      <button class="register-btn" (click)="register()" [disabled]="registerLoading">Register</button>
+      <p *ngIf="registerMessage">{{ registerMessage }}</p>
+    </div>
+
+    <div *ngIf="currentUser" class="auth-box">
+      <h3 class="section-subtitle">Shipping Address</h3>
+
+      <input type="text" [(ngModel)]="address.street" placeholder="Street" />
+      <input type="text" [(ngModel)]="address.postalCode" placeholder="Postal Code" />
+      <input type="text" [(ngModel)]="address.city" placeholder="City" />
+
+
+      <select
+        [(ngModel)]="selectedCountryCode"
+        (ngModelChange)="updateShippingCost()"
+        aria-label="Country"
+      >
+        <option value="" disabled hidden>Country</option>
+        <option *ngFor="let country of countries" [value]="country.code">
+          {{ country.name }}
+        </option>
+      </select>
+
+
+      <p *ngIf="addressMessage" class="address-message">{{ addressMessage }}</p>
+
+      <p *ngIf="shippingCost !== null">
+        Shipping cost for {{ selectedCountryName }}: €{{ shippingCost.toFixed(2) }}
+      </p>
+
+      <button class="save-btn" (click)="saveAddress()">Save</button>
+      <button class="login-btn" (click)="logout()">Log Out</button>
+    </div>
+  </div>
+
+  <div class="middle-column">
+    <div class="language-box">
+      <h3 class="section-subtitle">Language</h3>
+      <label for="language"></label>
+      <select id="language" [(ngModel)]="selectedLanguage" (change)="changeLanguage()">
+        <option value="" disabled hidden>Language</option>
+        <option *ngFor="let lang of languages" [value]="lang">{{ lang }}</option>
+      </select>
+
+      <div *ngIf="currentUser">
+
+        <h3 class="section-subtitle">Newsletter</h3>
+        <div class="order-item">
+          <p>Please subscribe to our newsletter to receive upcoming releases and exclusive offers!</p>
+        </div>
+        <button class="newsletter-btn" (click)="confirmNewsletter()">Subscribe</button>
+
+        <!-- Popup -->
+        <div class="popup" *ngIf="showThanksMessage">
+          <div class="popup-content">
+            <p>Thank you for subscribing to our newsletter!</p>
+            <button (click)="closePopup()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-column">
+    <h3 class="section-subtitle">Order history</h3>
+
+    <ng-container *ngIf="currentUser; else loginMessageBlock">
+      <div class="order-scroll">
+        <div class="order-list">
+          <div *ngIf="orders.length === 0">
+            <p>Your order history is empty.</p>
+          </div>
+          <div class="order-item" *ngFor="let order of orders">
+            <p>
+              <strong>Order number:</strong> {{ order.number }}<br />
+              <strong>Date:</strong> {{ order.orderDate | date:'mediumDate' }}<br />
+              <strong>Status:</strong> {{ order.status }}
+            </p>
+            <a class="save-btn" [routerLink]="['/order-history-detail', order.id]">View order</a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #loginMessageBlock>
+      <p>You need to log in to view your order history.</p>
+    </ng-template>
+  </div>
+</div>

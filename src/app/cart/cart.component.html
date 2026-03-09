@@ -1,0 +1,118 @@
+<div class="top-spacing"></div>
+
+<div class="cart-container">
+  <h2 class="cart-title-left">Shopping Cart</h2>
+
+  <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+    <table class="cart-table">
+      <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of cartItems; trackBy: trackItem">
+        <td class="product-info">
+          <a [routerLink]="['/films', item.product.id]">
+            <img [src]="item.product.imageUrl" alt="{{ item.product.title }}" class="product-image" />
+          </a>
+          <div class="product-details">
+            <a [routerLink]="['/films', item.product.id]" class="product-title">
+              {{ item.product.title }}
+            </a>
+            <div class="product-brand">{{ item.product.brand.name }}</div>
+            <div class="product-type">{{ item.product.type }}</div>
+          </div>
+        </td>
+
+        <td>
+          <div class="quantity-remove">
+            <input type="number" min="1" [value]="item.quantity" (change)="onQuantityChange(item.product.id, $event)" />
+            <button class="remove-button" (click)="removeItem(item.product.id)">Remove</button>
+          </div>
+        </td>
+
+        <td>€ {{ (item.product.price * item.quantity).toFixed(2) }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="code-section">
+      <div class="code-group">
+        <label for="giftCodeInput">Gift Code:</label>
+        <input
+          id="giftCodeInput"
+          type="text"
+          [(ngModel)]="giftCodeInput"
+          [disabled]="isGiftCodeApplied"
+          placeholder="Enter gift code"
+        />
+        <button
+          (click)="applyGiftCode()"
+          [disabled]="isGiftCodeApplied || !giftCodeInput.trim()"
+        >
+          Apply
+        </button>
+        <button *ngIf="isGiftCodeApplied" (click)="removeGiftCode()">Remove</button>
+
+        <p *ngIf="giftCodeError" class="error-message">{{ giftCodeError }}</p>
+        <p *ngIf="isGiftCodeApplied" class="success-message">
+          Gift code applied! Discount: € {{ discountAmount.toFixed(2) }}
+        </p>
+      </div>
+
+      <div class="code-group">
+        <label for="voucherInput">Voucher:</label>
+        <input
+          id="voucherInput"
+          type="text"
+          [(ngModel)]="voucherInput"
+          [disabled]="isVoucherApplied"
+          placeholder="Enter voucher code"
+        />
+        <button
+          (click)="applyVoucher()"
+          [disabled]="isVoucherApplied || !voucherInput.trim()"
+        >
+          Apply
+        </button>
+        <button *ngIf="isVoucherApplied" (click)="removeVoucher()">Remove</button>
+
+        <p *ngIf="voucherError" class="error-message">{{ voucherError }}</p>
+        <p *ngIf="isVoucherApplied" class="success-message">
+          Voucher applied!
+        </p>
+      </div>
+    </div>
+
+    <div class="price-and-currency">
+      <p class="total-price">
+        Subtotal: € {{ getSubtotal().toFixed(2) }}<br />
+        Shipping ({{ country }}): € {{ shippingCost.toFixed(2) }}<br />
+        Total: <strong>{{ selectedCurrency }} {{ convertPrice(getTotalPriceAfterDiscount()) }}</strong>
+      </p>
+
+      <div class="currency-selector">
+        <label for="currency" class="visually-hidden">Select Currency</label>
+        <select id="currency" [(ngModel)]="selectedCurrency" (change)="onCurrencyChange()">
+          <option *ngFor="let c of currencies" [value]="c.code">{{ c.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="bottom-buttons">
+      <button class="continue-button" routerLink="/shopping">Continue Shopping</button>
+      <button (click)="clearCart()" class="clear-button">Clear Cart</button>
+      <a routerLink="/checkout" class="checkout-button">Proceed to Checkout</a>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      <p>Your cart is empty.</p>
+      <button class="continue-button" routerLink="/shopping">Continue Shopping</button>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,36 @@
+.account-page {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+
+  .sidebar {
+    width: 200px;
+    border-right: 1px solid #ddd;
+    padding-right: 1rem;
+
+    select,
+    label {
+      display: block;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .content {
+    flex: 1;
+
+    form label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+    }
+  }
+}

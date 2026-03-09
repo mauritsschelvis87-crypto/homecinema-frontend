@@ -1,0 +1,331 @@
+:host {
+  color: #1a1a1a;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-container {
+  flex: 1;
+  max-width: 1100px;
+  width: 68%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fafafa;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  margin-bottom: 100px;
+
+}
+
+/* Top spacing */
+.top-spacing {
+  height: 100px;
+}
+
+/* Cart title links uitgelijnd */
+.cart-title-left {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Cart table */
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 32px;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: 2px 2px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cart-table th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cart-table th:last-child,
+.cart-table td:last-child {
+  text-align: right;
+}
+
+.cart-table .product-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cart-table .product-image {
+  width: 70px;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cart-table .product-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-table .product-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+
+.cart-table .product-title:hover {
+  color: #e53935;
+  text-decoration: none;
+}
+
+.cart-table .product-brand {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.cart-table .product-type {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 2px;
+}
+
+/* Quantity + Remove */
+.quantity-remove {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quantity-remove input[type="number"] {
+  width: 64px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+.quantity-remove .remove-button {
+  background-color: #ff6961;
+  padding: 6px 12px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-radius: 0;
+  font-weight: 500;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.quantity-remove .remove-button:hover {
+  background-color: #e55a54;
+}
+
+/* Gift code + Voucher section */
+.code-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 32px;
+
+  .code-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    /* Maak invulvelden compacter */
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 200px; // of bijvoorbeeld 120px als je het nóg compacter wilt
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Specifiek voor de code-section velden */
+    .code-section .code-group input[type="text"] {
+      width: 12px;
+    }
+
+    /* Aangepaste breedte voor quantity input */
+    .quantity-remove input[type="number"] {
+      width: 64px;
+      max-width: 100%;
+      padding: 6px;
+      font-size: 1rem;
+    }
+
+
+    button {
+      background-color: gray;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-right: 6px;
+      width: fit-content;
+
+      &:hover {
+        background-color: #555;
+      }
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .success-message {
+      color: green;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+  }
+}
+
+/* Summary: total and currency */
+.price-and-currency {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.total-price {
+  font-size: 1.0rem;
+  color: #1a1a1a;
+  white-space: nowrap;
+  text-align: right;
+  width: 100%;
+}
+
+.currency-selector {
+  margin-top: 8px;
+}
+
+.currency-selector select {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Buttons onderin */
+.bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1130px;
+  width: 68%;
+  margin: 0 auto;
+  padding: 16px 0;
+  border-top: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+
+.bottom-buttons button,
+.bottom-buttons a {
+  background-color: gray;
+  width: 200px;
+  color: white;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 10px 20px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.bottom-buttons button:hover,
+.bottom-buttons a:hover {
+  background-color: #555;
+}
+
+.bottom-buttons .checkout-button:hover {
+  background-color: var(--color-secundary-text);
+}
+
+.bottom-buttons .continue-button:hover,
+.bottom-buttons .continue-button:focus,
+.empty-cart .continue-button:hover,
+.empty-cart .continue-button:focus {
+  background-color: var(--color-secundary-text);
+  color: white;
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+.continue-button:hover,
+.continue-button:focus {
+  background-color: #d4af37;
+  color: white;
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* Empty cart */
+.empty-cart {
+  text-align: center;
+  padding: 80px 0;
+
+  p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  .continue-button {
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: background-color 0.3s ease;
+    width: 200px;
+    margin: 0 auto;
+    display: block;
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-secundary-text);
+      color: white;
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
