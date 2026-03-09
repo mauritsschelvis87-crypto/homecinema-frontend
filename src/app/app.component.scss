@@ -1,0 +1,63 @@
+.main-content {
+  transition: transform 1s ease;
+
+  &.shifted {
+    transform: translateX(-205px);
+  }
+}
+
+/* Logo fixed linksboven, geen schuif animatie */
+.app-logo {
+  position: fixed;
+  top: 0;
+  left: 10px;
+  height: 80px;
+  z-index: 11000;
+  cursor: pointer;
+
+  img {
+    height: 150%;
+    width: auto;
+    display: block;
+    transition: filter 0.3s ease;
+  }
+
+  &:hover img {
+    filter: grayscale(100%) brightness(60%);
+  }
+}
+
+/* Clapboard styling (blijft hetzelfde) */
+.clapboard-wrapper {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20000;
+  animation: clapboard-slide-in 1.5s ease forwards;
+  pointer-events: none;
+}
+
+.clapboard-wrapper img {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+
+@keyframes clapboard-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(50px) scale(0.5) rotate(-10deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px) scale(1.1) rotate(5deg);
+  }
+  80% {
+    transform: translateX(-50%) translateY(0) scale(0.95) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1) rotate(0);
+  }
+}

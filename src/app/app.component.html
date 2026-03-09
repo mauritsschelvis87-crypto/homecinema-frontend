@@ -1,0 +1,25 @@
+<header>
+  <app-header (menuToggle)="onMenuToggle($event)"></app-header>
+</header>
+
+<!-- Logo fixed linksboven, klikbaar naar homepage -->
+<a routerLink="/" class="app-logo" aria-label="Homepage">
+  <img src="assets/logo/HCP_logo_3.png" alt="Logo" />
+</a>
+
+<main class="main-content" [class.shifted]="menuOpen">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Side text, zichtbaar als menu open is -->
+<div class="side-text" *ngIf="menuOpen">
+</div>
+
+<!-- Clapboard animatie overlay -->
+<div class="clapboard-overlay" *ngIf="cartAnimation">
+  <div class="clapboard-wrapper" *ngIf="cartAnimation">
+    <img src="assets/svg/clapboard.svg" alt="Clapboard" class="clapboard-img" />
+  </div>
+</div>
+
+<app-footer></app-footer>
