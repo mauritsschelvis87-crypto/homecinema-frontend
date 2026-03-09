@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+
+
+:root {
+  --color-primary-text: white;
+  --color-secundary-text: #c3b365;
+  --color-primary-button: #a64e4e;
+  --color-hover-button: #c61414;
+  --color-arrow-button: #dc1f1f;
+  --color-header-hover: red;
+  --color-background: #5a5a5a;
+  --color-line-transparant: rgba(255, 255, 255, 0.1);
+
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--color-background);
+
+
+  color: var(--color-primary-text);
+  font-family: 'Open Sans', sans-serif;
+}
