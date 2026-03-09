@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6b8ad11b87c4b99c2faa6a35502d4f1081e4aa5b
 # homecinema-frontend
 
 
@@ -92,6 +95,7 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+<<<<<<< HEAD
 =======
 # HomecinemaFrontend
 
@@ -153,3 +157,5 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 >>>>>>> 81cf14d (initial commit)
+=======
+>>>>>>> 6b8ad11b87c4b99c2faa6a35502d4f1081e4aa5b
