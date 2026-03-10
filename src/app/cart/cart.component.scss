@@ -1,9 +1,14 @@
 :host {
   color: #1a1a1a;
-  font-family: 'Segoe UI', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+}
+
+.shopping-page-container {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--color-background);
+  position: relative;
+  box-sizing: border-box;
 }
 
 .cart-container {
@@ -232,12 +237,14 @@
 /* Buttons onderin */
 .bottom-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  max-width: 1130px;
+  flex-wrap: nowrap;
+  gap: 14px;
+  max-width: 1100px;
   width: 68%;
   margin: 0 auto;
-  padding: 16px 0;
+  padding: 20px 0 0;
   border-top: 1px solid #e0e0e0;
   box-sizing: border-box;
 }
@@ -245,7 +252,7 @@
 .bottom-buttons button,
 .bottom-buttons a {
   background-color: gray;
-  width: 200px;
+  min-width: 190px;
   color: white;
   border: none;
   outline: none;
@@ -275,8 +282,8 @@
 
 .bottom-buttons .continue-button:hover,
 .bottom-buttons .continue-button:focus,
-.empty-cart .continue-button:hover,
-.empty-cart .continue-button:focus {
+.empty-button:hover,
+.empty-button:focus {
   background-color: var(--color-secundary-text);
   color: white;
   outline: none;
@@ -293,39 +300,64 @@
   border: none;
 }
 
-/* Empty cart */
-.empty-cart {
-  text-align: center;
-  padding: 80px 0;
+.wishlist-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
 
-  p {
-    font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 20px;
+.empty-cart-shell {
+  max-width: 1050px;
+  margin-bottom: 100px;
+  padding: 40px;
+  background-color: #fafafa;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.empty-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: black;
+}
+
+.empty-text {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.empty-button {
+  display: inline-block;
+  background-color: black;
+  color: white;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+
+  &:hover,
+  &:focus {
+    background-color: #333;
+    outline: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .bottom-buttons {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
-  .continue-button {
-    background-color: gray;
-    color: white;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-size: 0.8rem;
-    transition: background-color 0.3s ease;
-    width: 200px;
-    margin: 0 auto;
-    display: block;
-    border: none;
-    outline: none;
-    box-shadow: none;
-
-    &:hover,
-    &:focus {
-      background-color: var(--color-secundary-text);
-      color: white;
-      border: none;
-      outline: none;
-      box-shadow: none;
-    }
+  .bottom-buttons button,
+  .bottom-buttons a {
+    width: 100%;
+    min-width: 0;
   }
 }

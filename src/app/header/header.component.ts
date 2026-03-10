@@ -4,11 +4,12 @@ import { Subscription } from 'rxjs';
 import { FilmService, Film } from '../services/film.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, FormsModule, NgIf, NgForOf],
+  imports: [RouterLink, FormsModule, NgIf, NgForOf, TranslatePipe],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @Output() menuToggle = new EventEmitter<boolean>();
   private routerSubscription!: Subscription;
+  private searchOpenTimeout?: ReturnType<typeof setTimeout>;
 
   constructor(
     private router: Router,
@@ -38,6 +40,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
+    if (this.menuOpen) {
+      this.closeSearch();
+    }
     this.menuToggle.emit(this.menuOpen);
   }
   closeMenu(): void {
@@ -46,11 +51,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleSearch(): void {
-    this.showSearch = !this.showSearch;
-    if (this.showSearch && !this.allFilms.length) {
-      this.filmService.getAllFilms().subscribe(films => this.allFilms = films);
+    if (this.showSearch) {
+      this.closeSearch();
+      return;
     }
-    if (!this.showSearch) this.closeSearch();
+
+    if (this.menuOpen) {
+      this.closeMenu();
+      this.clearSearchOpenTimeout();
+      this.searchOpenTimeout = setTimeout(() => {
+        this.openSearch();
+      }, 220);
+      return;
+    }
+
+    this.openSearch();
   }
 
   onSearchChange(): void {
@@ -89,12 +104,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   closeSearch(): void {
+    this.clearSearchOpenTimeout();
     this.showSearch = false;
     this.searchQuery = '';
     this.filteredFilms = [];
   }
 
+  private openSearch(): void {
+    this.showSearch = true;
+    if (!this.allFilms.length) {
+      this.filmService.getAllFilms().subscribe(films => this.allFilms = films);
+    }
+  }
+
+  private clearSearchOpenTimeout(): void {
+    if (this.searchOpenTimeout) {
+      clearTimeout(this.searchOpenTimeout);
+      this.searchOpenTimeout = undefined;
+    }
+  }
+
   ngOnDestroy(): void {
+    this.clearSearchOpenTimeout();
     this.routerSubscription.unsubscribe();
   }
 }

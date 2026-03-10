@@ -44,7 +44,7 @@ form {
   border-radius: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.6rem;
   box-sizing: border-box;
   width: 335px;
 }
@@ -89,7 +89,7 @@ button.save-btn {
   cursor: pointer;
   transition: background-color 0.3s ease;
   letter-spacing: 0.5px;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 button.save-btn:hover {
@@ -99,10 +99,31 @@ button.save-btn:hover {
 .total-price {
   display: flex;
   justify-content: space-between;
-  font-weight: normal; /* tekst niet vet */
+  align-items: center;
+  font-weight: normal;
   font-size: 1rem;
-  padding: 0 0.25rem;
+  padding: 0;
   color: #111;
+}
+
+.checkout-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e2e2;
+}
+
+.price-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.total-price--final {
+  padding-top: 0.65rem;
+  border-top: 1px solid #ececec;
 }
 
 .price-amount {
@@ -124,7 +145,7 @@ button.save-btn:hover {
   font-size: 0.85rem;
   font-weight: 500;
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .success-msg {

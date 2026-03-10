@@ -29,6 +29,17 @@ export class CollectionService {
     }
   }
 
+  syncStoredItem(film: Film): void {
+    const index = this.collection.findIndex((item) => item.id === film.id);
+    if (index === -1) {
+      return;
+    }
+
+    this.collection[index] = film;
+    this.collection$.next([...this.collection]);
+    localStorage.setItem('collection', JSON.stringify(this.collection));
+  }
+
   removeFromCollection(filmId: number) {
     this.collection = this.collection.filter(f => f.id !== filmId);
     this.collection$.next(this.collection);

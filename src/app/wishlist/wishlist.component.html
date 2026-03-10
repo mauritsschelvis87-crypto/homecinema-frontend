@@ -152,7 +152,8 @@
     <a
       *ngFor="let film of filteredWishlist"
       class="film-card"
-      [routerLink]="['/product', film.id]"
+      [routerLink]="getFilmLink(film)"
+      [fragment]="getFilmFragment(film)"
       tabindex="0"
       role="link"
       [attr.aria-label]="'View ' + film.title"

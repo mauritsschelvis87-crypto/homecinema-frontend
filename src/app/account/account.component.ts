@@ -5,6 +5,8 @@ import { AccountService } from '../services/account.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { OrderService } from '../services/order.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
 import { SHIPPING_COSTS } from '../constants/shipping-costs';
@@ -22,10 +24,15 @@ interface Country {
   shippingCost: number;
 }
 
+interface LanguageOption {
+  code: string;
+  label: string;
+}
+
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
 })
@@ -42,8 +49,14 @@ export class AccountComponent implements OnInit {
     country: 'Netherlands',
   };
 
-  selectedLanguage = 'English';
-  languages = ['Dutch', 'English'];
+  selectedLanguage = 'en';
+  languages: LanguageOption[] = [
+    { code: 'en', label: 'English' },
+    { code: 'nl', label: 'Nederlands' },
+    { code: 'de', label: 'Deutsch' },
+    { code: 'fr', label: 'Français' },
+    { code: 'es', label: 'Español' },
+  ];
 
   address: Address = { street: '', postalCode: '', city: '', country: '' };
   currentUser?: User;
@@ -70,10 +83,13 @@ export class AccountComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private orderService: OrderService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
+    this.selectedLanguage = localStorage.getItem('language') ?? this.translate.currentLang ?? 'en';
     this.countries = Object.entries(COUNTRY_NAME_TO_CODE).map(([name, code]) => ({
       name,
       code,
@@ -238,19 +254,23 @@ export class AccountComponent implements OnInit {
   loadOrders(email: string) {
     this.accountService.getOrders(email).subscribe({
       next: (orders) => {
-        this.orders = orders.sort(
+        const localOrders = this.orderService.getLocalOrderSummariesByUsername(email);
+        this.orders = [...orders, ...localOrders].sort(
           (a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
         );
       },
       error: (err) => {
         console.error('Error loading orders:', err);
-        this.orders = [];
+        this.orders = this.orderService.getLocalOrderSummariesByUsername(email).sort(
+          (a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+        );
       },
     });
   }
 
   changeLanguage() {
-    // Language change logic here (optional)
+    localStorage.setItem('language', this.selectedLanguage);
+    this.translate.use(this.selectedLanguage);
   }
 
   confirmNewsletter() {

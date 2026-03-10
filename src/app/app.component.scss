@@ -8,14 +8,16 @@
 
 .app-logo {
   position: fixed;
-  top: 0;
-  left: 10px;
-  height: 80px;
+  top: -45px;
+  left: -90px;
+  width: fit-content;
+  height: auto;
   z-index: 11000;
   cursor: pointer;
+  display: inline-block;
 
   img {
-    height: 150%;
+    height: 200px;
     width: auto;
     display: block;
     transition: filter 0.3s ease;

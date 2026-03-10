@@ -1,26 +1,32 @@
-<div class="cart-container faq-page">
+<div class="cart-container news-page faq-page">
   <h1>Frequently Asked Questions</h1>
 
-  <div class="faq-accordion">
-    <div *ngFor="let faq of faqs; let i = index" class="faq-item">
-      <button
-        class="faq-question"
-        [attr.aria-expanded]="faq.expanded"
-        [attr.aria-controls]="'faq' + i"
-        [id]="'faq' + i + '-btn'"
-        (click)="toggle(i)"
-      >
-        {{ faq.question }}
-      </button>
-      <div
-        class="faq-answer"
-        [id]="'faq' + i"
-        role="region"
-        [attr.aria-labelledby]="'faq' + i + '-btn'"
-        [hidden]="!faq.expanded"
-      >
-        {{ faq.answer }}
+  <div class="news-list faq-accordion">
+    <article *ngFor="let faq of faqs; let i = index" class="news-card faq-item">
+      <div class="news-card-header">
+        <div class="news-copy">
+          <h2>{{ faq.question }}</h2>
+        </div>
       </div>
-    </div>
+
+      <details class="news-details" [open]="faq.expanded">
+        <summary
+          [attr.aria-expanded]="faq.expanded"
+          [attr.aria-controls]="'faq' + i"
+          [id]="'faq' + i + '-btn'"
+          (click)="toggle(i); $event.preventDefault()"
+        >
+          Read more
+        </summary>
+        <p
+          class="content"
+          [id]="'faq' + i"
+          role="region"
+          [attr.aria-labelledby]="'faq' + i + '-btn'"
+        >
+          {{ faq.answer }}
+        </p>
+      </details>
+    </article>
   </div>
 </div>

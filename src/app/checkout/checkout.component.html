@@ -52,32 +52,35 @@
         </option>
       </select>
 
-      <div class="total-price">
-        <span>Shipping:</span>
-        <span class="price-amount shipping-price">
-    €{{ shippingCost | number:'1.2-2' }}
-  </span>
+      <div class="checkout-footer">
+        <div class="price-summary">
+          <div class="total-price">
+            <span>Shipping:</span>
+            <span class="price-amount shipping-price">
+              €{{ shippingCost | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <div class="total-price total-price--final">
+            <span>Total Price:</span>
+            <span class="price-amount total-price-amount">
+              €{{ getTotalPrice() | number:'1.2-2' }}
+            </span>
+          </div>
+        </div>
+
+        <button type="submit" class="save-btn">Place Order</button>
+
+        <p
+          *ngIf="addressUpdateMessage"
+          [ngClass]="{
+            'success-msg': addressUpdateSuccess,
+            'error-msg': !addressUpdateSuccess
+          }"
+        >
+          {{ addressUpdateMessage }}
+        </p>
       </div>
-
-      <div class="total-price">
-        <span>Total Price:</span>
-        <span class="price-amount total-price-amount">
-    €{{ getTotalPrice() | number:'1.2-2' }}
-  </span>
-      </div>
-
-
-      <button type="submit" class="save-btn">Place Order</button>
-
-      <p
-        *ngIf="addressUpdateMessage"
-        [ngClass]="{
-          'success-msg': addressUpdateSuccess,
-          'error-msg': !addressUpdateSuccess
-        }"
-      >
-        {{ addressUpdateMessage }}
-      </p>
     </form>
   </div>
 </div>

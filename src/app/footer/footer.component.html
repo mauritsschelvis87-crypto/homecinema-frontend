@@ -1,16 +1,16 @@
 <footer class="site-footer">
   <div class="footer-container">
     <div class="footer-account">
-      <h3>Account</h3>
+      <h3>{{ 'Account' | translate }}</h3>
       <ul>
-        <li><a routerLink="/account">Login & Register</a></li>
-        <li><a routerLink="/wishlist">My Wishlist</a></li>
-        <li><a routerLink="/my-collection">My Collection</a></li>
+        <li><a routerLink="/account">{{ 'Login' | translate }} &amp; {{ 'Register' | translate }}</a></li>
+        <li><a routerLink="/wishlist">{{ 'Wishlist' | translate }}</a></li>
+        <li><a routerLink="/collection">{{ 'Collection' | translate }}</a></li>
       </ul>
     </div>
 
     <div class="footer-collection">
-      <h3>The Collection</h3>
+      <h3>{{ 'The Collection' | translate }}</h3>
       <ul>
         <li>
           <a
@@ -54,10 +54,10 @@
     </div>
 
     <div class="footer-newsletter">
-      <h3>Subscribe to our Newsletter</h3>
+      <h3>{{ 'Newsletter' | translate }}</h3>
       <form (submit)="subscribeNewsletter(emailInput.value); emailInput.value=''">
-        <input #emailInput type="email" placeholder="Your email address" required />
-        <button type="submit">Subscribe</button>
+        <input #emailInput type="email" [placeholder]="'Email address' | translate" required />
+        <button type="submit">{{ 'Subscribe' | translate }}</button>
       </form>
     </div>
 
@@ -73,6 +73,6 @@
 
 
   <div class="footer-bottom">
-    <p>&copy; 2025 Home Cinema Project. All rights reserved.</p>
+    <p>&copy; 2026 Home Cinema Project. All rights reserved.</p>
   </div>
 </footer>

@@ -1,0 +1,152 @@
+<div class="page-gray-screen">
+  <section
+    *ngFor="let boxset of boxsets; let i = index"
+    class="boxset-page"
+    [class]="'boxset-page boxset-section-' + i"
+  >
+    <div class="page-content">
+      <div class="film-page-title-row">
+        <h1 class="film-page-title">{{ boxset.title }}</h1>
+        <div class="share-icons-inline">
+          <a
+            [href]="'https://www.facebook.com/sharer/sharer.php?u=' + getShareUrl(boxset.slug)"
+            target="_blank"
+            aria-label="Share on Facebook"
+          >
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a
+            [href]="'https://twitter.com/intent/tweet?url=' + getShareUrl(boxset.slug) + '&text=Take%20a%20look%20at%20this%20boxset!'"
+            target="_blank"
+            aria-label="Share on X"
+          >
+            <i class="fab fa-x-twitter"></i>
+          </a>
+          <a
+            [href]="'https://wa.me/?text=' + getShareUrl(boxset.slug)"
+            target="_blank"
+            aria-label="Share on WhatsApp"
+          >
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+      <p class="boxset-subtitle">{{ boxset.subtitle }}</p>
+
+      <div class="film-details-wrapper">
+        <div class="left-side-wrapper">
+          <div class="box-contents-container">
+            <img [src]="boxset.topImage" [alt]="boxset.title + ' contents'" class="box-contents-image" />
+          </div>
+
+          <div class="film-image-container">
+            <img [src]="boxset.secondaryImage" [alt]="boxset.title" class="film-image" />
+          </div>
+        </div>
+
+        <div class="right-side-wrapper">
+          <div class="specs-container">
+            <p class="boxset-description">{{ boxset.description }}</p>
+
+            <ul class="specs-list">
+              <li *ngFor="let spec of boxset.specs">
+                <strong>{{ spec.label }}:</strong> {{ spec.value }}
+              </li>
+            </ul>
+
+            <div class="actions">
+              <button (click)="addToCart(boxset)" class="btn btn-cart">Add to Cart</button>
+
+              <button
+                (click)="toggleWishlist(boxset)"
+                (mouseenter)="wishlistHoverId = boxset.product.id"
+                (mouseleave)="wishlistHoverId = null"
+                class="btn btn-wishlist"
+                [ngClass]="{ 'in-wishlist': isInWishlist(boxset) }"
+              >
+                {{
+                  wishlistClickLockId === boxset.product.id
+                    ? (isInWishlist(boxset) ? '★ In your wishlist' : 'Add to Wishlist')
+                    : (wishlistHoverId === boxset.product.id
+                      ? (isInWishlist(boxset) ? 'Remove' : 'Add to Wishlist')
+                      : (isInWishlist(boxset) ? '★ In your wishlist' : 'Add to Wishlist'))
+                }}
+              </button>
+
+              <button
+                (click)="toggleCollection(boxset)"
+                (mouseenter)="collectionHoverId = boxset.product.id"
+                (mouseleave)="collectionHoverId = null"
+                class="btn btn-collection"
+                [ngClass]="{ 'in-collection': isInCollection(boxset) }"
+              >
+                {{
+                  collectionClickLockId === boxset.product.id
+                    ? (isInCollection(boxset) ? '★ In your collection' : 'Add to Collection')
+                    : (collectionHoverId === boxset.product.id
+                      ? (isInCollection(boxset) ? 'Remove' : 'Add to Collection')
+                      : (isInCollection(boxset) ? '★ In your collection' : 'Add to Collection'))
+                }}
+              </button>
+            </div>
+          </div>
+
+          <div class="media-section" *ngIf="boxset.mediaItems.length > 0">
+            <div class="media-slider-wrapper">
+              <app-media-slider [items]="boxset.mediaItems"></app-media-slider>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="bottom-controls" *ngIf="currentIndex < boxsets.length - 1">
+    <button
+      class="scroll-arrow-btn"
+      aria-label="Scroll up"
+      (click)="scrollUp()"
+      [disabled]="currentIndex === 0"
+    >
+      <svg
+        width="40"
+        height="40"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <polyline
+          points="18 15 12 9 6 15"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    <button
+      class="scroll-arrow-btn"
+      aria-label="Scroll down"
+      (click)="scrollDown()"
+      [disabled]="currentIndex >= boxsets.length - 1"
+    >
+      <svg
+        width="40"
+        height="40"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <polyline
+          points="6 9 12 15 18 9"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
+</div>

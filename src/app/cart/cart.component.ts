@@ -6,6 +6,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
 import { ShippingCostService } from '../services/shipping-cost.service';
+import { Film } from '../services/film.service';
 
 interface Currency {
   code: string;
@@ -22,6 +23,13 @@ interface Currency {
 })
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
+  private readonly specialBoxsetSlugs: Record<number, string> = {
+    900001: 'bergman',
+    900002: 'wong-kar-wai',
+    900003: 'world-cinema-project',
+    900004: 'john-cassavetes',
+    900005: 'abbas-kiarostami',
+  };
 
   currencies: Currency[] = [
     { code: '€', label: 'EUR - Euro', rate: 1 },
@@ -159,6 +167,16 @@ export class CartComponent implements OnInit {
 
   trackItem(index: number, item: CartItem): number {
     return item.product.id;
+  }
+
+  getProductLink(product: Film): string[] {
+    return product.id >= 900000
+      ? ['/boxsets/special-edition']
+      : ['/films', product.id.toString()];
+  }
+
+  getProductFragment(product: Film): string | undefined {
+    return this.specialBoxsetSlugs[product.id] ?? undefined;
   }
 
   convertPrice(priceInEuro: number): string {

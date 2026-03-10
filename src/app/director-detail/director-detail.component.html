@@ -55,30 +55,32 @@
           </div>
         </div>
       </div>
-    </section>
-  }
-</div>
 
-<div class="director-films-container">
-  <section class="films-section">
-    <div class="film-grid">
-      @for (film of films; track film.id) {
-        <a
-          class="film-card"
-          [routerLink]="['/films', film.id]"
-          [attr.aria-label]="'View ' + film.title"
-        >
-          <img [src]="film.imageUrl" [alt]="film.title" />
-          <div class="film-info">
-            <h3 class="film-title">{{ film.title }}</h3>
-            <div class="meta-info">
-              <p>{{ film.director }}</p>
-              <p>{{ film.year }}</p>
+      @if (films.length > 0) {
+        <section class="films-section">
+          <div class="film-slider-shell">
+            <div class="film-slider-track">
+              @for (film of sliderFilms; track $index) {
+                <a
+                  class="film-card"
+                  [routerLink]="['/films', film.id]"
+                  [attr.aria-label]="'View ' + film.title"
+                >
+                  <img [src]="film.imageUrl" [alt]="film.title" />
+                  <div class="film-info">
+                    <h3 class="film-title">{{ film.title }}</h3>
+                    <div class="meta-info">
+                      <p>{{ film.director }}</p>
+                      <p>{{ film.year }}</p>
+                    </div>
+                  </div>
+                </a>
+              }
             </div>
           </div>
-        </a>
+        </section>
       }
-    </div>
-  </section>
+    </section>
+  }
 </div>
 </div>

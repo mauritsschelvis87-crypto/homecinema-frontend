@@ -1,16 +1,17 @@
 <div class="top-spacing"></div>
 
-<div
-  class="collection-empty cart-container"
-  *ngIf="!loading && filteredCollection.length === 0"
-  aria-live="polite"
->
-  <h2 class="empty-title">Your collection is empty</h2>
-  <p class="empty-text">Add movies to keep track of your collection!</p>
-  <a routerLink="/shopping" class="empty-button">Browse Films</a>
-</div>
+<div class="shopping-page-container">
+  <div
+    class="wishlist-empty cart-container"
+    *ngIf="!loading && filteredCollection.length === 0"
+    aria-live="polite"
+  >
+    <h2 class="empty-title">Your collection is empty</h2>
+    <p class="empty-text">Add movies to keep track of your collection!</p>
+    <a routerLink="/shopping" class="empty-button">Browse Films</a>
+  </div>
 
-<div class="shopping-page-container" *ngIf="!loading && filteredCollection.length > 0">
+  <div *ngIf="!loading && filteredCollection.length > 0">
   <section class="filters-container" aria-label="Film filters">
     <form class="filter-bar" novalidate>
       <input
@@ -118,7 +119,7 @@
     [ngClass]="{ 'film-grid': showGrid, 'film-list': !showGrid }"
     aria-label="Collection films"
   >
-    <a *ngFor="let film of filteredCollection" class="film-card" [routerLink]="['/product', film.id]" tabindex="0" role="link" [attr.aria-label]="'View ' + film.title">
+    <a *ngFor="let film of filteredCollection" class="film-card" [routerLink]="getFilmLink(film)" [fragment]="getFilmFragment(film)" tabindex="0" role="link" [attr.aria-label]="'View ' + film.title">
       <img [src]="film.imageUrl" [alt]="film.title" />
       <div class="film-info">
         <h3 class="film-title">{{ film.title }}</h3>
@@ -137,4 +138,5 @@
       </div>
     </a>
   </section>
+  </div>
 </div>

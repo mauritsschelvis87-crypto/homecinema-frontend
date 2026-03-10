@@ -17,6 +17,13 @@ export class CollectionComponent implements OnInit {
   filteredCollection: Film[] = [];
   loading = true;
   showGrid = true;
+  private readonly specialBoxsetSlugs: Record<number, string> = {
+    900001: 'bergman',
+    900002: 'wong-kar-wai',
+    900003: 'world-cinema-project',
+    900004: 'john-cassavetes',
+    900005: 'abbas-kiarostami',
+  };
 
   allCountries: string[] = [];
   allDirectors: string[] = [];
@@ -112,5 +119,15 @@ export class CollectionComponent implements OnInit {
 
   toggleView(): void {
     this.showGrid = !this.showGrid;
+  }
+
+  getFilmLink(film: Film): string[] {
+    return film.id >= 900000
+      ? ['/boxsets/special-edition']
+      : ['/product', film.id.toString()];
+  }
+
+  getFilmFragment(film: Film): string | undefined {
+    return this.specialBoxsetSlugs[film.id] ?? undefined;
   }
 }

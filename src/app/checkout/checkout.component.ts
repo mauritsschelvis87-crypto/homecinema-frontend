@@ -146,11 +146,25 @@ export class CheckoutComponent implements OnInit {
       }))
     };
 
+    const hasSpecialBoxset = this.cartItems.some(item => item.product.id >= 900000);
+
+    if (hasSpecialBoxset) {
+      const order = this.orderService.createLocalOrder(
+        this.username,
+        this.cartItems,
+        this.getTotalPrice()
+      );
+      alert('Bestelling geplaatst! Ordernummer: ' + order.id);
+      this.cartService.clearCart();
+      this.router.navigate(['/order-confirmation']);
+      return;
+    }
+
     this.orderService.placeOrder(orderRequest).subscribe({
       next: order => {
         alert('Bestelling geplaatst! Ordernummer: ' + order.id);
         this.cartService.clearCart();
-        this.router.navigate(['/order-confirmation', order.id]);
+        this.router.navigate(['/order-confirmation']);
       },
       error: err => {
         alert('Fout bij plaatsen bestelling.');

@@ -1,36 +1,52 @@
-.account-page {
+:host {
+  display: block;
+  width: 100%;
+}
+
+.account-navbar ul {
   display: flex;
-  gap: 2rem;
-  padding: 1rem;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
 
-  .sidebar {
-    width: 200px;
-    border-right: 1px solid #ddd;
-    padding-right: 1rem;
+.account-navbar li {
+  margin: 0;
+}
 
-    select,
-    label {
-      display: block;
-      margin-bottom: 1rem;
-    }
+.account-navbar a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.account-navbar a:hover,
+.account-navbar a:focus {
+  background-color: #333;
+  outline: none;
+}
+
+.account-navbar a.active {
+  background-color: var(--color-secundary-text);
+}
+
+@media (max-width: 600px) {
+  .account-navbar ul {
+    flex-direction: column;
   }
 
-  .content {
-    flex: 1;
-
-    form label {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.4rem;
-      margin-bottom: 1rem;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-    }
+  .account-navbar a {
+    width: 100%;
   }
 }

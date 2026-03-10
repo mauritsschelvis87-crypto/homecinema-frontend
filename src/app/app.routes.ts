@@ -18,6 +18,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { CartComponent } from './cart/cart.component';
 import { AccountComponent } from './account/account.component';
 import { OrderHistoryDetailComponent } from './order-history-detail/order-history-detail.component';
+import { BoxsetDetailComponent } from './boxset-detail/boxset-detail.component';
 
 const canAccessAccount: CanMatchFn = () => {
   const auth = inject(LoginService);
@@ -40,6 +41,7 @@ export const routes: Routes = [
   { path: 'director/:slugs', component: DirectorDetailComponent },
   { path: 'directors/:slug', component: DirectorDetailComponent },
   { path: 'account', component: AccountComponent },
+  { path: 'boxsets/special-edition', component: BoxsetDetailComponent },
   { path: 'films/:id', component: ProductDetailComponent },
   { path: 'order-history-detail/:id', component: OrderHistoryDetailComponent },
   { path: 'gift-code', component: GiftCodeComponent },

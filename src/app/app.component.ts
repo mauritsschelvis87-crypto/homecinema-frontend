@@ -4,13 +4,17 @@ import { environment } from '../environments/environment';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { TranslateService } from '@ngx-translate/core';
-import translationsEN from "../locale/en.json";
-import translationsNL from "../locale/nl.json";
+import translationsEN from '../locale/en.json';
+import translationsNL from '../locale/nl.json';
+import translationsDE from '../locale/de.json';
+import translationsFR from '../locale/fr.json';
+import translationsES from '../locale/es.json';
 import { RouterModule } from '@angular/router';
 import { CartService } from './services/cart.service';
 import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { AuthService } from './services/auth.service';
+import { DomTranslationService } from './services/dom-translation.service';
 
 @Component({
   selector: 'app-root',
@@ -34,9 +38,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private cartService: CartService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private domTranslationService: DomTranslationService
   ) {
-    translate.setDefaultLang('en');
     this.initialiseTranslateService();
 
     this.cartSub = this.cartService.itemAdded$.subscribe(() => {
@@ -46,10 +50,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ensureTestUserExists();
+    this.domTranslationService.init();
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         window.scrollTo(0, 0);
+        setTimeout(() => this.domTranslationService.translatePage(), 0);
       }
     });
   }
@@ -63,10 +69,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private initialiseTranslateService(): void {
-    this.translate.addLangs(['nl', 'en']);
+    const storedLanguage = localStorage.getItem('language') ?? 'en';
+
+    this.translate.addLangs(['en', 'nl', 'de', 'fr', 'es']);
     this.translate.setTranslation('en', translationsEN);
     this.translate.setTranslation('nl', translationsNL);
-    this.translate.setDefaultLang('nl');
+    this.translate.setTranslation('de', translationsDE);
+    this.translate.setTranslation('fr', translationsFR);
+    this.translate.setTranslation('es', translationsES);
+    this.translate.setDefaultLang('en');
+    this.translate.use(storedLanguage);
   }
 
   onMenuToggle(open: boolean): void {

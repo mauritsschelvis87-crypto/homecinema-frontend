@@ -78,8 +78,8 @@ export class FaqComponent {
       expanded: false
     },
     {
-      question: 'Wat betekenen regio’s A, B en C?',
-      answer: 'Films op DVD en Blu-ray zijn gecodeerd voor specifieke regio’s om afspelen te beperken. Regio A is voor Noord- en Zuid-Amerika en Oost-Azië, regio B voor Europa, Afrika, het Midden-Oosten en Australië, en regio C voor Centraal- en Zuid-Azië. Zorg dat je speler de juiste regio ondersteunt.',
+      question: 'What do regions A, B, and C mean?',
+      answer: 'DVDs and Blu-rays are encoded for specific regions to limit playback. Region A covers North and South America and East Asia, region B covers Europe, Africa, the Middle East, and Australia, and region C covers Central and South Asia. Make sure your player supports the correct region.',
       expanded: false
     },
 

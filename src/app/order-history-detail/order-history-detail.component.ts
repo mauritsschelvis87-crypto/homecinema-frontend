@@ -40,6 +40,13 @@ export class OrderHistoryDetailComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
+          const localOrder = this.orderService.getLocalOrderById(+id);
+          if (localOrder) {
+            this.order = localOrder;
+            this.isLoading = false;
+            return;
+          }
+
           this.error = 'Bestelling niet gevonden.';
           this.isLoading = false;
         },

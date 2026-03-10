@@ -158,6 +158,14 @@
   }
 }
 
+.media-slider-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  margin-top: 10px;
+}
+
 .btn {
   background-color: black;
   color: white;

@@ -23,6 +23,13 @@ export class WishlistComponent implements OnInit {
   wishlist: Film[] = [];
   filteredWishlist: Film[] = [];
   loading = false;
+  private readonly specialBoxsetSlugs: Record<number, string> = {
+    900001: 'bergman',
+    900002: 'wong-kar-wai',
+    900003: 'world-cinema-project',
+    900004: 'john-cassavetes',
+    900005: 'abbas-kiarostami',
+  };
 
   allCountries: string[] = [];
   allDirectors: string[] = [];
@@ -141,5 +148,15 @@ export class WishlistComponent implements OnInit {
   addToCart(film: Film): void {
     this.cartService.addToCart(film);
     this.remove(film.id);
+  }
+
+  getFilmLink(film: Film): string[] {
+    return film.id >= 900000
+      ? ['/boxsets/special-edition']
+      : ['/product', film.id.toString()];
+  }
+
+  getFilmFragment(film: Film): string | undefined {
+    return this.specialBoxsetSlugs[film.id] ?? undefined;
   }
 }
