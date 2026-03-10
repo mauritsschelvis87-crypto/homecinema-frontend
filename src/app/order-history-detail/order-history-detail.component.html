@@ -1,32 +1,40 @@
+<div class="top-spacing"></div>
+
 <div class="order-detail-container" *ngIf="!isLoading && order; else loadingOrError">
-  <h2>Bestelling #{{ order.id }}</h2>
-  <p>
-    <strong>Datum:</strong> {{ order.orderDate | date:'medium' }}<br />
-    <strong>Totaalbedrag:</strong> € {{ order.totalPrice.toFixed(2) }}
-  </p>
+  <h2 class="order-title">Order Details</h2>
 
-  <div class="order-items">
-    <div class="order-item" *ngFor="let item of order.orderItems">
-      <img [src]="item.film.imageUrl" [alt]="item.film.title" class="product-image" />
-      <div class="item-info">
-        <h4>{{ item.film.title }}</h4>
-        <p><strong>Brand:</strong> {{ item.film.brand.name }}</p>
-        <p><strong>Type:</strong> {{ item.film.type || 'Onbekend' }}</p>
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of order.orderItems">
+        <td class="product-info">
+          <img [src]="item.film.imageUrl" [alt]="item.film.title" class="product-image" />
+          <div class="product-details">
+            <div class="product-title">{{ item.film.title }}</div>
+            <div class="product-brand">{{ item.film.brand.name }}</div>
+            <div class="product-type">{{ item.film.type || 'Onbekend' }}</div>
+          </div>
+        </td>
+        <td>{{ item.quantity }}</td>
+        <td>€ {{ (item.price * item.quantity).toFixed(2) }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-        <p><strong>Prijs per stuk:</strong> € {{ item.film.price.toFixed(2) }}</p>
-        <p><strong>Aantal:</strong> {{ item.quantity }}</p>
-        <p><strong>Subtotaal:</strong> € {{ (item.price * item.quantity).toFixed(2) }}</p>
-
-        <div *ngIf="item.film.stills && item.film.stills.length > 0" class="stills-container">
-          <img *ngFor="let still of item.film.stills" [src]="still" [alt]="'Still van ' + item.film.title" class="still-image" />
-        </div>
-      </div>
-    </div>
+  <div class="purchase-summary">
+    <p class="summary-line"><strong>Purchase date:</strong> {{ order.orderDate | date:'medium' }}</p>
+    <p class="summary-line"><strong>Already paid:</strong> € {{ getPaidAmount().toFixed(2) }}</p>
+    <p class="summary-line"><strong>Total amount:</strong> € {{ getTotal().toFixed(2) }}</p>
   </div>
 
-  <div class="order-summary">
-    <h3>Totaal: € {{ getTotal().toFixed(2) }}</h3>
-    <a routerLink="/account" class="back-button">← Terug naar account</a>
+  <div class="bottom-actions">
+    <a routerLink="/account" class="back-button">Back to account</a>
   </div>
 </div>
 

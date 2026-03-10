@@ -34,6 +34,10 @@
   width: 335px;
 }
 
+.right-column {
+  max-height: 70vh;
+}
+
 .section-subtitle {
   font-weight: bold;
   font-size: 1.25rem;
@@ -71,8 +75,10 @@
 }
 
 .order-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
-  max-height: 60vh;
+  max-height: 100%;
   padding-right: 0.5rem;
 }
 
@@ -170,6 +176,7 @@
   }
 
   .order-scroll {
+    flex: initial;
     max-height: 400px;
     overflow-y: auto;
   }

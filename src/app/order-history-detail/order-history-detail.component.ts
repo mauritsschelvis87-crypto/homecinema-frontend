@@ -7,7 +7,7 @@ import { DatePipe, NgForOf, NgIf } from '@angular/common';
   selector: 'app-order-history-detail',
   templateUrl: './order-history-detail.component.html',
   imports: [NgIf, RouterLink, DatePipe, NgForOf],
-  styleUrls: ['./order-history-detail.component.scss'],
+  styleUrl: './order-history-detail.component.scss',
 })
 export class OrderHistoryDetailComponent implements OnInit {
   order: Order | null = null;
@@ -49,5 +49,9 @@ export class OrderHistoryDetailComponent implements OnInit {
 
   getTotal(): number {
     return this.order?.orderItems.reduce((sum, item) => sum + item.price, 0) || 0;
+  }
+
+  getPaidAmount(): number {
+    return this.order?.totalPrice ?? 0;
   }
 }

@@ -21,7 +21,6 @@ export class HomepageComponent implements OnInit {
     'italian-classics-hero',
     'silent-films-hero',
     'technicolor-hero',
-    'nosferatu-hero',
     'footer',
   ];
 

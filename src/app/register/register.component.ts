@@ -11,8 +11,8 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './register.component.html'
 })
 export class RegisterComponent {
-  email = '';
-  password = '';
+  email = 'dev@test.local';
+  password = 'test';
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -28,7 +28,10 @@ export class RegisterComponent {
         this.router.navigate(['/']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Registratie mislukt.';
+        this.errorMessage =
+          err.status === 409
+            ? 'Testaccount bestaat al en is klaar voor gebruik.'
+            : err.error?.message || 'Registratie mislukt.';
       }
     });
   }

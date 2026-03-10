@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     const exact = this.allFilms.find(f => f.title.toLowerCase() === q.toLowerCase());
     if (exact) {
-      this.router.navigate(['/product', exact.id]);
+      this.router.navigate(['/films', exact.id]);
     }
     else {
       this.router.navigate(['/shopping'], { queryParams: { q } });
@@ -84,7 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   goToFilm(id: number): void {
-    this.router.navigate(['/product', id]);
+    this.router.navigate(['/films', id]);
     this.closeSearch();
   }
 

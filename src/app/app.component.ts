@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { CartService } from './services/cart.service';
 import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,9 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private readonly testEmail = 'dev@test.local';
+  private readonly testPassword = 'test';
+
   title = 'infirfs-angular-code-along-week5-les1';
   protected readonly environment = environment;
   public menuOpen = false;
@@ -29,7 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private translate: TranslateService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     translate.setDefaultLang('en');
     this.initialiseTranslateService();
@@ -40,11 +45,20 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Scroll naar boven bij elke navigatie
+    this.ensureTestUserExists();
+
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         window.scrollTo(0, 0);
       }
+    });
+  }
+
+  private ensureTestUserExists(): void {
+    this.authService.register(this.testEmail, this.testPassword).subscribe({
+      error: () => {
+        // Ignore failures here so the app keeps loading even if the user already exists.
+      },
     });
   }
 

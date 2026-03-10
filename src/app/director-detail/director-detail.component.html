@@ -1,30 +1,84 @@
-@if (director) {
-  <div>
-    <h1>{{ director.name }}</h1>
-    <img [src]="director.image" alt="{{ director.name }}">
-    <p>{{ director.bio }}</p>
-    <p><strong>Geboren:</strong> {{ director.birthPlace }} ({{ director.birthYear }})</p>
-    @if (director.deathYear) {
-      <p><strong>Overleden:</strong> {{ director.deathYear }}</p>
-    }
-    <p><strong>Opleiding:</strong> {{ director.education }}</p>
-  </div>
-}
+<div class="top-spacing"></div>
 
-<div class="films-section">
-  <h2>Films van {{ director?.name }}</h2>
-  <div class="film-grid">
-    @for (film of films; track film) {
-      <a
-        class="film-card"
-        [routerLink]="['/product', film.id]"
+<div class="page-gray-screen">
+<div class="director-page-container">
+  @if (director) {
+    <section class="director-intro">
+      <div class="director-page-title-row">
+        <h1 class="director-page-title">{{ director.name }}</h1>
+        <div class="share-icons-inline">
+          <a
+            [href]="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on Facebook"
+          >
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a
+            [href]="'https://twitter.com/intent/tweet?url=' + shareUrl + '&text=Take%20a%20look%20at%20this%20director!'"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on Twitter"
+          >
+            <i class="fab fa-x-twitter"></i>
+          </a>
+          <a
+            [href]="'https://wa.me/?text=' + shareUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on WhatsApp"
+          >
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="director-details-wrapper">
+        <div class="left-side-wrapper">
+          <div class="director-image-container">
+            <img class="director-image" [src]="directorImage" [alt]="director.name" />
+          </div>
+        </div>
+
+        <div class="right-side-wrapper">
+          <div class="specs-container">
+            <ul class="specs-list">
+              <li><strong>Director:</strong> {{ director.name }}</li>
+              <li><strong>Born:</strong> {{ director.birthPlace }} ({{ director.birthYear }})</li>
+              @if (director.deathYear) {
+                <li><strong>Died:</strong> {{ director.deathYear }}</li>
+              }
+              <li><strong>Education:</strong> {{ director.education }}</li>
+            </ul>
+            <p class="bio">{{ director.bio }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+</div>
+
+<div class="director-films-container">
+  <section class="films-section">
+    <div class="film-grid">
+      @for (film of films; track film.id) {
+        <a
+          class="film-card"
+          [routerLink]="['/films', film.id]"
+          [attr.aria-label]="'View ' + film.title"
         >
-        <img [src]="film.imageUrl" [alt]="film.title" />
-        <h3>{{ film.title }}</h3>
-        <p>{{ film.year }}</p>
-        <p><strong>Uitgave:</strong> {{ film.brand.name }}</p>
-        <p><strong>Type:</strong> {{ film.type }}</p>
-      </a>
-    }
-  </div>
+          <img [src]="film.imageUrl" [alt]="film.title" />
+          <div class="film-info">
+            <h3 class="film-title">{{ film.title }}</h3>
+            <div class="meta-info">
+              <p>{{ film.director }}</p>
+              <p>{{ film.year }}</p>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+</div>
 </div>

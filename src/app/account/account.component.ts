@@ -30,20 +30,32 @@ interface Country {
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit {
-  selectedLanguage = '';
+  private readonly defaultLoginEmail = 'dev@test.local';
+  private readonly defaultLoginPassword = 'test';
+  private readonly defaultRegisterEmail = 'dev@test.local';
+  private readonly defaultRegisterPassword = 'test';
+  private readonly testUserEmail = 'dev@test.local';
+  private readonly defaultAddress: Address = {
+    street: 'Teststraat 1',
+    postalCode: '1234AB',
+    city: 'Amsterdam',
+    country: 'Netherlands',
+  };
+
+  selectedLanguage = 'English';
   languages = ['Dutch', 'English'];
 
   address: Address = { street: '', postalCode: '', city: '', country: '' };
   currentUser?: User;
   addressMessage = '';
 
-  loginEmail = '';
-  loginPassword = '';
+  loginEmail = this.defaultLoginEmail;
+  loginPassword = this.defaultLoginPassword;
   loginMessage = '';
   loginLoading = false;
 
-  registerEmail = '';
-  registerPassword = '';
+  registerEmail = this.defaultRegisterEmail;
+  registerPassword = this.defaultRegisterPassword;
   registerMessage = '';
   registerLoading = false;
 
@@ -71,6 +83,7 @@ export class AccountComponent implements OnInit {
     const storedEmail = localStorage.getItem('username');
     if (storedEmail) {
       this.currentUser = { username: storedEmail } as User;
+      this.applyAddressDefaults();
       this.loadUserData(storedEmail);
       this.loadOrders(storedEmail);
     }
@@ -100,6 +113,7 @@ export class AccountComponent implements OnInit {
           localStorage.setItem('username', this.loginEmail);
           this.loginMessage = '✅ You are logged in!.';
           this.currentUser = { username: this.loginEmail } as User;
+          this.applyAddressDefaults();
           this.loadUserData(this.loginEmail);
           this.loadOrders(this.loginEmail);
         },
@@ -131,16 +145,14 @@ export class AccountComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          localStorage.setItem('username', this.registerEmail);
           this.registerMessage = '✅ Registration successful.';
-          this.currentUser = { username: this.registerEmail } as User;
-          this.loadUserData(this.registerEmail);
-          this.loadOrders(this.registerEmail);
+          this.registerEmail = this.defaultRegisterEmail;
+          this.registerPassword = this.defaultRegisterPassword;
         },
         error: (err) => {
           this.registerMessage =
             err.status === 409
-              ? '⚠️ User already exists.'
+              ? '✅ Test account already exists and is ready to use.'
               : '⚠️ Something went wrong during registration.';
           this.registerLoading = false;
         },
@@ -153,8 +165,8 @@ export class AccountComponent implements OnInit {
   logout() {
     localStorage.removeItem('username');
     this.currentUser = undefined;
-    this.loginEmail = '';
-    this.loginPassword = '';
+    this.loginEmail = this.defaultLoginEmail;
+    this.loginPassword = this.defaultLoginPassword;
     this.orders = [];
     this.router.navigate(['/account']);
   }
@@ -163,22 +175,24 @@ export class AccountComponent implements OnInit {
     this.accountService.getUser(email).subscribe({
       next: (user: User) => {
         this.currentUser = user;
+        const shouldForceTestAddress = email === this.testUserEmail;
+        this.address = shouldForceTestAddress
+          ? { ...this.defaultAddress }
+          : {
+              street: user.address?.street || this.defaultAddress.street,
+              postalCode: user.address?.postalCode || this.defaultAddress.postalCode,
+              city: user.address?.city || this.defaultAddress.city,
+              country: user.address?.country || this.defaultAddress.country,
+            };
 
-        if (user.address?.country) {
-          const countryName = user.address.country;
-          const countryCode = COUNTRY_NAME_TO_CODE[countryName];
-          this.selectedCountryCode = countryCode ?? null;
-          this.shippingCost = countryCode ? SHIPPING_COSTS[countryCode] ?? null : null;
-
-          this.address = {
-            street: user.address.street || '',
-            postalCode: user.address.postalCode || '',
-            city: user.address.city || '',
-            country: countryName,
-          };
-        }
+        const countryCode = COUNTRY_NAME_TO_CODE[this.address.country];
+        this.selectedCountryCode = countryCode ?? '';
+        this.shippingCost = countryCode ? SHIPPING_COSTS[countryCode] ?? null : null;
       },
-      error: (err) => console.error('Error fetching user/address:', err),
+      error: (err) => {
+        console.error('Error fetching user/address:', err);
+        this.applyAddressDefaults();
+      },
     });
   }
 
@@ -224,9 +238,14 @@ export class AccountComponent implements OnInit {
   loadOrders(email: string) {
     this.accountService.getOrders(email).subscribe({
       next: (orders) => {
-        this.orders = orders;
+        this.orders = orders.sort(
+          (a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+        );
       },
-      error: (err) => console.error('Error loading orders:', err),
+      error: (err) => {
+        console.error('Error loading orders:', err);
+        this.orders = [];
+      },
     });
   }
 
@@ -240,5 +259,13 @@ export class AccountComponent implements OnInit {
 
   closePopup() {
     this.showThanksMessage = false;
+  }
+
+  private applyAddressDefaults() {
+    this.address = { ...this.defaultAddress };
+    this.selectedCountryCode = COUNTRY_NAME_TO_CODE[this.defaultAddress.country] ?? '';
+    this.shippingCost = this.selectedCountryCode
+      ? SHIPPING_COSTS[this.selectedCountryCode] ?? null
+      : null;
   }
 }

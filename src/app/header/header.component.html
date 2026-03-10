@@ -25,9 +25,18 @@
         autofocus
       />
       <ul *ngIf="filteredFilms.length" class="search-suggestions">
-        <li *ngFor="let film of filteredFilms" (click)="goToFilm(film.id)">
-          <img [src]="film.imageUrl" alt="{{film.title}}" width="40" height="60" />
-          <span>{{ film.title }} ({{ film.year }})</span>
+        <li *ngFor="let film of filteredFilms">
+          <button
+            type="button"
+            class="search-suggestion-link"
+            (click)="goToFilm(film.id)"
+          >
+            <img [src]="film.imageUrl" alt="{{film.title}}" width="40" height="60" />
+            <span class="search-suggestion-text">
+              <strong>{{ film.title }}</strong>
+              <small>{{ film.year }} • {{ film.director }}</small>
+            </span>
+          </button>
         </li>
       </ul>
     </div>
