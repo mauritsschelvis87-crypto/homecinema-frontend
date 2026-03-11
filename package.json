@@ -1,5 +1,5 @@
 {
-  "name": "infirfs-angular-code-along-week5-les1",
+  "name": "HomeCinemaProject",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -37,6 +39,7 @@
     "@angular/compiler-cli": "^20.1.0",
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "20.1.1",
+    "cypress": "^15.11.0",
     "eslint": "^9.29.0",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",

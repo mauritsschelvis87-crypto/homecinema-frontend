@@ -58,9 +58,8 @@
 
       @if (films.length > 0) {
         <section class="films-section">
-          <div class="film-slider-shell">
-            <div class="film-slider-track">
-              @for (film of sliderFilms; track $index) {
+          <div class="film-grid" aria-label="Director films">
+              @for (film of films; track film.id) {
                 <a
                   class="film-card"
                   [routerLink]="['/films', film.id]"
@@ -76,7 +75,6 @@
                   </div>
                 </a>
               }
-            </div>
           </div>
         </section>
       }

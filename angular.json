@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "infirfs-angular-code-along-week5-les1": {
+    "HomeCinemaProject": {
       "i18n": {
         "sourceLocale": "en"
       },
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/infirfs-angular-code-along-week5-les1",
+            "outputPath": "dist/HomeCinemaProject",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -74,10 +74,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "infirfs-angular-code-along-week5-les1:build:production"
+              "buildTarget": "HomeCinemaProject:build:production"
             },
             "development": {
-              "buildTarget": "infirfs-angular-code-along-week5-les1:build:development"
+              "buildTarget": "HomeCinemaProject:build:development"
             }
           },
           "defaultConfiguration": "development"

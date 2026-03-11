@@ -106,12 +106,4 @@ export class DirectorDetailComponent implements OnInit {
   get directorImage(): string {
     return this.exploreDirectorImages[this.currentSlug] || this.director?.image || '';
   }
-
-  get sliderFilms(): Film[] {
-    if (!this.films.length) {
-      return [];
-    }
-
-    return [...this.films, ...this.films];
-  }
 }

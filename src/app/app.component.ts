@@ -14,7 +14,6 @@ import { CartService } from './services/cart.service';
 import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { AuthService } from './services/auth.service';
-import { DomTranslationService } from './services/dom-translation.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly testEmail = 'dev@test.local';
   private readonly testPassword = 'test';
 
-  title = 'infirfs-angular-code-along-week5-les1';
+  title = 'HomeCinemaProject';
   protected readonly environment = environment;
   public menuOpen = false;
 
@@ -38,8 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private cartService: CartService,
     private router: Router,
-    private authService: AuthService,
-    private domTranslationService: DomTranslationService
+    private authService: AuthService
   ) {
     this.initialiseTranslateService();
 
@@ -50,12 +48,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ensureTestUserExists();
-    this.domTranslationService.init();
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         window.scrollTo(0, 0);
-        setTimeout(() => this.domTranslationService.translatePage(), 0);
       }
     });
   }
