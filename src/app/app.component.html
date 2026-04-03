@@ -6,7 +6,11 @@
   <img src="../assets/logo/HCP_logo_3.png" alt="Logo" />
 </a>
 
-<main class="main-content" [class.shifted]="menuOpen">
+<main
+  class="main-content"
+  [class.shifted]="menuOpen"
+  [class.homepage-route]="isHomepage"
+>
   <router-outlet></router-outlet>
 </main>
 

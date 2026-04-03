@@ -1,8 +1,18 @@
 .main-content {
+  width: 100%;
+  min-width: 0;
   transition: transform 1s ease;
 
   &.shifted {
     transform: translateX(-205px);
+  }
+
+  &.homepage-route {
+    overflow-x: hidden;
+  }
+
+  &.homepage-route.shifted {
+    width: calc(100% - 205px);
   }
 }
 

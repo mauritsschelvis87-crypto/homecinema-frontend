@@ -29,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'HomeCinemaProject';
   protected readonly environment = environment;
   public menuOpen = false;
+  public isHomepage = false;
 
   public cartAnimation = false;
   private cartSub?: Subscription;
@@ -48,12 +49,19 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ensureTestUserExists();
+    this.isHomepage = this.isHomepageRoute(this.router.url);
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        this.isHomepage = this.isHomepageRoute(event.urlAfterRedirects);
         window.scrollTo(0, 0);
       }
     });
+  }
+
+  private isHomepageRoute(url: string): boolean {
+    const path = url.split('?')[0].split('#')[0];
+    return path === '' || path === '/';
   }
 
   private ensureTestUserExists(): void {
