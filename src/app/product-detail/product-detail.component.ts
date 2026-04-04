@@ -39,8 +39,18 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+
+      if (!id) {
+        this.error = true;
+        this.loading = false;
+        return;
+      }
+
+      this.loading = true;
+      this.error = false;
+
       this.filmService.getFilmById(id).subscribe({
         next: (film) => {
           this.product = film;
@@ -53,7 +63,7 @@ export class ProductDetailComponent implements OnInit {
           this.loading = false;
         },
       });
-    }
+    });
   }
 
   setupMedia(): void {

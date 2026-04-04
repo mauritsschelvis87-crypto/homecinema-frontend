@@ -53,13 +53,13 @@ export class CartComponent implements OnInit {
   totalWeightInGrams: number = 0;
 
   private validGiftCodes: { [code: string]: number } = {
-    'GIFT10': 10,
-    'GIFT20': 20,
-    'MOVIE5': 5,
+    'TEST10': 10,
+    'TEST20': 20,
+    'TEST30': 30,
   };
 
   private validVouchers: string[] = [
-    'MOVIEBUFF',
+    'TEST',
     'SUMMER25',
     'VIPACCESS'
   ];
