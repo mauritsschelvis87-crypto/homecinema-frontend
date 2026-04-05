@@ -3,10 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { Address, User } from '../models/user';
 import { AccountService } from '../services/account.service';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { OrderService } from '../services/order.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { AuthService, AuthResponse } from '../services/auth.service';
 
 import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
 import { SHIPPING_COSTS } from '../constants/shipping-costs';
@@ -37,16 +37,11 @@ interface LanguageOption {
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit {
-  private readonly defaultLoginEmail = 'dev@test.local';
-  private readonly defaultLoginPassword = 'test';
-  private readonly defaultRegisterEmail = 'dev@test.local';
-  private readonly defaultRegisterPassword = 'test';
-  private readonly testUserEmail = 'dev@test.local';
   private readonly defaultAddress: Address = {
-    street: 'Teststraat 1',
-    postalCode: '1234AB',
-    city: 'Amsterdam',
-    country: 'Netherlands',
+    street: '',
+    postalCode: '',
+    city: '',
+    country: '',
   };
 
   selectedLanguage = 'en';
@@ -62,13 +57,13 @@ export class AccountComponent implements OnInit {
   currentUser?: User;
   addressMessage = '';
 
-  loginEmail = this.defaultLoginEmail;
-  loginPassword = this.defaultLoginPassword;
+  loginEmail = '';
+  loginPassword = '';
   loginMessage = '';
   loginLoading = false;
 
-  registerEmail = this.defaultRegisterEmail;
-  registerPassword = this.defaultRegisterPassword;
+  registerEmail = '';
+  registerPassword = '';
   registerMessage = '';
   registerLoading = false;
 
@@ -82,7 +77,7 @@ export class AccountComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private http: HttpClient,
+    private authService: AuthService,
     private router: Router,
     private orderService: OrderService,
     private translate: TranslateService
@@ -97,11 +92,15 @@ export class AccountComponent implements OnInit {
     }));
 
     const storedEmail = localStorage.getItem('username');
-    if (storedEmail) {
+    const token = this.authService.getStoredToken();
+
+    if (storedEmail || token) {
       this.currentUser = { username: storedEmail } as User;
       this.applyAddressDefaults();
-      this.loadUserData(storedEmail);
-      this.loadOrders(storedEmail);
+      this.loadUserData(storedEmail ?? undefined);
+      if (storedEmail) {
+        this.loadOrders(storedEmail);
+      }
     }
   }
 
@@ -115,23 +114,16 @@ export class AccountComponent implements OnInit {
     this.loginMessage = '';
     this.loginLoading = true;
 
-    this.http
-      .post<{ username: string }>(
-        'http://localhost:8080/api/auth/login',
-        {
-          email: this.loginEmail,
-          password: this.loginPassword,
-        },
-        { withCredentials: true }
-      )
+    this.authService
+      .login(this.loginEmail, this.loginPassword)
       .subscribe({
-        next: () => {
-          localStorage.setItem('username', this.loginEmail);
+        next: (response) => {
+          const username = response.email || this.loginEmail;
           this.loginMessage = '✅ You are logged in!.';
-          this.currentUser = { username: this.loginEmail } as User;
+          this.currentUser = { username } as User;
           this.applyAddressDefaults();
-          this.loadUserData(this.loginEmail);
-          this.loadOrders(this.loginEmail);
+          this.loadUserData(username);
+          this.loadOrders(username);
         },
         error: (err) => {
           this.loginMessage =
@@ -150,20 +142,18 @@ export class AccountComponent implements OnInit {
     this.registerMessage = '';
     this.registerLoading = true;
 
-    this.http
-      .post(
-        'http://localhost:8080/api/auth/register',
-        {
-          email: this.registerEmail,
-          password: this.registerPassword,
-        },
-        { withCredentials: true }
-      )
+    this.authService
+      .register(this.registerEmail, this.registerPassword)
       .subscribe({
-        next: () => {
+        next: (response: AuthResponse) => {
+          const username = response.email || this.registerEmail;
           this.registerMessage = '✅ Registration successful.';
-          this.registerEmail = this.defaultRegisterEmail;
-          this.registerPassword = this.defaultRegisterPassword;
+          this.currentUser = { username } as User;
+          this.applyAddressDefaults();
+          this.loadUserData(username);
+          this.loadOrders(username);
+          this.registerEmail = '';
+          this.registerPassword = '';
         },
         error: (err) => {
           this.registerMessage =
@@ -179,27 +169,24 @@ export class AccountComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('username');
+    this.authService.logout();
     this.currentUser = undefined;
-    this.loginEmail = this.defaultLoginEmail;
-    this.loginPassword = this.defaultLoginPassword;
+    this.loginEmail = '';
+    this.loginPassword = '';
     this.orders = [];
     this.router.navigate(['/account']);
   }
 
-  loadUserData(email: string) {
+  loadUserData(email?: string) {
     this.accountService.getUser(email).subscribe({
       next: (user: User) => {
         this.currentUser = user;
-        const shouldForceTestAddress = email === this.testUserEmail;
-        this.address = shouldForceTestAddress
-          ? { ...this.defaultAddress }
-          : {
-              street: user.address?.street || this.defaultAddress.street,
-              postalCode: user.address?.postalCode || this.defaultAddress.postalCode,
-              city: user.address?.city || this.defaultAddress.city,
-              country: user.address?.country || this.defaultAddress.country,
-            };
+        this.address = {
+          street: user.address?.street || this.defaultAddress.street,
+          postalCode: user.address?.postalCode || this.defaultAddress.postalCode,
+          city: user.address?.city || this.defaultAddress.city,
+          country: user.address?.country || this.defaultAddress.country,
+        };
 
         const countryCode = COUNTRY_NAME_TO_CODE[this.address.country];
         this.selectedCountryCode = countryCode ?? '';
@@ -225,7 +212,6 @@ export class AccountComponent implements OnInit {
     }
 
     const userUpdate = {
-      email: this.currentUser.username,
       street: this.address.street,
       postalCode: this.address.postalCode,
       city: this.address.city,
@@ -283,9 +269,7 @@ export class AccountComponent implements OnInit {
 
   private applyAddressDefaults() {
     this.address = { ...this.defaultAddress };
-    this.selectedCountryCode = COUNTRY_NAME_TO_CODE[this.defaultAddress.country] ?? '';
-    this.shippingCost = this.selectedCountryCode
-      ? SHIPPING_COSTS[this.selectedCountryCode] ?? null
-      : null;
+    this.selectedCountryCode = '';
+    this.shippingCost = null;
   }
 }

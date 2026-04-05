@@ -23,13 +23,12 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private readonly testEmail = 'dev@test.local';
-  private readonly testPassword = 'test';
-
   title = 'HomeCinemaProject';
   protected readonly environment = environment;
   public menuOpen = false;
   public isHomepage = false;
+  public isExploreRoute = false;
+  public useMenuAlignment = false;
 
   public cartAnimation = false;
   private cartSub?: Subscription;
@@ -48,12 +47,15 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.ensureTestUserExists();
     this.isHomepage = this.isHomepageRoute(this.router.url);
+    this.isExploreRoute = this.isExplorePageRoute(this.router.url);
+    this.useMenuAlignment = this.shouldUseMenuAlignment(this.router.url);
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isHomepage = this.isHomepageRoute(event.urlAfterRedirects);
+        this.isExploreRoute = this.isExplorePageRoute(event.urlAfterRedirects);
+        this.useMenuAlignment = this.shouldUseMenuAlignment(event.urlAfterRedirects);
         window.scrollTo(0, 0);
       }
     });
@@ -64,12 +66,19 @@ export class AppComponent implements OnInit, OnDestroy {
     return path === '' || path === '/';
   }
 
-  private ensureTestUserExists(): void {
-    this.authService.register(this.testEmail, this.testPassword).subscribe({
-      error: () => {
-        // Ignore failures here so the app keeps loading even if the user already exists.
-      },
-    });
+  private shouldUseMenuAlignment(url: string): boolean {
+    const path = url.split('?')[0].split('#')[0];
+
+    return path === ''
+      || path === '/'
+      || path === '/boxsets/special-edition'
+      || path.startsWith('/director/')
+      || path.startsWith('/directors/');
+  }
+
+  private isExplorePageRoute(url: string): boolean {
+    const path = url.split('?')[0].split('#')[0];
+    return path === '/explore';
   }
 
   private initialiseTranslateService(): void {

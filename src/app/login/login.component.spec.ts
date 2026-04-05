@@ -1,23 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from './login.component';
+import { AuthService } from '../services/auth.service';
 
 describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let component: LoginComponent;
-  let httpClientSpy: jasmine.SpyObj<HttpClient>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    httpClientSpy = jasmine.createSpyObj<HttpClient>('HttpClient', ['post']);
+    authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', ['login']);
     routerSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
-        { provide: HttpClient, useValue: httpClientSpy },
+        { provide: AuthService, useValue: authServiceSpy },
         { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
@@ -27,7 +27,7 @@ describe('LoginComponent', () => {
   });
 
   it('navigates to the splash screen after a successful login', () => {
-    httpClientSpy.post.and.returnValue(of({}));
+    authServiceSpy.login.and.returnValue(of({ email: 'dev@test.local', token: 'jwt-token' }));
 
     component.login();
 
@@ -37,7 +37,7 @@ describe('LoginComponent', () => {
   });
 
   it('shows an invalid credentials message on a 401 error', () => {
-    httpClientSpy.post.and.returnValue(throwError(() => ({ status: 401 })));
+    authServiceSpy.login.and.returnValue(throwError(() => ({ status: 401 })));
 
     component.login();
 

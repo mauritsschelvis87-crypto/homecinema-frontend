@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -12,21 +12,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  email = 'dev@test.local';
-  password = 'test';
+  email = '';
+  password = '';
   message = '';
   loading = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login() {
     this.message = '';
     this.loading = true;
 
-    this.http.post('http://localhost:8080/api/auth/login', {
-      email: this.email,
-      password: this.password,
-    }, { withCredentials: true }).subscribe({
+    this.authService.login(this.email, this.password).subscribe({
       next: () => {
         this.router.navigate(['/splash-screen']);
       },

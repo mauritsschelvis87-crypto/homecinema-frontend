@@ -1,7 +1,9 @@
 .main-content {
   width: 100%;
   min-width: 0;
-  transition: transform 1s ease;
+  transition:
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    width 1.15s cubic-bezier(0.22, 1, 0.36, 1);
 
   &.shifted {
     transform: translateX(-205px);
@@ -11,9 +13,21 @@
     overflow-x: hidden;
   }
 
+  &.menu-align-route {
+    overflow-x: hidden;
+  }
+
   &.homepage-route.shifted {
     width: calc(100% - 205px);
   }
+
+  &.menu-align-route.shifted {
+    width: calc(100% - 205px);
+  }
+
+}
+
+@media (max-width: 768px) {
 }
 
 .app-logo {

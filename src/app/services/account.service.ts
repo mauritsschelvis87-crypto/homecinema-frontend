@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
+import { Address } from '../models/user';
+import { environment } from '../../environments/environment';
 
 export interface Order {
   id: number;
@@ -14,25 +16,23 @@ export interface Order {
   providedIn: 'root',
 })
 export class AccountService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
 
-  getUser(email: string): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/account?email=${email}`, {
+  getUser(email?: string): Observable<User> {
+    const url = localStorage.getItem('token')
+      ? `${this.baseUrl}/account/me`
+      : `${this.baseUrl}/account?email=${encodeURIComponent(email ?? '')}`;
+
+    return this.http.get<User>(url, {
       withCredentials: true,
     });
   }
 
-  updateUser(data: {
-    email: string;
-    street: string;
-    postalCode: string;
-    city: string;
-    country: string;
-  }): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/account`, data, {
+  updateUser(address: Address): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}/account/me/address`, address, {
       withCredentials: true,
     });
   }

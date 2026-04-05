@@ -37,16 +37,20 @@ describe('RegisterComponent', () => {
   });
 
   it('navigates to the homepage after a successful registration', () => {
-    authServiceSpy.register.and.returnValue(of({}));
+    authServiceSpy.register.and.returnValue(of({ email: 'dev@test.local', token: 'jwt-token' }));
+    component.email = 'user@example.com';
+    component.password = 'secret';
 
     component.onSubmit();
 
-    expect(authServiceSpy.register).toHaveBeenCalledWith('dev@test.local', 'test');
+    expect(authServiceSpy.register).toHaveBeenCalledWith('user@example.com', 'secret');
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
   });
 
   it('shows the friendly conflict message for an existing test account', () => {
     authServiceSpy.register.and.returnValue(throwError(() => ({ status: 409 })));
+    component.email = 'user@example.com';
+    component.password = 'secret';
 
     component.onSubmit();
 

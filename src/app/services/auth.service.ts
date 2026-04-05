@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export interface UserProfile {
   email: string;
 }
 
+export interface AuthResponse extends UserProfile {
+  token?: string;
+  tokenType?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(false);
+  private loggedIn = new BehaviorSubject<boolean>(this.hasStoredToken());
   private userProfile: UserProfile | null = null;
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 
@@ -25,31 +31,51 @@ export class AuthService {
     });
   }
 
-  register(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { email, password }, {
-      withCredentials: true
-    });
-  }
-
-  login(email: string, password: string): Observable<UserProfile> {
-    const headers = new HttpHeaders({
-      Authorization: 'Basic ' + btoa(`${email}:${password}`)
-    });
-
-    return this.http.post<UserProfile>(`${this.apiUrl}/login`, {}, {
-      headers,
+  register(email: string, password: string, persistSession = true): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { email, password }, {
       withCredentials: true
     }).pipe(
-      tap(user => {
-        this.userProfile = user;
-        this.loggedIn.next(true);
-      })
+      tap(response => this.applyAuthResponse(response, email, persistSession))
+    );
+  }
+
+  login(email: string, password: string, persistSession = true): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }, {
+      withCredentials: true
+    }).pipe(
+      tap(response => this.applyAuthResponse(response, email, persistSession))
     );
   }
 
   logout(): void {
     this.userProfile = null;
     this.loggedIn.next(false);
-    // eventueel: backend call om sessie ongeldig te maken
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenType');
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('username');
+  }
+
+  getStoredToken(): string | null {
+    return localStorage.getItem('token') ?? localStorage.getItem('jwt');
+  }
+
+  private applyAuthResponse(response: AuthResponse, fallbackEmail: string, persistSession: boolean): void {
+    this.userProfile = {
+      email: response.email || fallbackEmail,
+    };
+
+    if (persistSession && response.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('jwt', response.token);
+      localStorage.setItem('tokenType', response.tokenType ?? 'Bearer');
+      localStorage.setItem('username', response.email || fallbackEmail);
+    }
+
+    this.loggedIn.next(Boolean(this.getStoredToken()));
+  }
+
+  private hasStoredToken(): boolean {
+    return Boolean(localStorage.getItem('token') ?? localStorage.getItem('jwt'));
   }
 }

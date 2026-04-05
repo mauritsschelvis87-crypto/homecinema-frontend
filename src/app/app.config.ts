@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 import { routes } from './app.routes';
+import { authTokenInterceptor } from './interceptors/auth-token.interceptor';
 
 export function playerFactory() {
   return player;
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideTranslateService({ defaultLanguage: 'nl' }),
-    provideHttpClient(withFetch(), withInterceptors([])),  // <-- aangepast
+    provideHttpClient(withFetch(), withInterceptors([authTokenInterceptor])),
 
     provideLottieOptions({
       player: playerFactory,

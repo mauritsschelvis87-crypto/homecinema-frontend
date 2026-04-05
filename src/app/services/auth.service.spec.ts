@@ -1,11 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { AuthService, UserProfile } from './auth.service';
+import { AuthResponse, AuthService, UserProfile } from './auth.service';
+import { environment } from '../../environments/environment';
 
 describe('AuthService', () => {
   let service: AuthService;
   let httpTestingController: HttpTestingController;
+
+  beforeEach(() => {
+    localStorage.clear();
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,12 +27,13 @@ describe('AuthService', () => {
 
   afterEach(() => {
     httpTestingController.verify();
+    localStorage.clear();
   });
 
   it('register sends the expected payload', () => {
     service.register('dev@test.local', 'test').subscribe();
 
-    const request = httpTestingController.expectOne('http://localhost:8080/api/auth/register');
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/auth/register`);
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual({
       email: 'dev@test.local',
@@ -39,7 +45,11 @@ describe('AuthService', () => {
   });
 
   it('login stores the user profile and marks the user as logged in', () => {
-    const user: UserProfile = { email: 'dev@test.local' };
+    const user: AuthResponse = {
+      email: 'dev@test.local',
+      token: 'jwt-token',
+      tokenType: 'Bearer',
+    };
     let loggedIn: boolean | undefined;
     let profile: UserProfile | null | undefined;
 
@@ -49,10 +59,13 @@ describe('AuthService', () => {
 
     service.login('dev@test.local', 'test').subscribe();
 
-    const request = httpTestingController.expectOne('http://localhost:8080/api/auth/login');
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/auth/login`);
     expect(request.request.method).toBe('POST');
     expect(request.request.withCredentials).toBeTrue();
-    expect(request.request.headers.get('Authorization')).toBe('Basic ' + btoa('dev@test.local:test'));
+    expect(request.request.body).toEqual({
+      email: 'dev@test.local',
+      password: 'test',
+    });
 
     request.flush(user);
 
@@ -61,7 +74,9 @@ describe('AuthService', () => {
     });
 
     expect(loggedIn).toBeTrue();
-    expect(profile).toEqual(user);
+    expect(profile).toEqual({ email: 'dev@test.local' });
+    expect(localStorage.getItem('token')).toBe('jwt-token');
+    expect(localStorage.getItem('username')).toBe('dev@test.local');
   });
 
   it('logout clears the user session state', () => {

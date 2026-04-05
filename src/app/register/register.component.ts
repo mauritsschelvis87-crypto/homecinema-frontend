@@ -11,8 +11,8 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './register.component.html'
 })
 export class RegisterComponent {
-  email = 'dev@test.local';
-  password = 'test';
+  email = '';
+  password = '';
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}

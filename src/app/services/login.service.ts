@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, tap, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -8,16 +8,24 @@ import { environment } from '../../environments/environment';
 })
 export class LoginService {
 
-  private apiUrl = `${environment.apiUrl}`;
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 
   isLoggedIn(): boolean {
-    return localStorage.getItem('jwt') !== null;
+    return (localStorage.getItem('token') ?? localStorage.getItem('jwt')) !== null;
   }
 
   register(credentials: { firstname: string; lastname: string; email: string; address: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}/register`, credentials).pipe(
+      tap(response => {
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('jwt', response.token);
+          localStorage.setItem('tokenType', response.tokenType ?? 'Bearer');
+          localStorage.setItem('username', response.email ?? credentials.email);
+        }
+      }),
       catchError(error => {
         console.error('Error during registration:', error);
         throw error;
@@ -29,7 +37,10 @@ export class LoginService {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
         if (response.token) {
+          localStorage.setItem('token', response.token);
           localStorage.setItem('jwt', response.token);
+          localStorage.setItem('tokenType', response.tokenType ?? 'Bearer');
+          localStorage.setItem('username', response.email ?? credentials.email);
         }
       }),
       catchError(error => {
@@ -41,6 +52,9 @@ export class LoginService {
 
 
   logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenType');
     localStorage.removeItem('jwt');
+    localStorage.removeItem('username');
   }
 }
