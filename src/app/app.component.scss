@@ -39,12 +39,14 @@
   z-index: 11000;
   cursor: pointer;
   display: inline-block;
+  pointer-events: none;
 
   img {
     height: 200px;
     width: auto;
     display: block;
     transition: filter 0.3s ease;
+    pointer-events: auto;
   }
 
   &:hover img {
