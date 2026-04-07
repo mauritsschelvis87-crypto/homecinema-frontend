@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Film } from './film.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
@@ -10,7 +11,7 @@ export class WishlistService {
   wishlist$ = this.wishlistSubject.asObservable();
   private readonly specialWishlistStorageKey = 'specialWishlist';
 
-  private baseUrl = 'http://localhost:8080/api/wishlist';
+  private baseUrl = `${environment.apiUrl}/wishlist`;
   private userId = 1;
 
   constructor(private http: HttpClient) {

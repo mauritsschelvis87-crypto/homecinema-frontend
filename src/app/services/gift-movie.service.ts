@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface GiftMovieRequest {
   recipientEmail: string;
@@ -17,7 +18,7 @@ export interface GiftMovieResponse {
   providedIn: 'root',
 })
 export class GiftMovieService {
-  private apiUrl = 'http://localhost:8080/api/gift-codes';
+  private apiUrl = `${environment.apiUrl}/gift-codes`;
 
   constructor(private http: HttpClient) {}
 

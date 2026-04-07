@@ -27,30 +27,45 @@
 
 }
 
-@media (max-width: 768px) {
-}
-
 .app-logo {
   position: fixed;
-  top: -45px;
-  left: -90px;
-  width: fit-content;
-  height: auto;
+  top: 1.75rem;
+  left: 3.25rem;
+  width: 410px;
+  height: 42px;
   z-index: 11000;
   cursor: pointer;
-  display: inline-block;
-  pointer-events: none;
+  display: block;
+  overflow: visible;
 
   img {
+    position: absolute;
+    top: -74px;
+    left: -142px;
     height: 200px;
     width: auto;
     display: block;
     transition: filter 0.3s ease;
-    pointer-events: auto;
+    pointer-events: none;
   }
 
   &:hover img {
     filter: grayscale(100%) brightness(60%);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-logo {
+    top: 1.2rem;
+    left: 1rem;
+    width: min(260px, calc(100vw - 2rem));
+    height: 30px;
+
+    img {
+      top: -52px;
+      left: -100px;
+      height: 140px;
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CartItem } from './cart.service';
+import { environment } from '../../environments/environment';
 
 export interface Brand {
   id?: string | number;
@@ -49,7 +50,7 @@ export interface OrderRequest {
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
-  private orderUrl = 'http://localhost:8080/api/orders';
+  private orderUrl = `${environment.apiUrl}/orders`;
   private readonly localOrdersStorageKey = 'localSpecialOrders';
 
   constructor(private http: HttpClient) {}

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface GiftCodeValidationResult {
   valid: boolean;
@@ -13,7 +14,7 @@ export interface GiftCodeValidationResult {
   providedIn: 'root',
 })
 export class GiftCodeService {
-  private apiUrl = 'http://localhost:8080/api/giftcodes';
+  private apiUrl = `${environment.apiUrl}/giftcodes`;
 
   constructor(private http: HttpClient) {}
 
