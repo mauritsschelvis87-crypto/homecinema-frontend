@@ -55,21 +55,46 @@
       <div class="checkout-footer">
         <div class="price-summary">
           <div class="total-price">
+            <span>Subtotal:</span>
+            <span class="price-amount">
+              €{{ getDisplayedSubtotal() | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <div class="total-price">
             <span>Shipping:</span>
             <span class="price-amount shipping-price">
               €{{ shippingCost | number:'1.2-2' }}
             </span>
           </div>
 
+          <div
+            *ngIf="getDisplayedDiscountAmount() > 0"
+            class="total-price total-price--discount"
+          >
+            <span class="discount-label">{{ getDiscountLabel() }}</span>
+            <span class="price-amount discount-amount">
+              -€{{ getDisplayedDiscountAmount() | number:'1.2-2' }}
+            </span>
+          </div>
+
           <div class="total-price total-price--final">
             <span>Total Price:</span>
             <span class="price-amount total-price-amount">
-              €{{ getTotalPrice() | number:'1.2-2' }}
+              €{{ getDisplayedTotalPrice() | number:'1.2-2' }}
             </span>
           </div>
         </div>
 
-        <button type="submit" class="save-btn">Place Order</button>
+        <p *ngIf="previewLoading" class="info-msg">
+          Calculating backend price preview...
+        </p>
+
+        <p *ngIf="previewErrorMessage" class="error-msg">
+          {{ previewErrorMessage }}
+        </p>
+
+        <button type="submit" class="save-btn" [disabled]="previewLoading">Place Order</button>
 
         <p
           *ngIf="addressUpdateMessage"
@@ -79,6 +104,10 @@
           }"
         >
           {{ addressUpdateMessage }}
+        </p>
+
+        <p *ngIf="orderErrorMessage" class="error-msg">
+          {{ orderErrorMessage }}
         </p>
       </div>
     </form>

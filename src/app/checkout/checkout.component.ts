@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartService, CartItem } from '../services/cart.service';
 import { AccountService } from '../services/account.service';
-import { OrderService, OrderRequest } from '../services/order.service';
+import { Order, OrderService, OrderRequest } from '../services/order.service';
 import { DecimalPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
 import { SHIPPING_COSTS } from '../constants/shipping-costs';
+import { getDiscountSummaryLabel } from '../utils/discount-code-display';
 
 @Component({
   selector: 'app-checkout',
@@ -16,15 +18,22 @@ import { SHIPPING_COSTS } from '../constants/shipping-costs';
   imports: [NgClass, NgIf, DecimalPipe, ReactiveFormsModule, NgForOf],
   standalone: true
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
+  private static readonly invalidCodeMessage = 'The code is invalid.';
+
   checkoutForm!: FormGroup;
   cartItems: CartItem[] = [];
   addressUpdateMessage = '';
   addressUpdateSuccess = false;
+  orderErrorMessage = '';
+  previewErrorMessage = '';
+  previewLoading = false;
+  pricingPreview: Order | null = null;
 
   shippingCost = 0;
   totalWeight = 0;
   baseShippingCost = 0;
+  private previewSubscription?: Subscription;
 
   euCountries = Object.entries(COUNTRY_NAME_TO_CODE).map(([name, code]) => ({ name, code }));
 
@@ -50,6 +59,11 @@ export class CheckoutComponent implements OnInit {
       this.cartItems = items;
       this.totalWeight = this.cartService.getTotalWeight();
       this.updateShippingCost(); // trigger bij init
+      this.refreshPreview();
+    });
+
+    this.cartService.getPromotions().subscribe(() => {
+      this.refreshPreview();
     });
 
 
@@ -106,7 +120,30 @@ export class CheckoutComponent implements OnInit {
   }
 
   getTotalPrice(): number {
-    return this.getSubtotal() + this.shippingCost;
+    return this.getDisplayedTotalPrice();
+  }
+
+  ngOnDestroy(): void {
+    this.previewSubscription?.unsubscribe();
+  }
+
+  getDisplayedSubtotal(): number {
+    return this.pricingPreview?.subtotalPrice ?? this.getSubtotal();
+  }
+
+  getDisplayedDiscountAmount(): number {
+    return this.pricingPreview?.discountAmount ?? 0;
+  }
+
+  getDisplayedTotalPrice(): number {
+    return this.pricingPreview?.totalPrice ?? this.getSubtotal();
+  }
+
+  getDiscountLabel(): string {
+    return getDiscountSummaryLabel(
+      this.pricingPreview?.appliedGiftCardCode,
+      this.pricingPreview?.appliedGiftCode
+    );
   }
 
   onSubmit(): void {
@@ -114,6 +151,8 @@ export class CheckoutComponent implements OnInit {
       this.checkoutForm.markAllAsTouched();
       return;
     }
+
+    this.orderErrorMessage = '';
 
     if (this.username) {
       const addressUpdateData = {
@@ -137,9 +176,13 @@ export class CheckoutComponent implements OnInit {
       });
     }
 
+    const promotions = this.cartService.getCurrentPromotions();
+
     const orderRequest: OrderRequest = {
       username: this.username,
-      totalPrice: this.getTotalPrice(),
+      totalPrice: this.getDisplayedTotalPrice(),
+      giftCardCode: promotions.giftCardCode || undefined,
+      giftCode: promotions.giftCode || undefined,
       items: this.cartItems.map(item => ({
         productId: item.product.id,
         quantity: item.quantity
@@ -149,12 +192,12 @@ export class CheckoutComponent implements OnInit {
     const hasSpecialBoxset = this.cartItems.some(item => item.product.id >= 900000);
 
     if (hasSpecialBoxset) {
+      this.orderService.clearLatestPlacedOrderId();
       const order = this.orderService.createLocalOrder(
         this.username,
         this.cartItems,
-        this.getTotalPrice()
+        this.getSubtotal() + this.shippingCost
       );
-      alert('Bestelling geplaatst! Ordernummer: ' + order.id);
       this.cartService.clearCart();
       this.router.navigate(['/order-confirmation']);
       return;
@@ -162,14 +205,77 @@ export class CheckoutComponent implements OnInit {
 
     this.orderService.placeOrder(orderRequest).subscribe({
       next: order => {
-        alert('Bestelling geplaatst! Ordernummer: ' + order.id);
+        if (order.id != null) {
+          this.orderService.setLatestPlacedOrderId(order.id);
+        }
         this.cartService.clearCart();
         this.router.navigate(['/order-confirmation']);
       },
       error: err => {
-        alert('Fout bij plaatsen bestelling.');
+        this.orderErrorMessage = err?.error?.error ?? 'Fout bij plaatsen bestelling.';
         console.error(err);
       }
     });
+  }
+
+  private refreshPreview(): void {
+    if (!this.username || !this.cartItems.length || this.hasSpecialBoxset()) {
+      this.clearPreviewState();
+      return;
+    }
+
+    const request = this.buildOrderRequest();
+    if (!request) {
+      this.clearPreviewState();
+      return;
+    }
+
+    this.previewLoading = true;
+    this.previewErrorMessage = '';
+    this.previewSubscription?.unsubscribe();
+    this.previewSubscription = this.orderService.previewOrder(request).subscribe({
+      next: preview => {
+        this.pricingPreview = preview;
+        this.previewLoading = false;
+        this.previewErrorMessage = '';
+      },
+      error: err => {
+        this.pricingPreview = null;
+        this.previewLoading = false;
+        const hasPromotionCode = Boolean(request.giftCardCode || request.giftCode);
+        this.previewErrorMessage = hasPromotionCode && err?.status === 400
+          ? CheckoutComponent.invalidCodeMessage
+          : err?.error?.error ?? 'Could not load the price preview.';
+      },
+    });
+  }
+
+  private buildOrderRequest(): OrderRequest | null {
+    if (!this.username || !this.cartItems.length) {
+      return null;
+    }
+
+    const promotions = this.cartService.getCurrentPromotions();
+    return {
+      username: this.username,
+      totalPrice: this.getSubtotal(),
+      giftCardCode: promotions.giftCardCode || undefined,
+      giftCode: promotions.giftCode || undefined,
+      items: this.cartItems.map(item => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      })),
+    };
+  }
+
+  private hasSpecialBoxset(): boolean {
+    return this.cartItems.some(item => item.product.id >= 900000);
+  }
+
+  private clearPreviewState(): void {
+    this.previewSubscription?.unsubscribe();
+    this.previewLoading = false;
+    this.previewErrorMessage = '';
+    this.pricingPreview = null;
   }
 }

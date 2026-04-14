@@ -31,6 +31,42 @@
   }
 }
 
+.order-summary {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid #ececec;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 1rem;
+  color: #1a1a1a;
+}
+
+.summary-row--discount,
+.summary-row--discount span {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.summary-row--total {
+  padding-top: 12px;
+  border-top: 1px solid #ececec;
+  font-weight: 700;
+}
+
+.error-message {
+  margin-top: 20px;
+  color: #d32f2f;
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;

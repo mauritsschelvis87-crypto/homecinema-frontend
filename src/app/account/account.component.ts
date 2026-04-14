@@ -16,6 +16,9 @@ interface Order {
   number: string;
   orderDate: string;
   status: string;
+  subtotalPrice?: number;
+  discountAmount?: number;
+  totalPrice?: number;
 }
 
 interface Country {
@@ -265,6 +268,14 @@ export class AccountComponent implements OnInit {
 
   closePopup() {
     this.showThanksMessage = false;
+  }
+
+  hasDiscount(order: Order): boolean {
+    return (order.discountAmount ?? 0) > 0;
+  }
+
+  getPaidAmount(order: Order): number | null {
+    return order.totalPrice ?? null;
   }
 
   private applyAddressDefaults() {

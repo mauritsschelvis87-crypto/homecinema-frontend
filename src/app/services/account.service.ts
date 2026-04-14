@@ -10,6 +10,9 @@ export interface Order {
   number: string;
   orderDate: string;
   status: string;
+  subtotalPrice?: number;
+  discountAmount?: number;
+  totalPrice?: number;
 }
 
 @Injectable({

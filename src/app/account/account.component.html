@@ -1,7 +1,7 @@
 <div class="top-spacing"></div>
 
 <div class="shopping-page-container account-page">
-  <section class="account-shell" aria-label="Account sections">
+  <section class="account-shell page-shell" aria-label="Account sections">
     <div class="account-grid">
       <article class="account-card">
       <div *ngIf="!currentUser; else addressSection" class="card-stack">
@@ -102,7 +102,17 @@
                   <p>
                     <strong>{{ 'Order number:' | translate }}</strong> {{ order.number }}<br />
                     <strong>{{ 'Date:' | translate }}</strong> {{ order.orderDate | date:'mediumDate' }}<br />
-                    <strong>{{ 'Status:' | translate }}</strong> {{ order.status }}
+                    <strong>{{ 'Status:' | translate }}</strong> {{ order.status }}<br />
+                    <ng-container *ngIf="hasDiscount(order)">
+                      <span class="order-meta order-meta--discount">
+                        <strong>Discount:</strong> -€{{ (order.discountAmount ?? 0) | number:'1.2-2' }}
+                      </span><br />
+                    </ng-container>
+                    <ng-container *ngIf="getPaidAmount(order) !== null">
+                      <span class="order-meta">
+                        <strong>Paid:</strong> €{{ getPaidAmount(order) | number:'1.2-2' }}
+                      </span>
+                    </ng-container>
                   </p>
                   <a class="action-button action-button--inline" [routerLink]="['/order-history-detail', order.id]">
                     {{ 'View order' | translate }}

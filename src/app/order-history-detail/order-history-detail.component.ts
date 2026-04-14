@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { OrderService, Order } from '../services/order.service';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { getDiscountSummaryLabel } from '../utils/discount-code-display';
 
 @Component({
   selector: 'app-order-history-detail',
@@ -54,11 +55,55 @@ export class OrderHistoryDetailComponent implements OnInit {
     }
   }
 
-  getTotal(): number {
-    return this.order?.orderItems.reduce((sum, item) => sum + item.price, 0) || 0;
+  getSubtotal(): number {
+    if (!this.order) {
+      return 0;
+    }
+
+    if (this.order.subtotalPrice != null) {
+      return this.order.subtotalPrice;
+    }
+
+    return this.order.orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  }
+
+  getDiscountAmount(): number {
+    if (!this.order) {
+      return 0;
+    }
+
+    if (this.order.discountAmount != null) {
+      return this.order.discountAmount;
+    }
+
+    return Math.max(0, this.getSubtotal() - (this.order.totalPrice ?? this.getSubtotal()));
   }
 
   getPaidAmount(): number {
-    return this.order?.totalPrice ?? 0;
+    if (!this.order) {
+      return 0;
+    }
+
+    return this.order.totalPrice ?? Math.max(0, this.getSubtotal() - this.getDiscountAmount());
+  }
+
+  hasDiscount(): boolean {
+    return this.getDiscountAmount() > 0;
+  }
+
+  getDiscountLabel(): string {
+    return getDiscountSummaryLabel(
+      this.order?.appliedGiftCardCode,
+      this.order?.appliedGiftCode
+    );
+  }
+
+  getAppliedCodes(): string[] {
+    const codes = [
+      this.order?.appliedGiftCardCode,
+      this.order?.appliedGiftCode,
+    ].filter((code): code is string => Boolean(code));
+
+    return [...new Set(codes)];
   }
 }

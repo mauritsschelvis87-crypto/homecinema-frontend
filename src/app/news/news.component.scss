@@ -5,18 +5,16 @@
   color: #1a1a1a;
   font-family: 'Segoe UI', sans-serif;
   min-height: 100vh;
-  padding: 40px 0;
   background-color: var(--color-background);
+}
+
+.top-spacing {
+  height: 100px;
 }
 
 .cart-container {
   flex: 1;
-  max-width: 1000px;
-  width: 68%;
-  background-color: #fafafa;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-  padding: 20px 40px;
-  margin: 100px 0;
+  margin: 0 auto 100px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -119,12 +117,6 @@
 }
 
 @media (max-width: 768px) {
-  .cart-container {
-    width: 90%;
-    padding: 16px 20px;
-    margin: 80px 0;
-  }
-
   .news-page h1 {
     font-size: 1.8rem;
   }

@@ -7,12 +7,19 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface CartPromotions {
+  giftCardCode: string;
+  giftCode: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   private itemAddedSubject = new Subject<void>();
+  private readonly promotionsStorageKey = 'cartPromotions';
+  private promotionsSubject = new BehaviorSubject<CartPromotions>(this.getStoredPromotions());
 
   public readonly itemAdded$ = this.itemAddedSubject.asObservable();
 
@@ -22,6 +29,14 @@ export class CartService {
 
   getCurrentCartItems(): CartItem[] {
     return this.cartItemsSubject.getValue();
+  }
+
+  getPromotions(): Observable<CartPromotions> {
+    return this.promotionsSubject.asObservable();
+  }
+
+  getCurrentPromotions(): CartPromotions {
+    return this.promotionsSubject.getValue();
   }
 
   addToCart(product: Film): void {
@@ -53,6 +68,7 @@ export class CartService {
   clearCart(): void {
     console.log('Clearing cart items');
     this.cartItemsSubject.next([]);
+    this.clearPromotions();
   }
 
   getTotalPrice(): number {
@@ -105,5 +121,64 @@ export class CartService {
 
     console.log(`Shipping cost calculated for weight ${weight}g: €${shippingCost.toFixed(2)}`);
     return shippingCost;
+  }
+
+  setGiftCardCode(code: string): void {
+    this.updatePromotions({ giftCardCode: code.trim().toUpperCase() });
+  }
+
+  setGiftCode(code: string): void {
+    this.updatePromotions({ giftCode: code.trim().toUpperCase() });
+  }
+
+  clearGiftCardCode(): void {
+    this.updatePromotions({ giftCardCode: '' });
+  }
+
+  clearGiftCode(): void {
+    this.updatePromotions({ giftCode: '' });
+  }
+
+  clearPromotions(): void {
+    const emptyPromotions: CartPromotions = {
+      giftCardCode: '',
+      giftCode: '',
+    };
+
+    this.promotionsSubject.next(emptyPromotions);
+    localStorage.setItem(this.promotionsStorageKey, JSON.stringify(emptyPromotions));
+  }
+
+  private updatePromotions(patch: Partial<CartPromotions>): void {
+    const nextState = {
+      ...this.promotionsSubject.getValue(),
+      ...patch,
+    };
+
+    this.promotionsSubject.next(nextState);
+    localStorage.setItem(this.promotionsStorageKey, JSON.stringify(nextState));
+  }
+
+  private getStoredPromotions(): CartPromotions {
+    const stored = localStorage.getItem(this.promotionsStorageKey);
+    if (!stored) {
+      return {
+        giftCardCode: '',
+        giftCode: '',
+      };
+    }
+
+    try {
+      const parsed = JSON.parse(stored) as Partial<CartPromotions>;
+      return {
+        giftCardCode: parsed.giftCardCode ?? '',
+        giftCode: parsed.giftCode ?? '',
+      };
+    } catch {
+      return {
+        giftCardCode: '',
+        giftCode: '',
+      };
+    }
   }
 }

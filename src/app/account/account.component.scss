@@ -8,19 +8,14 @@
 }
 
 .shopping-page-container {
-  max-width: 1100px;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   background-color: var(--color-background);
   position: relative;
   box-sizing: border-box;
 }
 
 .account-shell {
-  max-width: 1050px;
-  padding: 40px;
-  background-color: #fafafa;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   text-align: center;
   margin-bottom: 100px;
   box-sizing: border-box;
@@ -159,6 +154,14 @@ select:focus {
   line-height: 1.5;
 }
 
+.order-meta {
+  display: inline-block;
+}
+
+.order-meta--discount {
+  color: #2e7d32;
+}
+
 .order-scroll {
   overflow-y: auto;
   max-height: 560px;
@@ -224,10 +227,6 @@ select.ng-invalid {
 }
 
 @media (max-width: 600px) {
-  .account-shell {
-    padding: 20px;
-  }
-
   .account-grid {
     width: 100%;
     margin: 0;

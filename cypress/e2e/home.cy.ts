@@ -1,3 +1,5 @@
+//npm run cypress:open
+
 describe('Home page', () => {
   it('shows the main homepage sections', () => {
     cy.visit('/');

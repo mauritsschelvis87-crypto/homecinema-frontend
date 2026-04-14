@@ -20,16 +20,16 @@ export class NewsComponent implements OnInit {
   ngOnInit(): void {
     this.news = [
       {
-        title: 'Gift Codes Available',
-        orderDate: '2026-04-04',
-        summary: 'Active gift codes currently configured in the shop.',
-        content: 'The current gift codes in the application are TEST10 (€10 discount), TEST20 (€20 discount), and TEST30 (€30 discount).'
+        title: 'Gift Card Codes Available',
+        orderDate: '2026-04-14',
+        summary: 'Current fixed-amount gift card codes configured in the shop.',
+        content: 'The active gift card codes are FREE10, FREE20, and FREE30. These codes apply a fixed discount of €10, €20, or €30 to the order subtotal.'
       },
       {
         title: 'Voucher Codes Available',
-        orderDate: '2026-04-04',
-        summary: 'Current voucher codes available for testing and promotions.',
-        content: 'The voucher codes currently present in the application are TEST, SUMMER25, and VIPACCESS.'
+        orderDate: '2026-04-14',
+        summary: 'Current percentage-based voucher codes available for testing and promotions.',
+        content: 'The active voucher codes are FREE5 and FREE10. These vouchers apply 5% or 10% discount to the order subtotal, excluding shipping.'
       },
       {
         title: 'New Blu-ray Releases',

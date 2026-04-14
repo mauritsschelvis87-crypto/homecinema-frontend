@@ -96,6 +96,11 @@ button.save-btn:hover {
   background-color: var(--color-secundary-text);
 }
 
+button.save-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .total-price {
   display: flex;
   justify-content: space-between;
@@ -104,6 +109,15 @@ button.save-btn:hover {
   font-size: 1rem;
   padding: 0;
   color: #111;
+}
+
+.total-price span:first-child {
+  flex: 1;
+}
+
+.total-price span:last-child {
+  white-space: nowrap;
+  text-align: right;
 }
 
 .checkout-footer {
@@ -126,6 +140,17 @@ button.save-btn:hover {
   border-top: 1px solid #ececec;
 }
 
+.total-price--discount,
+.total-price--discount .price-amount,
+.discount-label,
+.discount-amount {
+  color: #2e7d32;
+}
+
+.total-price--discount {
+  font-weight: 600;
+}
+
 .price-amount {
   color: #000;
   font-weight: normal;
@@ -141,6 +166,7 @@ button.save-btn:hover {
 
 
 .success-msg,
+.info-msg,
 .error-msg {
   font-size: 0.85rem;
   font-weight: 500;
@@ -150,6 +176,10 @@ button.save-btn:hover {
 
 .success-msg {
   color: #2e7d32;
+}
+
+.info-msg {
+  color: #666;
 }
 
 .error-msg {

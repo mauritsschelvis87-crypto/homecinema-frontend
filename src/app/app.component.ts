@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
 import { CartService } from './services/cart.service';
 import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
-import { AuthService } from './services/auth.service';
+import { DevSessionService } from './services/dev-session.service';
 
 @Component({
   selector: 'app-root',
@@ -32,12 +32,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public cartAnimation = false;
   private cartSub?: Subscription;
+  private devSessionSub?: Subscription;
 
   constructor(
     private translate: TranslateService,
     private cartService: CartService,
     private router: Router,
-    private authService: AuthService
+    private devSessionService: DevSessionService
   ) {
     this.initialiseTranslateService();
 
@@ -47,6 +48,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.devSessionSub = this.devSessionService.ensureDevelopmentSession().subscribe({
+      error: err => console.error('Dev session bootstrap failed:', err),
+    });
+
     this.isHomepage = this.isHomepageRoute(this.router.url);
     this.isExploreRoute = this.isExplorePageRoute(this.router.url);
     this.useMenuAlignment = this.shouldUseMenuAlignment(this.router.url);
@@ -108,5 +113,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.cartSub?.unsubscribe();
+    this.devSessionSub?.unsubscribe();
   }
 }

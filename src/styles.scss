@@ -23,3 +23,21 @@ html, body {
   color: var(--color-primary-text);
   font-family: 'Open Sans', sans-serif;
 }
+
+.page-shell {
+  width: 68%;
+  max-width: 1100px;
+  min-height: calc(100vh - 200px);
+  padding: 20px;
+  background-color: #fafafa;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    width: calc(100% - 32px);
+    min-height: calc(100vh - 140px);
+    padding: 16px;
+  }
+}

@@ -5,6 +5,25 @@
     <h1>Order Confirmed</h1>
     <p>Your order has been placed successfully. You will receive a confirmation email with the details shortly.</p>
 
+    <div *ngIf="order" class="order-summary">
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span>{{ formatBackendAmount(order.subtotalPrice ?? 0) }}</span>
+      </div>
+
+      <div *ngIf="(order.discountAmount ?? 0) > 0" class="summary-row summary-row--discount">
+        <span>Discount:</span>
+        <span>{{ formatBackendAmount(order.discountAmount ?? 0) }}</span>
+      </div>
+
+      <div class="summary-row summary-row--total">
+        <span>Total Price:</span>
+        <span>{{ formatBackendAmount(order.totalPrice) }}</span>
+      </div>
+    </div>
+
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
     <a routerLink="/" class="back-link">Return to Home</a>
   </div>
 </div>

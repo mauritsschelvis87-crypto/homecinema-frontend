@@ -1,4 +1,15 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://b1156856.student.inf.st.hsleiden.nl/api'
+  apiUrl: 'http://localhost:26856/api',
+  devSession: {
+    enabled: false,
+    email: '',
+    password: '',
+    address: {
+      street: '',
+      postalCode: '',
+      city: '',
+      country: '',
+    },
+  },
 };

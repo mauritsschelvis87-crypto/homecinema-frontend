@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CartService, CartItem } from '../services/cart.service';
 import { AccountService } from '../services/account.service';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,9 @@ import { RouterLink } from '@angular/router';
 import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
 import { ShippingCostService } from '../services/shipping-cost.service';
 import { Film } from '../services/film.service';
+import { Order, OrderRequest, OrderService } from '../services/order.service';
+import { Subscription } from 'rxjs';
+import { getDiscountSummaryLabel } from '../utils/discount-code-display';
 
 interface Currency {
   code: string;
@@ -21,7 +24,9 @@ interface Currency {
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
+  private static readonly invalidCodeMessage = 'The code is invalid.';
+
   cartItems: CartItem[] = [];
   private readonly specialBoxsetSlugs: Record<number, string> = {
     900001: 'bergman',
@@ -42,32 +47,25 @@ export class CartComponent implements OnInit {
   giftCodeInput: string = '';
   isGiftCodeApplied: boolean = false;
   giftCodeError: string = '';
-  discountAmount: number = 0;
 
   voucherInput: string = '';
   isVoucherApplied: boolean = false;
   voucherError: string = '';
+  previewErrorMessage = '';
+  previewLoading = false;
+  pricingPreview: Order | null = null;
 
   shippingCost: number = 0;
   country: string = '';
   totalWeightInGrams: number = 0;
-
-  private validGiftCodes: { [code: string]: number } = {
-    'TEST10': 10,
-    'TEST20': 20,
-    'TEST30': 30,
-  };
-
-  private validVouchers: string[] = [
-    'TEST',
-    'SUMMER25',
-    'VIPACCESS'
-  ];
+  username = localStorage.getItem('username') ?? '';
+  private previewSubscription?: Subscription;
 
   constructor(
     private cartService: CartService,
     private accountService: AccountService,
-    private shippingCostService: ShippingCostService
+    private shippingCostService: ShippingCostService,
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
@@ -75,12 +73,17 @@ export class CartComponent implements OnInit {
       this.cartItems = items;
       this.calculateTotalWeight();
       this.updateShippingCost();
-      if (this.isGiftCodeApplied) this.applyGiftCode();
+      this.refreshPreview();
     });
 
-    const username = localStorage.getItem('username');
-    if (username) {
-      this.accountService.getUser(username).subscribe({
+    const promotions = this.cartService.getCurrentPromotions();
+    this.giftCodeInput = promotions.giftCardCode;
+    this.isGiftCodeApplied = !!promotions.giftCardCode;
+    this.voucherInput = promotions.giftCode;
+    this.isVoucherApplied = !!promotions.giftCode;
+
+    if (this.username) {
+      this.accountService.getUser(this.username).subscribe({
         next: user => {
           this.country = user.address?.country ?? '';
           this.updateShippingCost();
@@ -115,8 +118,10 @@ export class CartComponent implements OnInit {
   onCountryChange(newCountry: string): void {
     this.country = newCountry;
     this.updateShippingCost();
-    this.resetGiftCode();
-    this.resetVoucher();
+  }
+
+  ngOnDestroy(): void {
+    this.previewSubscription?.unsubscribe();
   }
 
   onQuantityChange(productId: number, event: Event): void {
@@ -131,16 +136,12 @@ export class CartComponent implements OnInit {
     this.cartService.updateQuantity(productId, quantity);
     this.calculateTotalWeight();
     this.updateShippingCost();
-    this.resetGiftCode();
-    this.resetVoucher();
   }
 
   removeItem(productId: number): void {
     this.cartService.removeFromCart(productId);
     this.calculateTotalWeight();
     this.updateShippingCost();
-    this.resetGiftCode();
-    this.resetVoucher();
   }
 
   clearCart(): void {
@@ -149,6 +150,7 @@ export class CartComponent implements OnInit {
     this.shippingCost = 0;
     this.resetGiftCode();
     this.resetVoucher();
+    this.clearPreviewState();
   }
 
   getSubtotal(): number {
@@ -159,10 +161,38 @@ export class CartComponent implements OnInit {
   }
 
   getTotalPriceAfterDiscount(): number {
-    const subtotal = this.getSubtotal();
-    let discounted = subtotal - this.discountAmount;
-    if (discounted < 0) discounted = 0;
-    return discounted + this.shippingCost;
+    return this.getDisplayedTotalPrice();
+  }
+
+  getDisplayedSubtotal(): number {
+    return this.pricingPreview?.subtotalPrice ?? this.getSubtotal();
+  }
+
+  getDisplayedDiscountAmount(): number {
+    return this.pricingPreview?.discountAmount ?? 0;
+  }
+
+  getDisplayedTotalPrice(): number {
+    return this.pricingPreview?.totalPrice ?? this.getSubtotal();
+  }
+
+  hasDiscountPreview(): boolean {
+    return this.getDisplayedDiscountAmount() > 0;
+  }
+
+  getDiscountLabel(): string {
+    return getDiscountSummaryLabel(
+      this.pricingPreview?.appliedGiftCardCode,
+      this.pricingPreview?.appliedGiftCode
+    );
+  }
+
+  isGiftCardConfirmedByPreview(): boolean {
+    return this.pricingPreview?.appliedGiftCardCode === this.giftCodeInput;
+  }
+
+  isVoucherConfirmedByPreview(): boolean {
+    return this.pricingPreview?.appliedGiftCode === this.voucherInput;
   }
 
   trackItem(index: number, item: CartItem): number {
@@ -193,22 +223,29 @@ export class CartComponent implements OnInit {
   applyGiftCode(): void {
     const code = this.giftCodeInput.trim().toUpperCase();
     if (!code) {
-      this.giftCodeError = 'Voer een cadeauboncode in.';
+      this.giftCodeError = 'Enter a gift card code.';
+      return;
+    }
+    if (!this.username) {
+      this.giftCodeError = 'Log in to apply a code.';
       return;
     }
 
-    if (this.validGiftCodes.hasOwnProperty(code)) {
-      this.discountAmount = this.validGiftCodes[code];
-      if (this.discountAmount > this.getSubtotal()) {
-        this.discountAmount = this.getSubtotal();
+    this.giftCodeError = '';
+    this.previewErrorMessage = '';
+    this.validatePreview(
+      { giftCardCode: code },
+      () => {
+        this.giftCodeInput = code;
+        this.isGiftCodeApplied = true;
+        this.cartService.setGiftCardCode(code);
+      },
+      () => {
+        this.isGiftCodeApplied = false;
+        this.giftCodeError = CartComponent.invalidCodeMessage;
+        this.refreshPreview();
       }
-      this.isGiftCodeApplied = true;
-      this.giftCodeError = '';
-    } else {
-      this.giftCodeError = 'Ongeldige code.';
-      this.isGiftCodeApplied = false;
-      this.discountAmount = 0;
-    }
+    );
   }
 
   removeGiftCode(): void {
@@ -219,23 +256,36 @@ export class CartComponent implements OnInit {
   private resetGiftCode(): void {
     this.isGiftCodeApplied = false;
     this.giftCodeError = '';
-    this.discountAmount = 0;
+    this.cartService.clearGiftCardCode();
+    this.refreshPreview();
   }
 
   applyVoucher(): void {
     const code = this.voucherInput.trim().toUpperCase();
     if (!code) {
-      this.voucherError = 'Voer een voucher in.';
+      this.voucherError = 'Enter a voucher code.';
+      return;
+    }
+    if (!this.username) {
+      this.voucherError = 'Log in to apply a code.';
       return;
     }
 
-    if (this.validVouchers.includes(code)) {
-      this.isVoucherApplied = true;
-      this.voucherError = '';
-    } else {
-      this.voucherError = 'Ongeldige voucher.';
-      this.isVoucherApplied = false;
-    }
+    this.voucherError = '';
+    this.previewErrorMessage = '';
+    this.validatePreview(
+      { giftCode: code },
+      () => {
+        this.voucherInput = code;
+        this.isVoucherApplied = true;
+        this.cartService.setGiftCode(code);
+      },
+      () => {
+        this.isVoucherApplied = false;
+        this.voucherError = CartComponent.invalidCodeMessage;
+        this.refreshPreview();
+      }
+    );
   }
 
   removeVoucher(): void {
@@ -246,5 +296,168 @@ export class CartComponent implements OnInit {
   private resetVoucher(): void {
     this.isVoucherApplied = false;
     this.voucherError = '';
+    this.cartService.clearGiftCode();
+    this.refreshPreview();
+  }
+
+  private refreshPreview(): void {
+    if (!this.username || !this.cartItems.length || this.hasSpecialBoxset()) {
+      this.clearPreviewState();
+      return;
+    }
+
+    const request = this.buildOrderRequest();
+    if (!request) {
+      this.clearPreviewState();
+      return;
+    }
+
+    this.previewLoading = true;
+    this.previewErrorMessage = '';
+    this.previewSubscription?.unsubscribe();
+    this.previewSubscription = this.orderService.previewOrder(request).subscribe({
+      next: preview => {
+        this.pricingPreview = preview;
+        this.previewLoading = false;
+        this.previewErrorMessage = '';
+        this.giftCodeError = '';
+        this.voucherError = '';
+      },
+      error: err => {
+        this.pricingPreview = null;
+        this.previewLoading = false;
+        const apiErrorMessage = this.getApiErrorMessage(err);
+        const assignedPromotionError = this.assignPromotionErrors(
+          request.giftCardCode,
+          request.giftCode,
+          apiErrorMessage,
+          err?.status
+        );
+
+        this.previewErrorMessage = assignedPromotionError
+          ? ''
+          : apiErrorMessage ?? 'Could not load the price preview.';
+      },
+    });
+  }
+
+  private validatePreview(
+    overrides: Partial<OrderRequest>,
+    onSuccess: () => void,
+    onError: () => void
+  ): void {
+    const request = this.buildOrderRequest(overrides);
+    if (!request) {
+      onError();
+      return;
+    }
+
+    this.previewLoading = true;
+    this.previewSubscription?.unsubscribe();
+    this.previewSubscription = this.orderService.previewOrder(request).subscribe({
+      next: preview => {
+        onSuccess();
+        this.pricingPreview = preview;
+        this.previewLoading = false;
+        this.previewErrorMessage = '';
+      },
+      error: () => {
+        this.previewLoading = false;
+        onError();
+      },
+    });
+  }
+
+  private buildOrderRequest(overrides: Partial<OrderRequest> = {}): OrderRequest | null {
+    if (!this.username || !this.cartItems.length) {
+      return null;
+    }
+
+    const promotions = this.cartService.getCurrentPromotions();
+    return {
+      username: this.username,
+      totalPrice: this.getSubtotal(),
+      giftCardCode: (overrides.giftCardCode ?? promotions.giftCardCode) || undefined,
+      giftCode: (overrides.giftCode ?? promotions.giftCode) || undefined,
+      items: this.cartItems.map(item => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      })),
+    };
+  }
+
+  private hasSpecialBoxset(): boolean {
+    return this.cartItems.some(item => item.product.id >= 900000);
+  }
+
+  private clearPreviewState(): void {
+    this.previewSubscription?.unsubscribe();
+    this.previewLoading = false;
+    this.previewErrorMessage = '';
+    this.pricingPreview = null;
+  }
+
+  private getApiErrorMessage(err: unknown): string | null {
+    const maybeError = err as { error?: { error?: string } | string };
+    if (typeof maybeError?.error === 'string') {
+      return maybeError.error;
+    }
+
+    if (typeof maybeError?.error?.error === 'string') {
+      return maybeError.error.error;
+    }
+
+    return null;
+  }
+
+  private assignPromotionErrors(
+    giftCardCode?: string,
+    giftCode?: string,
+    backendMessage?: string | null,
+    status?: number
+  ): boolean {
+    if (status !== 400 || (!giftCardCode && !giftCode)) {
+      return false;
+    }
+
+    const normalizedMessage = backendMessage?.toLowerCase() ?? '';
+    let assigned = false;
+
+    this.giftCodeError = '';
+    this.voucherError = '';
+
+    if (giftCardCode && (!giftCode || this.isGiftCardErrorMessage(normalizedMessage))) {
+      this.giftCodeError = CartComponent.invalidCodeMessage;
+      assigned = true;
+    }
+
+    if (giftCode && (!giftCardCode || this.isVoucherErrorMessage(normalizedMessage))) {
+      this.voucherError = CartComponent.invalidCodeMessage;
+      assigned = true;
+    }
+
+    if (!assigned) {
+      if (giftCardCode) {
+        this.giftCodeError = CartComponent.invalidCodeMessage;
+        assigned = true;
+      }
+
+      if (giftCode) {
+        this.voucherError = CartComponent.invalidCodeMessage;
+        assigned = true;
+      }
+    }
+
+    return assigned;
+  }
+
+  private isGiftCardErrorMessage(message: string): boolean {
+    return message.includes('giftcard') || message.includes('gift card');
+  }
+
+  private isVoucherErrorMessage(message: string): boolean {
+    return message.includes('gift code')
+      || message.includes('voucher')
+      || message.includes('eligible film');
   }
 }

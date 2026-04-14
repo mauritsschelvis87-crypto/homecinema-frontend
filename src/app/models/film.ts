@@ -55,6 +55,8 @@ export interface ShippingAddress {
 export interface OrderRequest {
   username: string;
   email: string;
+  giftCardCode?: string;
+  giftCode?: string;
   items: OrderItemRequest[];
   totalPrice: number;
   shippingAddress: ShippingAddress;

@@ -1,6 +1,6 @@
 <div class="top-spacing"></div>
 
-<div class="order-detail-container" *ngIf="!isLoading && order; else loadingOrError">
+<div class="order-detail-container page-shell" *ngIf="!isLoading && order; else loadingOrError">
   <h2 class="order-title">Order Details</h2>
 
   <table class="order-table">
@@ -29,8 +29,15 @@
 
   <div class="purchase-summary">
     <p class="summary-line"><strong>Purchase date:</strong> {{ order.orderDate | date:'medium' }}</p>
+    <p class="summary-line"><strong>Subtotal:</strong> € {{ getSubtotal().toFixed(2) }}</p>
+    <p *ngIf="hasDiscount()" class="summary-line summary-line--discount">
+      <strong>{{ getDiscountLabel() }}</strong> (€ {{ getDiscountAmount().toFixed(2) }})
+    </p>
+    <p *ngIf="getAppliedCodes().length" class="summary-line">
+      <strong>Applied code{{ getAppliedCodes().length > 1 ? 's' : '' }}:</strong>
+      {{ getAppliedCodes().join(', ') }}
+    </p>
     <p class="summary-line"><strong>Already paid:</strong> € {{ getPaidAmount().toFixed(2) }}</p>
-    <p class="summary-line"><strong>Total amount:</strong> € {{ getTotal().toFixed(2) }}</p>
   </div>
 
   <div class="bottom-actions">

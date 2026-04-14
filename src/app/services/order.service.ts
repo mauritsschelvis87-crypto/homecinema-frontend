@@ -26,9 +26,15 @@ export interface OrderItem {
 }
 
 export interface Order {
-  id: number;
-  orderDate: string;
+  id?: number;
+  number?: string;
+  status?: string;
+  orderDate?: string;
+  subtotalPrice?: number;
+  discountAmount?: number;
   totalPrice: number;
+  appliedGiftCardCode?: string | null;
+  appliedGiftCode?: string | null;
   orderItems: OrderItem[];
 }
 
@@ -37,11 +43,16 @@ export interface LocalOrderSummary {
   number: string;
   orderDate: string;
   status: string;
+  subtotalPrice: number;
+  discountAmount: number;
+  totalPrice: number;
 }
 
 export interface OrderRequest {
   username: string;
   totalPrice: number;
+  giftCardCode?: string;
+  giftCode?: string;
   items: {
     productId: number;
     quantity: number;
@@ -52,8 +63,13 @@ export interface OrderRequest {
 export class OrderService {
   private orderUrl = `${environment.apiUrl}/orders`;
   private readonly localOrdersStorageKey = 'localSpecialOrders';
+  private readonly latestPlacedOrderIdStorageKey = 'latestPlacedOrderId';
 
   constructor(private http: HttpClient) {}
+
+  previewOrder(order: OrderRequest): Observable<Order> {
+    return this.http.post<Order>(`${this.orderUrl}/preview`, order, { withCredentials: true });
+  }
 
   placeOrder(order: OrderRequest): Observable<Order> {
     return this.http.post<Order>(this.orderUrl, order, { withCredentials: true });
@@ -67,10 +83,32 @@ export class OrderService {
     return this.http.get<Order>(`${this.orderUrl}/${id}`, { withCredentials: true });
   }
 
+  setLatestPlacedOrderId(id: number): void {
+    sessionStorage.setItem(this.latestPlacedOrderIdStorageKey, String(id));
+  }
+
+  getLatestPlacedOrderId(): number | null {
+    const stored = sessionStorage.getItem(this.latestPlacedOrderIdStorageKey);
+    if (!stored) {
+      return null;
+    }
+
+    const parsed = Number(stored);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  clearLatestPlacedOrderId(): void {
+    sessionStorage.removeItem(this.latestPlacedOrderIdStorageKey);
+  }
+
   createLocalOrder(username: string, cartItems: CartItem[], totalPrice: number): LocalOrderSummary {
     const storedOrders = this.getStoredLocalOrders();
     const id = Date.now();
     const orderDate = new Date().toISOString();
+    const subtotalPrice = cartItems.reduce(
+      (sum, item) => sum + item.product.price * item.quantity,
+      0
+    );
 
     const order = {
       id,
@@ -78,6 +116,8 @@ export class OrderService {
       number: `BOX-${id}`,
       orderDate,
       status: 'Placed',
+      subtotalPrice,
+      discountAmount: 0,
       totalPrice,
       orderItems: cartItems.map(item => ({
         film: {
@@ -102,6 +142,9 @@ export class OrderService {
       number: order.number,
       orderDate: order.orderDate,
       status: order.status,
+      subtotalPrice: order.subtotalPrice,
+      discountAmount: order.discountAmount,
+      totalPrice: order.totalPrice,
     };
   }
 
@@ -113,6 +156,9 @@ export class OrderService {
         number: order.number,
         orderDate: order.orderDate,
         status: order.status,
+        subtotalPrice: order.subtotalPrice ?? order.totalPrice,
+        discountAmount: order.discountAmount ?? 0,
+        totalPrice: order.totalPrice,
       }));
   }
 
@@ -124,7 +170,11 @@ export class OrderService {
 
     return {
       id: order.id,
+      number: order.number,
+      status: order.status,
       orderDate: order.orderDate,
+      subtotalPrice: order.subtotalPrice ?? order.totalPrice,
+      discountAmount: order.discountAmount ?? 0,
       totalPrice: order.totalPrice,
       orderItems: order.orderItems,
     };
@@ -136,6 +186,8 @@ export class OrderService {
     number: string;
     orderDate: string;
     status: string;
+    subtotalPrice: number;
+    discountAmount: number;
     totalPrice: number;
     orderItems: OrderItem[];
   }> {

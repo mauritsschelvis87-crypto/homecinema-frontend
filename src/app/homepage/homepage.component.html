@@ -14,7 +14,9 @@
       [routerLink]="['/shopping']"
       [queryParams]="{ country: 'France', year: '1958-1969' }"
       class="hero-button"
-    >Shop Now</a>
+    >
+      Shop Now
+    </a>
   </div>
 </section>
 
@@ -26,7 +28,9 @@
       [routerLink]="['/shopping']"
       [queryParams]="{ country: 'Italy', year: '1945-1975' }"
       class="hero-button"
-    >Shop Now</a>
+    >
+      Shop Now
+    </a>
   </div>
 </section>
 
@@ -38,7 +42,9 @@
       [routerLink]="['/shopping']"
       [queryParams]="{ silent: true }"
       class="hero-button"
-    >Shop Now</a>
+    >
+      Shop Now
+    </a>
   </div>
 </section>
 
@@ -50,7 +56,9 @@
       [routerLink]="['/shopping']"
       [queryParams]="{ colorOrBlackAndWhite: 'Technicolor' }"
       class="hero-button"
-    >Shop Now</a>
+    >
+      Shop Now
+    </a>
   </div>
 </section>
 
@@ -60,10 +68,49 @@
 
 <!-- Scroll controls -->
 <div class="bottom-controls" *ngIf="currentIndex < sections.length - 1">
-  <button class="scroll-arrow-btn" aria-label="Scroll up" (click)="scrollUp()" [disabled]="currentIndex===0">
-    <!-- up arrow SVG -->
+  <button
+    class="scroll-arrow-btn"
+    aria-label="Scroll up"
+    (click)="scrollUp()"
+    [disabled]="currentIndex === 0"
+  >
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <polyline
+        points="18 15 12 9 6 15"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   </button>
-  <button class="scroll-arrow-btn" aria-label="Scroll down" (click)="scrollDown()" [disabled]="currentIndex===sections.length-2">
-    <!-- down arrow SVG -->
+
+  <button
+    class="scroll-arrow-btn"
+    aria-label="Scroll down"
+    (click)="scrollDown()"
+    [disabled]="currentIndex >= sections.length - 1"
+  >
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <polyline
+        points="6 9 12 15 18 9"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   </button>
 </div>
