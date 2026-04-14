@@ -29,6 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
   public isHomepage = false;
   public isExploreRoute = false;
   public useMenuAlignment = false;
+  public isSpecialEditionRoute = false;
+  public isDirectorDetailRoute = false;
 
   public cartAnimation = false;
   private cartSub?: Subscription;
@@ -55,12 +57,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isHomepage = this.isHomepageRoute(this.router.url);
     this.isExploreRoute = this.isExplorePageRoute(this.router.url);
     this.useMenuAlignment = this.shouldUseMenuAlignment(this.router.url);
+    this.isSpecialEditionRoute = this.isSpecialEditionPageRoute(this.router.url);
+    this.isDirectorDetailRoute = this.isDirectorPageRoute(this.router.url);
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isHomepage = this.isHomepageRoute(event.urlAfterRedirects);
         this.isExploreRoute = this.isExplorePageRoute(event.urlAfterRedirects);
         this.useMenuAlignment = this.shouldUseMenuAlignment(event.urlAfterRedirects);
+        this.isSpecialEditionRoute = this.isSpecialEditionPageRoute(event.urlAfterRedirects);
+        this.isDirectorDetailRoute = this.isDirectorPageRoute(event.urlAfterRedirects);
         window.scrollTo(0, 0);
       }
     });
@@ -76,9 +82,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
     return path === ''
       || path === '/'
-      || path === '/boxsets/special-edition'
-      || path.startsWith('/director/')
-      || path.startsWith('/directors/');
+      || path === '/boxsets/special-edition';
+  }
+
+  private isSpecialEditionPageRoute(url: string): boolean {
+    const path = url.split('?')[0].split('#')[0];
+    return path === '/boxsets/special-edition';
+  }
+
+  private isDirectorPageRoute(url: string): boolean {
+    const path = url.split('?')[0].split('#')[0];
+    return path.startsWith('/director/') || path.startsWith('/directors/');
   }
 
   private isExplorePageRoute(url: string): boolean {

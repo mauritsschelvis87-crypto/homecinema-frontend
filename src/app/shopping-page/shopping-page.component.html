@@ -100,31 +100,47 @@
     [ngClass]="{'film-grid': showGrid, 'film-list': !showGrid}"
     aria-label="Available films list"
   >
-    <a
-      class="film-card"
-      *ngFor="let film of visibleFilms; trackBy: trackByFilmId"
-      [routerLink]="['/product', film.id]"
-      tabindex="0"
-      role="link"
-      [attr.aria-label]="'View ' + film.title"
-    >
-      <img [src]="film.imageUrl" [alt]="film.title" />
-      <div class="film-info">
-        <h3 class="film-title">{{ film.title }}</h3>
-        <div class="meta-info">
-          <ng-container *ngIf="!showGrid; else compact">
-            <p>{{ film.director }}</p>
-            <p>{{ film.country }}</p>
-            <p>{{ film.year }}</p>
-            <p>{{ film.type }}</p>
-            <p *ngIf="film.brand?.name">{{ film.brand.name }}</p>
-          </ng-container>
-          <ng-template #compact>
-            <p>{{ film.director }}<br />{{ film.year }}</p>
-          </ng-template>
+    <div class="film-card-shell" *ngFor="let film of visibleFilms; trackBy: trackByFilmId">
+      <a
+        class="film-card-link"
+        [routerLink]="['/product', film.id]"
+        tabindex="0"
+        role="link"
+        [attr.aria-label]="'View ' + film.title"
+      >
+        <div class="film-cover cover-with-collection-badge">
+          <img [src]="film.imageUrl" [alt]="film.title" />
+          <span *ngIf="isInCollection(film.id)" class="collection-cover-badge" aria-hidden="true"></span>
         </div>
+        <div class="film-info">
+          <h3 class="film-title">{{ truncateTitle(film.title) }}</h3>
+          <div class="meta-info">
+            <ng-container *ngIf="!showGrid; else compact">
+              <p>{{ film.director }}</p>
+              <p>{{ film.country }}</p>
+              <p>{{ film.year }}</p>
+              <p>{{ film.type }}</p>
+              <p *ngIf="film.brand?.name">{{ film.brand.name }}</p>
+            </ng-container>
+            <ng-template #compact>
+              <p>{{ film.director }}<br />{{ film.year }}</p>
+            </ng-template>
+          </div>
+        </div>
+      </a>
+      <div *ngIf="isInCollection(film.id)" class="collection-card-rating" aria-label="Rate this film">
+        <button
+          *ngFor="let star of ratingStars"
+          type="button"
+          class="rating-star"
+          [class.filled]="isStarFilled(film, star)"
+          [attr.aria-label]="'Rate ' + film.title + ' ' + star + ' stars'"
+          (click)="setRating($event, film, star)"
+        >
+          ★
+        </button>
       </div>
-    </a>
+    </div>
 
     <div class="load-more-button-container">
       <button

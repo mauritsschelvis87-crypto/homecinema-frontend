@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./collection.component.scss']
 })
 export class CollectionComponent implements OnInit {
+  readonly cardTitleMaxLength = 15;
+  readonly ratingStars = [1, 2, 3, 4, 5];
   collection: Film[] = [];
   filteredCollection: Film[] = [];
   loading = true;
@@ -129,5 +131,22 @@ export class CollectionComponent implements OnInit {
 
   getFilmFragment(film: Film): string | undefined {
     return this.specialBoxsetSlugs[film.id] ?? undefined;
+  }
+
+  setRating(event: Event, film: Film, rating: number): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.collectionService.rateFilm(film.id, rating);
+    film.userRating = rating;
+  }
+
+  isStarFilled(film: Film, star: number): boolean {
+    return star <= (film.userRating ?? 0);
+  }
+
+  truncateTitle(title: string): string {
+    return title.length > this.cardTitleMaxLength
+      ? `${title.slice(0, this.cardTitleMaxLength).trim()}...`
+      : title;
   }
 }

@@ -5,6 +5,7 @@ import { FilmService, Film } from '../services/film.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private filmService: FilmService
+    private filmService: FilmService,
+    private collectionService: CollectionService
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +103,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   goToFilm(id: number): void {
     this.router.navigate(['/films', id]);
     this.closeSearch();
+  }
+
+  isInCollection(filmId: number): boolean {
+    return this.collectionService.isInCollection(filmId);
   }
 
   closeSearch(): void {

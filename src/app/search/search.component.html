@@ -4,7 +4,14 @@
 
   <div class="film-list">
     <a *ngFor="let film of results" [routerLink]="['/product', film.id]" class="film-item">
-      <img [src]="film.imageUrl" alt="{{film.title}}" />
+      <span class="search-result-cover cover-with-collection-badge">
+        <img [src]="film.imageUrl" alt="{{film.title}}" />
+        <span
+          *ngIf="isInCollection(film.id)"
+          class="collection-cover-badge collection-cover-badge--thumb"
+          aria-hidden="true"
+        ></span>
+      </span>
       <div class="info">
         <h3>{{ film.title }}</h3>
         <p>{{ film.year }} • {{ film.director }}</p>

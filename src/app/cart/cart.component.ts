@@ -10,6 +10,7 @@ import { Film } from '../services/film.service';
 import { Order, OrderRequest, OrderService } from '../services/order.service';
 import { Subscription } from 'rxjs';
 import { getDiscountSummaryLabel } from '../utils/discount-code-display';
+import { CollectionService } from '../services/collection.service';
 
 interface Currency {
   code: string;
@@ -65,7 +66,8 @@ export class CartComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private accountService: AccountService,
     private shippingCostService: ShippingCostService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private collectionService: CollectionService
   ) {}
 
   ngOnInit(): void {
@@ -207,6 +209,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
   getProductFragment(product: Film): string | undefined {
     return this.specialBoxsetSlugs[product.id] ?? undefined;
+  }
+
+  isInCollection(productId: number): boolean {
+    return this.collectionService.isInCollection(productId);
   }
 
   convertPrice(priceInEuro: number): string {

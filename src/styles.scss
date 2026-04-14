@@ -10,6 +10,7 @@
   --color-arrow-button: #dc1f1f;
   --color-header-hover: red;
   --color-background: #5a5a5a;
+  --color-cover-surface: #dcdcdc;
   --color-line-transparant: rgba(255, 255, 255, 0.1);
 
 }
@@ -25,13 +26,85 @@ html, body {
 }
 
 .page-shell {
-  width: 68%;
-  max-width: 1100px;
+  width: min(1080px, calc(100% - 48px));
+  max-width: 1080px;
   min-height: calc(100vh - 200px);
   padding: 20px;
+  margin: 0 auto;
   background-color: #fafafa;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
+}
+
+.cover-with-collection-badge {
+  position: relative;
+  display: block;
+  background-color: var(--color-cover-surface);
+}
+
+.cover-with-collection-badge img {
+  background-color: var(--color-cover-surface) !important;
+}
+
+.collection-cover-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 7px;
+  background-color: rgba(17, 17, 17, 0.92);
+  border: 1px solid rgba(195, 179, 101, 0.9);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.rating-star.filled {
+  color: var(--color-secundary-text) !important;
+}
+
+.rating-star:hover:not(:disabled),
+.rating-star:focus:not(:disabled) {
+  color: var(--color-secundary-text) !important;
+}
+
+.collection-cover-badge::before {
+  content: 'Collection';
+  color: var(--color-secundary-text);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.collection-cover-badge--detail {
+  top: 0;
+  right: 0;
+  padding: 5px 9px;
+}
+
+.collection-cover-badge--detail::before {
+  font-size: 0.6rem;
+}
+
+.collection-cover-badge--product {
+  top: 0;
+  right: 0;
+}
+
+.collection-cover-badge--thumb {
+  top: 0;
+  right: 0;
+  padding: 3px 5px;
+}
+
+.collection-cover-badge--thumb::before {
+  font-size: 0.4rem;
 }
 
 @media (max-width: 900px) {
@@ -39,5 +112,25 @@ html, body {
     width: calc(100% - 32px);
     min-height: calc(100vh - 140px);
     padding: 16px;
+  }
+
+  .collection-cover-badge::before {
+    font-size: 0.48rem;
+  }
+
+  .collection-cover-badge--detail {
+    padding: 4px 8px;
+  }
+
+  .collection-cover-badge--detail::before {
+    font-size: 0.54rem;
+  }
+
+  .collection-cover-badge--thumb {
+    padding: 2px 4px;
+  }
+
+  .collection-cover-badge--thumb::before {
+    font-size: 0.36rem;
   }
 }

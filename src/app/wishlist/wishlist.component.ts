@@ -5,6 +5,7 @@ import { CartService } from '../services/cart.service';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -20,6 +21,8 @@ import {FormsModule} from '@angular/forms';
   ]
 })
 export class WishlistComponent implements OnInit {
+  readonly cardTitleMaxLength = 15;
+  readonly ratingStars = [1, 2, 3, 4, 5];
   wishlist: Film[] = [];
   filteredWishlist: Film[] = [];
   loading = false;
@@ -56,7 +59,8 @@ export class WishlistComponent implements OnInit {
 
   constructor(
     private wishlistService: WishlistService,
-    private cartService: CartService
+    private cartService: CartService,
+    private collectionService: CollectionService
   ) {}
 
   ngOnInit(): void {
@@ -158,5 +162,26 @@ export class WishlistComponent implements OnInit {
 
   getFilmFragment(film: Film): string | undefined {
     return this.specialBoxsetSlugs[film.id] ?? undefined;
+  }
+
+  truncateTitle(title: string): string {
+    return title.length > this.cardTitleMaxLength
+      ? `${title.slice(0, this.cardTitleMaxLength).trim()}...`
+      : title;
+  }
+
+  isInCollection(filmId: number): boolean {
+    return this.collectionService.isInCollection(filmId);
+  }
+
+  setRating(event: Event, film: Film, rating: number): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.collectionService.rateFilm(film.id, rating);
+    film.userRating = rating;
+  }
+
+  isStarFilled(film: Film, star: number): boolean {
+    return star <= this.collectionService.getRating(film.id);
   }
 }

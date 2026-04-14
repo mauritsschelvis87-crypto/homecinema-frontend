@@ -28,15 +28,42 @@
     </div>
 
     <div class="label-with-collection">
-      <span *ngIf="collectionService.isInCollection(product.id)" class="collection-left-badge">
-        ★ In your collection
-      </span>
+      <div class="collection-status">
+        <span
+          class="collection-left-badge"
+          [class.collection-left-badge-muted]="!collectionService.isInCollection(product.id)"
+        >
+          {{ collectionService.isInCollection(product.id) ? 'In your collection' : 'Not in your collection' }}
+        </span>
+        <div
+          class="detail-rating"
+          [class.detail-rating-disabled]="!collectionService.isInCollection(product.id)"
+          aria-label="Rate this film"
+        >
+          <button
+            *ngFor="let star of ratingStars"
+            type="button"
+            class="rating-star"
+            [class.filled]="isStarFilled(star)"
+            [attr.aria-label]="'Rate ' + star + ' stars'"
+            (click)="setRating(star)"
+            [disabled]="!collectionService.isInCollection(product.id)"
+          >
+            ★
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="film-details-wrapper">
       <div class="left-side-wrapper">
-        <div class="film-image-container">
+        <div class="film-image-container cover-with-collection-badge">
           <img [src]="product.imageUrl" [alt]="product.title" class="film-image" />
+          <span
+            *ngIf="collectionService.isInCollection(product.id)"
+            class="collection-cover-badge collection-cover-badge--detail collection-cover-badge--product"
+            aria-hidden="true"
+          ></span>
         </div>
       </div>
 
@@ -84,10 +111,10 @@
           >
             {{
               collectionClickLock
-                ? (isInCollection() ? '★ In your collection' : 'Add to Collection')
+                ? (isInCollection() ? 'In your collection' : 'Add to Collection')
                 : (collectionHover
                   ? (isInCollection() ? 'Remove' : 'Add to Collection')
-                  : (isInCollection() ? '★ In your collection' : 'Add to Collection'))
+                  : (isInCollection() ? 'In your collection' : 'Add to Collection'))
             }}
           </button>
         </div>

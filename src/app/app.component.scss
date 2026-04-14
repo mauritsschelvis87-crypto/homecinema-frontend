@@ -25,6 +25,14 @@
     width: calc(100% - 205px);
   }
 
+  &.special-edition-route.shifted {
+    width: 100%;
+  }
+
+  &.director-detail-route.shifted {
+    width: 100%;
+  }
+
 }
 
 .app-logo {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FilmService, Film } from '../services/film.service';
 import { CommonModule } from '@angular/common';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'app-search',
@@ -17,7 +18,8 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private filmService: FilmService
+    private filmService: FilmService,
+    private collectionService: CollectionService
   ) {}
 
   ngOnInit(): void {
@@ -37,5 +39,9 @@ export class SearchComponent implements OnInit {
       f.country.toLowerCase().includes(this.query) ||
       f.year.toString().includes(this.query)
     );
+  }
+
+  isInCollection(filmId: number): boolean {
+    return this.collectionService.isInCollection(filmId);
   }
 }

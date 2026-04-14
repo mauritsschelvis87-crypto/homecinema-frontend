@@ -18,6 +18,7 @@ export interface MediaItem {
 })
 export class MediaSliderComponent {
   @Input() items: MediaItem[] = [];
+  @Input() showArrows = true;
   currentIndex = 0;
 
   prev(): void {

@@ -1,0 +1,325 @@
+@mixin catalog-listing {
+  .top-spacing {
+    height: 100px;
+    background-color: var(--color-background);
+  }
+
+  .shopping-page-container {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 10px 40px;
+    background-color: var(--color-background);
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .filters-container {
+    background-color: white;
+    padding: 10px 19px;
+    margin-top: 2px;
+    margin-left: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .film-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    width: 100%;
+    padding: 18px 0 0;
+    justify-items: center;
+    margin-top: 22px;
+
+    @media (max-width: 992px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  .film-card {
+    background-color: #ececec;
+    color: black;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 2px;
+    text-align: center;
+    width: 100%;
+    max-width: 255px;
+    min-height: 396px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+    @media (max-width: 992px) {
+      max-width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      max-width: 100%;
+      padding: 8px;
+    }
+
+    &:hover,
+    &:focus {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      outline: none;
+    }
+
+    .film-cover {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      margin-bottom: 12px;
+      background-color: var(--color-cover-surface);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .film-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background-color: var(--color-cover-surface);
+    }
+
+    .film-title,
+    .film-info {
+      color: black;
+    }
+  }
+
+  .film-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+
+    @media (max-width: 600px) {
+      font-size: 1.1rem;
+    }
+  }
+
+    .film-info {
+      font-size: 1rem;
+      color: #666;
+      padding: 0 10px 12px;
+      display: flex;
+      flex-direction: column;
+
+      @media (max-width: 600px) {
+        font-size: 0.9rem;
+      }
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 1080px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    box-sizing: border-box;
+  }
+
+  .filter-input,
+  .filter-select {
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 0;
+    padding: 6px 8px;
+    font-size: 1rem;
+    width: 129px;
+    box-sizing: border-box;
+
+    @media (max-width: 600px) {
+      width: 100%;
+    }
+  }
+
+  .filter-input::placeholder {
+    color: #666;
+  }
+
+  .filter-button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 0;
+    padding: 8px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    width: 129px;
+    box-sizing: border-box;
+    margin-left: 3px;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      max-width: none;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: #333;
+      outline: none;
+    }
+  }
+
+  .film-list {
+    width: 100%;
+    margin: 0;
+    padding: 18px 0 0;
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 34px;
+    row-gap: 24px;
+    align-items: stretch;
+    justify-items: stretch;
+
+    @media (max-width: 992px) {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 28px;
+      row-gap: 22px;
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+      row-gap: 18px;
+    }
+
+    a.film-card {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      background-color: #ececec;
+      padding: 0.85rem;
+      min-height: 168px;
+      margin-left: 0;
+      width: 100%;
+      max-width: 100%;
+      text-decoration: none;
+      color: black;
+      text-align: left;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+
+      &:hover,
+      &:focus-visible {
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+        outline: none;
+      }
+
+      .film-cover {
+        width: 84px;
+        min-width: 84px;
+        aspect-ratio: 2 / 3;
+        margin-bottom: 0;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background-color: var(--color-cover-surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .film-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        background-color: var(--color-cover-surface);
+      }
+
+      .film-info {
+        flex: 1;
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        color: black;
+
+        .film-title {
+          margin: 0 0 0.2rem;
+          font-size: 1rem;
+          font-weight: 700;
+          color: black;
+        }
+
+        p {
+          margin: 0.1rem 0;
+          font-size: 0.95rem;
+          color: black;
+          line-height: 1;
+        }
+
+        .extra-info {
+          margin-top: 0.2rem;
+
+          p {
+            margin: 0.1rem 0;
+            font-size: 0.95rem;
+            color: black;
+            line-height: 1;
+          }
+        }
+      }
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #777;
+      font-size: 1.3rem;
+      margin-top: 3rem;
+    }
+  }
+
+  .card-rating {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    min-height: 32px;
+    padding: 0 0 12px;
+    background-color: #ececec;
+  }
+
+  .card-rating-footer {
+    margin-top: auto;
+  }
+
+  .rating-star {
+    border: none;
+    background: transparent;
+    color: #bdbdbd;
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    &:hover,
+    &:focus {
+      color: #7c7c7c;
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    &.filled {
+      color: #111;
+    }
+  }
+}

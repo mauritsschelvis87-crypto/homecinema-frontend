@@ -32,16 +32,15 @@
         </div>
       </div>
 
-      <p class="boxset-subtitle">{{ boxset.subtitle }}</p>
-
       <div class="film-details-wrapper">
         <div class="left-side-wrapper">
-          <div class="box-contents-container">
-            <img [src]="boxset.topImage" [alt]="boxset.title + ' contents'" class="box-contents-image" />
-          </div>
-
-          <div class="film-image-container">
-            <img [src]="boxset.secondaryImage" [alt]="boxset.title" class="film-image" />
+          <div class="film-image-container cover-with-collection-badge">
+            <img [src]="boxset.product.imageUrl" [alt]="boxset.title" class="film-image" />
+            <span
+              *ngIf="collectionService.isInCollection(boxset.product.id)"
+              class="collection-cover-badge collection-cover-badge--detail"
+              aria-hidden="true"
+            ></span>
           </div>
         </div>
 
@@ -91,62 +90,14 @@
               </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="media-section" *ngIf="boxset.mediaItems.length > 0">
-            <div class="media-slider-wrapper">
-              <app-media-slider [items]="boxset.mediaItems"></app-media-slider>
-            </div>
-          </div>
+      <div class="media-section" *ngIf="boxset.mediaItems.length > 0">
+        <div class="media-slider-wrapper">
+          <app-media-slider [items]="boxset.mediaItems"></app-media-slider>
         </div>
       </div>
     </div>
   </section>
-
-  <div class="bottom-controls" *ngIf="currentIndex < boxsets.length - 1">
-    <button
-      class="scroll-arrow-btn"
-      aria-label="Scroll up"
-      (click)="scrollUp()"
-      [disabled]="currentIndex === 0"
-    >
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <polyline
-          points="18 15 12 9 6 15"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
-
-    <button
-      class="scroll-arrow-btn"
-      aria-label="Scroll down"
-      (click)="scrollDown()"
-      [disabled]="currentIndex >= boxsets.length - 1"
-    >
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <polyline
-          points="6 9 12 15 18 9"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
-  </div>
 </div>

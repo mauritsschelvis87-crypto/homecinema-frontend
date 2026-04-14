@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FilmService, Film } from '../services/film.service';
 import { DirectorService, Director } from '../services/director.service';
+import { CollectionService } from '../services/collection.service';
 
 import { RouterLink } from '@angular/router';
 
@@ -13,6 +14,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './director-detail.component.scss'
 })
 export class DirectorDetailComponent implements OnInit {
+  readonly cardTitleMaxLength = 15;
+  readonly ratingStars = [1, 2, 3, 4, 5];
   private readonly exploreDirectorImages: Record<string, string> = {
     'jean-luc-godard': '/assets/directors/jean_luc_godard.jpg',
     'powell-pressburger': '/assets/directors/michael_powell.jpg',
@@ -32,7 +35,8 @@ export class DirectorDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private directorService: DirectorService,
-    private filmService: FilmService
+    private filmService: FilmService,
+    private collectionService: CollectionService
   ) {}
 
   ngOnInit(): void {
@@ -105,5 +109,26 @@ export class DirectorDetailComponent implements OnInit {
 
   get directorImage(): string {
     return this.exploreDirectorImages[this.currentSlug] || this.director?.image || '';
+  }
+
+  truncateTitle(title: string): string {
+    return title.length > this.cardTitleMaxLength
+      ? `${title.slice(0, this.cardTitleMaxLength).trim()}...`
+      : title;
+  }
+
+  isInCollection(filmId: number): boolean {
+    return this.collectionService.isInCollection(filmId);
+  }
+
+  setRating(event: Event, film: Film, rating: number): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.collectionService.rateFilm(film.id, rating);
+    film.userRating = rating;
+  }
+
+  isStarFilled(film: Film, star: number): boolean {
+    return star <= this.collectionService.getRating(film.id);
   }
 }

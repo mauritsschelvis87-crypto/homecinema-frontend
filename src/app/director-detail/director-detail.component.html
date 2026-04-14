@@ -1,84 +1,106 @@
 <div class="top-spacing"></div>
 
 <div class="page-gray-screen">
-<div class="director-page-container">
-  @if (director) {
-    <section class="director-intro">
-      <div class="director-page-title-row">
-        <h1 class="director-page-title">{{ director.name }}</h1>
-        <div class="share-icons-inline">
-          <a
-            [href]="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Share on Facebook"
-          >
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a
-            [href]="'https://twitter.com/intent/tweet?url=' + shareUrl + '&text=Take%20a%20look%20at%20this%20director!'"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Share on Twitter"
-          >
-            <i class="fab fa-x-twitter"></i>
-          </a>
-          <a
-            [href]="'https://wa.me/?text=' + shareUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Share on WhatsApp"
-          >
-            <i class="fab fa-whatsapp"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="director-details-wrapper">
-        <div class="left-side-wrapper">
-          <div class="director-image-container">
-            <img class="director-image" [src]="directorImage" [alt]="director.name" />
+  <div class="director-page-container">
+    @if (director) {
+      <section class="director-intro">
+        <div class="director-page-title-row">
+          <h1 class="director-page-title">{{ director.name }}</h1>
+          <div class="share-icons-inline">
+            <a
+              [href]="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on Facebook"
+            >
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a
+              [href]="'https://twitter.com/intent/tweet?url=' + shareUrl + '&text=Take%20a%20look%20at%20this%20director!'"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on Twitter"
+            >
+              <i class="fab fa-x-twitter"></i>
+            </a>
+            <a
+              [href]="'https://wa.me/?text=' + shareUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on WhatsApp"
+            >
+              <i class="fab fa-whatsapp"></i>
+            </a>
           </div>
         </div>
 
-        <div class="right-side-wrapper">
-          <div class="specs-container">
-            <ul class="specs-list">
-              <li><strong>Director:</strong> {{ director.name }}</li>
-              <li><strong>Born:</strong> {{ director.birthPlace }} ({{ director.birthYear }})</li>
-              @if (director.deathYear) {
-                <li><strong>Died:</strong> {{ director.deathYear }}</li>
-              }
-              <li><strong>Education:</strong> {{ director.education }}</li>
-            </ul>
-            <p class="bio">{{ director.bio }}</p>
+        <div class="director-details-wrapper">
+          <div class="left-side-wrapper">
+            <div class="director-image-container">
+              <img class="director-image" [src]="directorImage" [alt]="director.name" />
+            </div>
+          </div>
+
+          <div class="right-side-wrapper">
+            <div class="specs-container">
+              <ul class="specs-list">
+                <li><strong>Director:</strong> {{ director.name }}</li>
+                <li><strong>Born:</strong> {{ director.birthPlace }} ({{ director.birthYear }})</li>
+                @if (director.deathYear) {
+                  <li><strong>Died:</strong> {{ director.deathYear }}</li>
+                }
+                <li><strong>Education:</strong> {{ director.education }}</li>
+              </ul>
+              <p class="bio">{{ director.bio }}</p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       @if (films.length > 0) {
         <section class="films-section">
           <div class="film-grid" aria-label="Director films">
-              @for (film of films; track film.id) {
+            @for (film of films; track film.id) {
+              <div class="film-card-shell">
                 <a
-                  class="film-card"
-                  [routerLink]="['/films', film.id]"
+                  class="film-card-link"
+                  [routerLink]="['/product', film.id]"
                   [attr.aria-label]="'View ' + film.title"
                 >
-                  <img [src]="film.imageUrl" [alt]="film.title" />
+                  <div class="film-cover cover-with-collection-badge">
+                    <img [src]="film.imageUrl" [alt]="film.title" />
+                    @if (isInCollection(film.id)) {
+                      <span class="collection-cover-badge" aria-hidden="true"></span>
+                    }
+                  </div>
                   <div class="film-info">
-                    <h3 class="film-title">{{ film.title }}</h3>
+                    <h3 class="film-title">{{ truncateTitle(film.title) }}</h3>
                     <div class="meta-info">
                       <p>{{ film.director }}</p>
                       <p>{{ film.year }}</p>
                     </div>
                   </div>
                 </a>
-              }
+                @if (isInCollection(film.id)) {
+                  <div class="collection-card-rating" aria-label="Rate this film">
+                    @for (star of ratingStars; track star) {
+                      <button
+                        type="button"
+                        class="rating-star"
+                        [class.filled]="isStarFilled(film, star)"
+                        [attr.aria-label]="'Rate ' + film.title + ' ' + star + ' stars'"
+                        (click)="setRating($event, film, star)"
+                      >
+                        ★
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
           </div>
         </section>
       }
-    </section>
-  }
-</div>
+    }
+  </div>
 </div>

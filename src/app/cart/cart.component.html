@@ -16,8 +16,15 @@
         <tbody>
         <tr *ngFor="let item of cartItems; trackBy: trackItem">
           <td class="product-info">
-            <a [routerLink]="getProductLink(item.product)" [fragment]="getProductFragment(item.product)">
-              <img [src]="item.product.imageUrl" alt="{{ item.product.title }}" class="product-image" />
+            <a [routerLink]="getProductLink(item.product)" [fragment]="getProductFragment(item.product)" class="product-image-link">
+              <span class="product-image-wrap cover-with-collection-badge">
+                <img [src]="item.product.imageUrl" alt="{{ item.product.title }}" class="product-image" />
+                <span
+                  *ngIf="isInCollection(item.product.id)"
+                  class="collection-cover-badge collection-cover-badge--thumb"
+                  aria-hidden="true"
+                ></span>
+              </span>
             </a>
             <div class="product-details">
               <a [routerLink]="getProductLink(item.product)" [fragment]="getProductFragment(item.product)" class="product-title">

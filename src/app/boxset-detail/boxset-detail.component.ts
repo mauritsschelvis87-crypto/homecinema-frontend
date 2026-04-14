@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { MediaSliderComponent, MediaItem } from '../media-slider/media-slider.component';
 import { Film } from '../services/film.service';
 import { CartService } from '../services/cart.service';
 import { WishlistService } from '../services/wishlist.service';
 import { CollectionService } from '../services/collection.service';
-import { ActivatedRoute } from '@angular/router';
 
 interface BoxsetSpec {
   label: string;
@@ -31,8 +30,7 @@ interface BoxsetItem {
   templateUrl: './boxset-detail.component.html',
   styleUrls: ['./boxset-detail.component.scss'],
 })
-export class BoxsetDetailComponent implements AfterViewInit {
-  currentIndex = 0;
+export class BoxsetDetailComponent {
   wishlistHoverId: number | null = null;
   collectionHoverId: number | null = null;
   wishlistClickLockId: number | null = null;
@@ -297,74 +295,15 @@ export class BoxsetDetailComponent implements AfterViewInit {
     },
   ];
 
-  private isScrolling = false;
-
   constructor(
     private cartService: CartService,
     private wishlistService: WishlistService,
-    public collectionService: CollectionService,
-    private route: ActivatedRoute
+    public collectionService: CollectionService
   ) {
     this.boxsets.forEach((boxset) => {
       this.wishlistService.syncStoredSpecialItem(boxset.product);
       this.collectionService.syncStoredItem(boxset.product);
     });
-  }
-
-  ngAfterViewInit(): void {
-    this.route.fragment.subscribe((fragment) => {
-      if (!fragment) {
-        return;
-      }
-
-      const targetIndex = this.boxsets.findIndex((boxset) => boxset.slug === fragment);
-      if (targetIndex === -1) {
-        return;
-      }
-
-      this.currentIndex = targetIndex;
-      setTimeout(() => this.scrollToCurrentSection(), 0);
-    });
-  }
-
-  @HostListener('wheel', ['$event'])
-  onWheel(event: WheelEvent): void {
-    if (this.isScrolling) return;
-
-    if (event.deltaY > 0 && this.currentIndex < this.boxsets.length - 1) {
-      this.currentIndex++;
-      this.scrollToCurrentSection();
-    } else if (event.deltaY < 0 && this.currentIndex > 0) {
-      this.currentIndex--;
-      this.scrollToCurrentSection();
-    }
-  }
-
-  scrollDown(): void {
-    if (this.currentIndex < this.boxsets.length - 1) {
-      this.currentIndex++;
-      this.scrollToCurrentSection();
-    }
-  }
-
-  scrollUp(): void {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-      this.scrollToCurrentSection();
-    }
-  }
-
-  scrollToCurrentSection(): void {
-    this.isScrolling = true;
-    const element = document.querySelector(`section.boxset-section-${this.currentIndex}`);
-
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    setTimeout(() => {
-      this.isScrolling = false;
-    }, 350);
   }
 
   getShareUrl(slug: string): string {

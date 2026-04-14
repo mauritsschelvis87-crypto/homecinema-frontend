@@ -25,6 +25,7 @@ export interface Film {
   stills?: string[];
   weight?: number;
   silent: boolean;
+  userRating?: number | null;
 }
 
 export interface OrderItemResponse {

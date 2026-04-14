@@ -27,6 +27,7 @@ export interface Film {
   weight?: number;
   stills: string[];
   silent: boolean;
+  userRating?: number | null;
 }
 
 @Injectable({

@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { OrderService, Order } from '../services/order.service';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { getDiscountSummaryLabel } from '../utils/discount-code-display';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'app-order-history-detail',
@@ -17,7 +18,8 @@ export class OrderHistoryDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private collectionService: CollectionService
   ) {}
 
   ngOnInit(): void {
@@ -105,5 +107,9 @@ export class OrderHistoryDetailComponent implements OnInit {
     ].filter((code): code is string => Boolean(code));
 
     return [...new Set(codes)];
+  }
+
+  isInCollection(filmId: number | string): boolean {
+    return this.collectionService.isInCollection(Number(filmId));
   }
 }

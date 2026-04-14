@@ -23,9 +23,11 @@ export class CollectionService {
 
   addToCollection(film: Film) {
     if (!this.collection.find((f) => f.id === film.id)) {
-      this.collection.push(film);
-      this.collection$.next(this.collection);
-      localStorage.setItem('collection', JSON.stringify(this.collection));
+      this.collection.push({
+        ...film,
+        userRating: film.userRating ?? null,
+      });
+      this.persistCollection();
     }
   }
 
@@ -35,18 +37,42 @@ export class CollectionService {
       return;
     }
 
-    this.collection[index] = film;
-    this.collection$.next([...this.collection]);
-    localStorage.setItem('collection', JSON.stringify(this.collection));
+    this.collection[index] = {
+      ...film,
+      userRating: film.userRating ?? this.collection[index].userRating ?? null,
+    };
+    this.persistCollection();
   }
 
   removeFromCollection(filmId: number) {
     this.collection = this.collection.filter(f => f.id !== filmId);
-    this.collection$.next(this.collection);
-    localStorage.setItem('collection', JSON.stringify(this.collection));
+    this.persistCollection();
   }
 
   isInCollection(filmId: number): boolean {
     return this.collection.some(f => f.id === filmId);
+  }
+
+  getRating(filmId: number): number {
+    return this.collection.find(f => f.id === filmId)?.userRating ?? 0;
+  }
+
+  rateFilm(filmId: number, rating: number): void {
+    const index = this.collection.findIndex(f => f.id === filmId);
+    if (index === -1 || rating < 1 || rating > 5) {
+      return;
+    }
+
+    this.collection[index] = {
+      ...this.collection[index],
+      userRating: rating,
+    };
+
+    this.persistCollection();
+  }
+
+  private persistCollection(): void {
+    this.collection$.next([...this.collection]);
+    localStorage.setItem('collection', JSON.stringify(this.collection));
   }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute }        from '@angular/router';
 import { RouterLink }            from '@angular/router';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule }           from '@angular/forms';
+import { CollectionService } from '../services/collection.service';
 
 @Component({
   selector: 'app-shopping-page',
@@ -13,6 +14,8 @@ import { FormsModule }           from '@angular/forms';
   styleUrls: ['./shopping-page.component.scss']
 })
 export class ShoppingPageComponent implements OnInit {
+  readonly cardTitleMaxLength = 15;
+  readonly ratingStars = [1, 2, 3, 4, 5];
   allFilms: Film[]      = [];
   filteredFilms: Film[] = [];
   visibleFilms: Film[]  = [];
@@ -51,7 +54,8 @@ export class ShoppingPageComponent implements OnInit {
 
   constructor(
     private filmService: FilmService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private collectionService: CollectionService
   ) {}
 
   ngOnInit(): void {
@@ -221,4 +225,25 @@ export class ShoppingPageComponent implements OnInit {
   }
 
   toggleView(){ this.showGrid = !this.showGrid; }
+
+  truncateTitle(title: string): string {
+    return title.length > this.cardTitleMaxLength
+      ? `${title.slice(0, this.cardTitleMaxLength).trim()}...`
+      : title;
+  }
+
+  isInCollection(filmId: number): boolean {
+    return this.collectionService.isInCollection(filmId);
+  }
+
+  setRating(event: Event, film: Film, rating: number): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.collectionService.rateFilm(film.id, rating);
+    film.userRating = rating;
+  }
+
+  isStarFilled(film: Film, star: number): boolean {
+    return star <= this.collectionService.getRating(film.id);
+  }
 }

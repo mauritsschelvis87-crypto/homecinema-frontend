@@ -5,16 +5,17 @@ import { CartService } from '../services/cart.service';
 import { WishlistService } from '../services/wishlist.service';
 import { CollectionService } from '../services/collection.service';
 import { MediaSliderComponent } from '../media-slider/media-slider.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [MediaSliderComponent, NgIf, NgClass],
+  imports: [MediaSliderComponent, NgIf, NgClass, NgFor],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
+  readonly ratingStars = [1, 2, 3, 4, 5];
   product!: Film;
   loading = true;
   error = false;
@@ -54,6 +55,7 @@ export class ProductDetailComponent implements OnInit {
       this.filmService.getFilmById(id).subscribe({
         next: (film) => {
           this.product = film;
+          this.syncRatingFromCollection();
           this.setupMedia();
           this.loading = false;
           this.shareUrl = `https://jouwshop.nl/product/${film.id}`;
@@ -115,8 +117,10 @@ export class ProductDetailComponent implements OnInit {
   toggleCollection(): void {
     if (this.isInCollection()) {
       this.collectionService.removeFromCollection(this.product.id);
+      this.product.userRating = null;
     } else {
       this.collectionService.addToCollection(this.product);
+      this.syncRatingFromCollection();
     }
 
     this.collectionClickLock = true;
@@ -127,5 +131,28 @@ export class ProductDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/shopping']);
+  }
+
+  setRating(rating: number): void {
+    if (!this.isInCollection()) {
+      return;
+    }
+
+    this.collectionService.rateFilm(this.product.id, rating);
+    this.product.userRating = rating;
+  }
+
+  isStarFilled(star: number): boolean {
+    return star <= (this.product?.userRating ?? 0);
+  }
+
+  private syncRatingFromCollection(): void {
+    if (!this.product) {
+      return;
+    }
+
+    this.product.userRating = this.isInCollection()
+      ? this.collectionService.getRating(this.product.id)
+      : null;
   }
 }
