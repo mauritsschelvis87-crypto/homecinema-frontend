@@ -4,6 +4,7 @@ import { Film } from '../services/film.service';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FilmRegionValue, getFilmRegion, normalizeFilmRegion } from '../utils/film-search';
 
 @Component({
   selector: 'app-collection',
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 export class CollectionComponent implements OnInit {
   readonly cardTitleMaxLength = 15;
   readonly ratingStars = [1, 2, 3, 4, 5];
+  readonly regionOptions: FilmRegionValue[] = ['A', 'B', 'Free'];
   collection: Film[] = [];
   filteredCollection: Film[] = [];
   loading = true;
@@ -42,6 +44,7 @@ export class CollectionComponent implements OnInit {
   filters = {
     title: '',
     country: '',
+    region: '',
     director: '',
     year: '',
     type: '',
@@ -89,6 +92,7 @@ export class CollectionComponent implements OnInit {
     this.filteredCollection = this.collection.filter(f =>
       (!this.filters.title    || f.title.toLowerCase().includes(this.filters.title.toLowerCase())) &&
       (!this.filters.country  || f.country.toLowerCase()  === this.filters.country.toLowerCase()) &&
+      (!this.filters.region   || getFilmRegion(f) === normalizeFilmRegion(this.filters.region)) &&
       (!this.filters.director || f.director.toLowerCase() === this.filters.director.toLowerCase()) &&
       (!this.filters.year     || f.year.toString() === this.filters.year) &&
       (!this.filters.type     || f.type     === this.filters.type) &&
@@ -98,7 +102,7 @@ export class CollectionComponent implements OnInit {
   }
 
   resetFilters(): void {
-    this.filters = { title:'', country:'', director:'', year:'', type:'', brand:'' };
+    this.filters = { title:'', country:'', region:'', director:'', year:'', type:'', brand:'' };
     this.filteredCollection = [...this.collection];
     this.resetDropdowns();
   }

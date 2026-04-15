@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Director, DirectorService } from './director.service';
+import { environment } from '../../environments/environment';
 
 describe('DirectorService', () => {
   let service: DirectorService;
@@ -35,13 +36,11 @@ describe('DirectorService', () => {
     httpTestingController.verify();
   });
 
-  it('flattens the directors payload', () => {
+  it('loads the directors payload from the api', () => {
     const response = [
       createDirector({ slug: 'akira-kurosawa' }),
-      [
-        createDirector({ slug: 'jean-renoir' }),
-        createDirector({ slug: 'andrei-tarkovsky' }),
-      ],
+      createDirector({ slug: 'jean-renoir' }),
+      createDirector({ slug: 'andrei-tarkovsky' }),
     ];
 
     let directors: Director[] | undefined;
@@ -49,7 +48,7 @@ describe('DirectorService', () => {
       directors = result;
     });
 
-    const request = httpTestingController.expectOne('/assets/covers/directors.json');
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/directors`);
     request.flush(response);
 
     expect(directors?.length).toBe(3);
@@ -67,13 +66,13 @@ describe('DirectorService', () => {
       director = result;
     });
 
-    const request = httpTestingController.expectOne('/assets/covers/directors.json');
-    request.flush([
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/directors/friedrich-murnau`);
+    request.flush(
       createDirector({
         name: 'Friedrich W. Murnau',
         slug: 'friedrich-w-murnau',
-      }),
-    ]);
+      })
+    );
 
     expect(director?.slug).toBe('friedrich-w-murnau');
   });

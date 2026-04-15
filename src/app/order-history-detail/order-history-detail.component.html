@@ -1,38 +1,38 @@
 <div class="top-spacing"></div>
 
 <div class="order-detail-container page-shell" *ngIf="!isLoading && order; else loadingOrError">
-  <h2 class="order-title">Order Details</h2>
-
-  <table class="order-table">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of order.orderItems">
-        <td class="product-info">
-          <span class="product-image-wrap cover-with-collection-badge">
-            <img [src]="item.film.imageUrl" [alt]="item.film.title" class="product-image" />
-            <span
-              *ngIf="isInCollection(item.film.id)"
-              class="collection-cover-badge collection-cover-badge--thumb"
-              aria-hidden="true"
-            ></span>
-          </span>
-          <div class="product-details">
-            <div class="product-title">{{ item.film.title }}</div>
-            <div class="product-brand">{{ item.film.brand.name }}</div>
-            <div class="product-type">{{ item.film.type || 'Onbekend' }}</div>
-          </div>
-        </td>
-        <td>{{ item.quantity }}</td>
-        <td>€ {{ (item.price * item.quantity).toFixed(2) }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="items-scroll">
+    <table class="order-table">
+      <colgroup>
+        <col />
+        <col class="quantity-column" />
+        <col class="total-column" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of order.orderItems">
+          <td class="product-info">
+            <span class="product-image-wrap">
+              <img [src]="item.film.imageUrl" [alt]="item.film.title" class="product-image" />
+            </span>
+            <div class="product-details">
+              <div class="product-title">{{ item.film.title }}</div>
+              <div class="product-brand">{{ item.film.brand.name }}</div>
+              <div class="product-type">{{ item.film.type || 'Onbekend' }}</div>
+            </div>
+          </td>
+          <td>{{ item.quantity }}</td>
+          <td>€ {{ (item.price * item.quantity).toFixed(2) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="purchase-summary">
     <p class="summary-line"><strong>Purchase date:</strong> {{ order.orderDate | date:'medium' }}</p>
@@ -48,8 +48,9 @@
   </div>
 
   <div class="bottom-actions">
-    <a routerLink="/account" class="back-button">Back to account</a>
+    <button type="button" class="back-button">Return Request</button>
   </div>
+
 </div>
 
 <ng-template #loadingOrError>

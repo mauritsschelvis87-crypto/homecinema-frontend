@@ -1,13 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+export interface DirectorPerson {
+  name: string;
+  birthDate?: string;
+  birthPlace?: string;
+  birthYear?: number;
+  deathDate?: string;
+  deathYear?: number;
+}
 
 export interface Director {
   name: string;
   slug: string;
   birthPlace: string;
-  birthYear: number;
+  birthYear?: number;
   deathYear?: number;
+  infoLine?: string;
+  bornLine?: string;
+  diedLine?: string;
+  people?: DirectorPerson[];
   image: string;
   bio: string;
   education: string;
@@ -15,29 +29,17 @@ export interface Director {
 
 @Injectable({ providedIn: 'root' })
 export class DirectorService {
-  private url = '/assets/covers/directors.json';
+  private apiUrl = `${environment.apiUrl}/directors`;
 
   constructor(private http: HttpClient) {}
 
   getDirectors(): Observable<Director[]> {
-    return this.http.get<(Director | Director[])[]>(this.url).pipe(
-      map(directors => directors.flat() as Director[])
-    );
+    return this.http.get<Director[]>(this.apiUrl);
   }
 
   getDirectorBySlug(slug: string): Observable<Director | undefined> {
-    return this.getDirectors().pipe(
-      map(directors => directors.find(d => this.matchesSlug(d.slug, slug)))
+    return this.http.get<Director>(`${this.apiUrl}/${slug}`).pipe(
+      catchError(() => of(undefined))
     );
-  }
-
-  private matchesSlug(directorSlug: string, routeSlug: string): boolean {
-    const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const normalizedDirector = normalize(directorSlug);
-    const normalizedRoute = normalize(routeSlug);
-
-    return normalizedDirector === normalizedRoute
-      || normalizedDirector.replace('-w-', '-') === normalizedRoute
-      || normalizedRoute.replace('-w-', '-') === normalizedDirector;
   }
 }

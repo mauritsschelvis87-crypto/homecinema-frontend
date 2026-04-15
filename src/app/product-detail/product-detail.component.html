@@ -57,21 +57,32 @@
 
     <div class="film-details-wrapper">
       <div class="left-side-wrapper">
-        <div class="film-image-container cover-with-collection-badge">
-          <img [src]="product.imageUrl" [alt]="product.title" class="film-image" />
-          <span
-            *ngIf="collectionService.isInCollection(product.id)"
-            class="collection-cover-badge collection-cover-badge--detail collection-cover-badge--product"
-            aria-hidden="true"
-          ></span>
+        <div class="film-image-container">
+          <div class="film-image-frame cover-with-collection-badge">
+            <img
+              #productImage
+              [src]="product.imageUrl"
+              [alt]="product.title"
+              class="film-image"
+              (load)="syncImageHeight()"
+            />
+            <span
+              *ngIf="collectionService.isInCollection(product.id)"
+              class="collection-cover-badge collection-cover-badge--detail collection-cover-badge--product"
+              aria-hidden="true"
+            ></span>
+          </div>
         </div>
       </div>
 
-      <div class="right-side-wrapper">
+      <div class="right-side-wrapper" [style.height.px]="detailImageHeight || null">
         <div class="specs-container">
           <ul class="specs-list">
             <li><strong>Director:</strong> {{ product.director }}</li>
             <li><strong>Country:</strong> {{ product.country }}</li>
+            <li *ngIf="getProductRegion() as region">
+              <strong>Region:</strong> {{ region }}
+            </li>
             <li><strong>Year:</strong> {{ product.year }}</li>
             <li><strong>Genre:</strong> {{ product.genre }}</li>
             <li><strong>Label:</strong> {{ product.brand.name }}</li>
@@ -111,10 +122,10 @@
           >
             {{
               collectionClickLock
-                ? (isInCollection() ? 'In your collection' : 'Add to Collection')
+                ? (isInCollection() ? '★ In your collection' : 'Add to Collection')
                 : (collectionHover
                   ? (isInCollection() ? 'Remove' : 'Add to Collection')
-                  : (isInCollection() ? 'In your collection' : 'Add to Collection'))
+                  : (isInCollection() ? '★ In your collection' : 'Add to Collection'))
             }}
           </button>
         </div>

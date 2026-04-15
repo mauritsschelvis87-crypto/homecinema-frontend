@@ -12,6 +12,10 @@
   --color-background: #5a5a5a;
   --color-cover-surface: #dcdcdc;
   --color-line-transparant: rgba(255, 255, 255, 0.1);
+  --poster-aspect-ratio: 1288 / 1600;
+  --page-top-spacing: 86px;
+  --page-surface-gap: 2px;
+  --page-content-offset: calc(var(--page-top-spacing) + var(--page-surface-gap));
 
 }
 html, body {
@@ -39,11 +43,13 @@ html, body {
 .cover-with-collection-badge {
   position: relative;
   display: block;
-  background-color: var(--color-cover-surface);
+  background-color: transparent;
 }
 
 .cover-with-collection-badge img {
-  background-color: var(--color-cover-surface) !important;
+  object-fit: contain !important;
+  object-position: center;
+  background-color: transparent !important;
 }
 
 .collection-cover-badge {
@@ -105,6 +111,48 @@ html, body {
 
 .collection-cover-badge--thumb::before {
   font-size: 0.4rem;
+}
+
+.collection-inline-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 10px;
+  background-color: rgba(17, 17, 17, 0.92);
+  border: 1px solid rgba(195, 179, 101, 0.9);
+  color: var(--color-secundary-text);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.collection-card-rating--compact {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin-left: 0;
+  margin-top: -14px;
+  padding: 0 0.85rem 12px;
+  box-sizing: border-box;
+}
+
+.collection-card-rating--compact .collection-inline-badge {
+  flex: 0 0 84px;
+  width: 84px;
+  min-width: 84px;
+  max-width: 84px;
+  padding: 0;
+  margin-right: 12px;
+}
+
+.collection-card-rating--compact .rating-star {
+  margin: 0;
 }
 
 @media (max-width: 900px) {

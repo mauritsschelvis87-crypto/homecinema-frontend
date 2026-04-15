@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FilmService, Film } from '../services/film.service';
 import { CommonModule } from '@angular/common';
 import { CollectionService } from '../services/collection.service';
+import { matchesFilmSearch } from '../utils/film-search';
 
 @Component({
   selector: 'app-search',
@@ -33,12 +34,7 @@ export class SearchComponent implements OnInit {
   }
 
   filterResults(): void {
-    this.results = this.allFilms.filter(f =>
-      f.title.toLowerCase().includes(this.query) ||
-      f.director.toLowerCase().includes(this.query) ||
-      f.country.toLowerCase().includes(this.query) ||
-      f.year.toString().includes(this.query)
-    );
+    this.results = this.allFilms.filter(f => matchesFilmSearch(f, this.query));
   }
 
   isInCollection(filmId: number): boolean {

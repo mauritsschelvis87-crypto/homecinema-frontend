@@ -15,17 +15,20 @@
 
 .cart-container {
   flex: 1;
-  margin: 0 auto;
+  margin: var(--page-surface-gap) auto 0;
   margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  min-height: min(70vh, 760px);
 }
 
 .empty-cart-shell {
-  margin: 0 auto 100px;
+  margin: var(--page-surface-gap) auto 100px;
 }
 
 /* Top spacing */
 .top-spacing {
-  height: 100px;
+  height: var(--page-top-spacing);
 }
 
 /* Cart title links uitgelijnd */
@@ -40,7 +43,25 @@
 .cart-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+  margin-bottom: 0;
+}
+
+.cart-table .quantity-column {
+  width: 204px;
+}
+
+.cart-table .total-column {
+  width: 120px;
+}
+
+.items-scroll {
+  width: 100%;
+  max-height: min(48vh, 420px);
+  overflow-y: auto;
   margin-bottom: 32px;
+  padding-right: 0.25rem;
+  box-sizing: border-box;
 }
 
 .cart-table th,
@@ -64,9 +85,14 @@
   text-align: right;
 }
 
+.cart-table th:nth-child(2),
+.cart-table td:nth-child(2) {
+  text-align: center;
+}
+
 .cart-table .product-info {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
 }
 
@@ -76,16 +102,21 @@
 }
 
 .cart-table .product-image-wrap {
-  width: 70px;
-  min-width: 70px;
+  display: block;
+  width: 72px;
+  min-width: 72px;
+  line-height: 0;
 }
 
 .cart-table .product-image {
   width: 100%;
+  min-width: 0;
+  max-width: none;
   height: auto;
   object-fit: contain;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  background-color: var(--color-cover-surface);
+  background-color: transparent;
+  display: block;
 }
 
 .cart-table .product-details {
@@ -117,10 +148,15 @@
   margin-top: 2px;
 }
 
+.cart-table td {
+  vertical-align: top;
+}
+
 /* Quantity + Remove */
 .quantity-remove {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -223,11 +259,13 @@
   flex-direction: column;
   align-items: flex-end;
   margin-bottom: 24px;
+  margin-left: auto;
+  width: 100%;
+  max-width: 320px;
 }
 
 .summary-card {
   width: 100%;
-  max-width: 320px;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -266,7 +304,6 @@
 .summary-meta,
 .summary-error {
   width: 100%;
-  max-width: 320px;
   margin: 10px 0 0;
   text-align: right;
   font-size: 0.85rem;
@@ -339,9 +376,7 @@
 }
 
 .bottom-buttons .continue-button:hover,
-.bottom-buttons .continue-button:focus,
-.empty-button:hover,
-.empty-button:focus {
+.bottom-buttons .continue-button:focus {
   background-color: var(--color-secundary-text);
   color: white;
   outline: none;
@@ -392,17 +427,17 @@
 
 .empty-button {
   display: inline-block;
-  background-color: black;
+  background-color: var(--color-primary-button);
   color: white;
-  text-transform: uppercase;
-  padding: 12px 24px;
+  padding: 12px 30px;
   text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: opacity 0.3s ease;
 
   &:hover,
   &:focus {
-    background-color: #333;
+    opacity: 0.8;
     outline: none;
   }
 }

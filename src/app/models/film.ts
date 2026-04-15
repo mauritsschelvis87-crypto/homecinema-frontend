@@ -14,6 +14,7 @@ export interface Film {
   genre: string;
   director: string;
   country: string;
+  region?: 'A' | 'B';
   year: number;
   runtime: number;
   type: { id?: number; name: string };

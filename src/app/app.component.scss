@@ -37,7 +37,7 @@
 
 .app-logo {
   position: fixed;
-  top: 1.75rem;
+  top: 1.45rem;
   left: 3.25rem;
   width: 410px;
   height: 42px;
@@ -64,7 +64,7 @@
 
 @media (max-width: 768px) {
   .app-logo {
-    top: 1.2rem;
+    top: 0.95rem;
     left: 1rem;
     width: min(260px, calc(100vw - 2rem));
     height: 30px;

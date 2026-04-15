@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { OrderService, Order } from '../services/order.service';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { getDiscountSummaryLabel } from '../utils/discount-code-display';
@@ -8,7 +8,7 @@ import { CollectionService } from '../services/collection.service';
 @Component({
   selector: 'app-order-history-detail',
   templateUrl: './order-history-detail.component.html',
-  imports: [NgIf, RouterLink, DatePipe, NgForOf],
+  imports: [NgIf, DatePipe, NgForOf],
   styleUrl: './order-history-detail.component.scss',
 })
 export class OrderHistoryDetailComponent implements OnInit {

@@ -1,5 +1,5 @@
 .top-spacing {
-  height: 100px;
+  height: var(--page-top-spacing);
   background-color: var(--color-background);
 }
 
@@ -28,7 +28,7 @@
 .director-intro {
   background-color: #fafafa;
   padding: 20px 24px;
-  margin-top: 2px;
+  margin-top: var(--page-surface-gap);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
 }
@@ -65,7 +65,7 @@
 .director-details-wrapper {
   display: flex;
   gap: 40px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .left-side-wrapper {
@@ -92,11 +92,17 @@
 
 .right-side-wrapper {
   flex: 1 1 400px;
+  display: flex;
 }
 
 .specs-container {
   background-color: transparent;
   text-align: left;
+  position: relative;
+  height: 400px;
+  width: 100%;
+  padding-bottom: 108px;
+  box-sizing: border-box;
 }
 
 .specs-list {
@@ -118,139 +124,68 @@
   max-width: 68ch;
 }
 
-.films-section {
-  margin-top: 22px;
+.collection-summary {
+  margin: 0 0 20px;
+  color: #444;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.55;
+  max-width: 62ch;
 }
 
-.film-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
-  padding: 18px 0 0;
-  width: 100%;
-  justify-items: center;
-  margin-top: 22px;
+.collection-summary strong {
+  color: #222;
+  font-weight: 700;
 }
 
-.film-card-shell {
+.director-actions {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 255px;
-  background-color: #ececec;
-  color: black;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  min-height: 396px;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-
-  @media (max-width: 992px) {
-    max-width: 100%;
-  }
+  flex-wrap: wrap;
+  gap: 10px;
+  position: absolute;
+  left: 0;
+  bottom: 56px;
 }
 
-.film-card-shell:hover,
-.film-card-shell:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.film-card-link {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  color: inherit;
+.btn {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
   text-decoration: none;
-  text-align: center;
-  outline: none;
-}
-
-.film-cover {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  margin-bottom: 12px;
-  background-color: var(--color-cover-surface);
-  overflow: hidden;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.film-cover img {
+.btn:hover,
+.btn:focus {
+  background-color: #555;
+  outline: none;
+}
+
+.btn-discography {
+  background-color: var(--color-secundary-text);
+  min-width: 160px;
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+.media-section {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  display: block;
-  background-color: var(--color-cover-surface);
+  margin-top: 12px;
 }
 
-.film-info {
-  flex: 1;
-  padding: 0 10px 12px;
-  color: black;
-}
-
-.film-title {
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin-bottom: 6px;
-
-  @media (max-width: 600px) {
-    font-size: 1.1rem;
-  }
-}
-
-.meta-info {
-  font-size: 1rem;
-  color: #666;
-
-  p {
-    margin: 0.1rem 0;
-    color: black;
-    line-height: 1;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 0.9rem;
-  }
-}
-
-.collection-card-rating {
+.media-slider-wrapper {
   display: flex;
   justify-content: center;
-  gap: 4px;
-  min-height: 32px;
-  padding: 0 0 12px;
-  background-color: #ececec;
-}
-
-.rating-star {
-  border: none;
-  background: transparent;
-  color: #bdbdbd;
-  font-size: 1.45rem;
-  line-height: 1;
-  padding: 0;
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
-
-  &:hover,
-  &:focus {
-    color: #7c7c7c;
-    outline: none;
-    transform: scale(1.05);
-  }
-
-  &.filled {
-    color: #111;
-  }
-}
-
-@media (max-width: 992px) {
-  .film-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
+  align-items: flex-end;
+  width: 100%;
+  margin-top: 6px;
 }
 
 @media (max-width: 768px) {
@@ -271,7 +206,19 @@
 
   .right-side-wrapper {
     width: 100%;
+    display: block;
     margin-top: 20px;
+  }
+
+  .specs-container {
+    height: auto;
+    padding-bottom: 0;
+    display: block;
+  }
+
+  .director-actions {
+    position: static;
+    margin-top: 24px;
   }
 }
 
@@ -284,8 +231,16 @@
     padding: 20px;
   }
 
-  .film-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .director-page-title {
+    margin-left: 0;
+    font-size: 2rem;
+  }
+
+  .director-actions {
+    width: 100%;
+  }
+
+  .btn-discography {
+    width: 100%;
   }
 }

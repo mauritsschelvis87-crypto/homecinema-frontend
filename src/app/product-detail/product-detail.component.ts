@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilmService, Film } from '../services/film.service';
 import { CartService } from '../services/cart.service';
@@ -6,6 +6,7 @@ import { WishlistService } from '../services/wishlist.service';
 import { CollectionService } from '../services/collection.service';
 import { MediaSliderComponent } from '../media-slider/media-slider.component';
 import { NgClass, NgFor, NgIf } from '@angular/common';
+import { FilmRegionValue, getFilmRegion } from '../utils/film-search';
 
 @Component({
   selector: 'app-product-detail',
@@ -14,11 +15,12 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   readonly ratingStars = [1, 2, 3, 4, 5];
   product!: Film;
   loading = true;
   error = false;
+  detailImageHeight = 0;
 
   mediaArray: { type: 'image' | 'video'; url: string }[] = [];
 
@@ -29,6 +31,14 @@ export class ProductDetailComponent implements OnInit {
   collectionClickLock = false;
 
   shareUrl: string = '';
+  private resizeObserver?: ResizeObserver;
+  private productImageElement?: ElementRef<HTMLImageElement>;
+
+  @ViewChild('productImage')
+  set productImageRef(value: ElementRef<HTMLImageElement> | undefined) {
+    this.productImageElement = value;
+    this.observeProductImage();
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -66,6 +76,10 @@ export class ProductDetailComponent implements OnInit {
         },
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
   }
 
   setupMedia(): void {
@@ -146,6 +160,20 @@ export class ProductDetailComponent implements OnInit {
     return star <= (this.product?.userRating ?? 0);
   }
 
+  getProductRegion(): FilmRegionValue | null {
+    return this.product ? getFilmRegion(this.product) : null;
+  }
+
+  syncImageHeight(): void {
+    const image = this.productImageElement?.nativeElement;
+
+    if (!image) {
+      return;
+    }
+
+    this.detailImageHeight = Math.round(image.getBoundingClientRect().height);
+  }
+
   private syncRatingFromCollection(): void {
     if (!this.product) {
       return;
@@ -154,5 +182,22 @@ export class ProductDetailComponent implements OnInit {
     this.product.userRating = this.isInCollection()
       ? this.collectionService.getRating(this.product.id)
       : null;
+  }
+
+  private observeProductImage(): void {
+    this.resizeObserver?.disconnect();
+
+    const image = this.productImageElement?.nativeElement;
+
+    if (!image) {
+      return;
+    }
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => this.syncImageHeight());
+      this.resizeObserver.observe(image);
+    }
+
+    this.syncImageHeight();
   }
 }

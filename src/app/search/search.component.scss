@@ -1,12 +1,22 @@
 .search-result-cover {
   display: block;
-  width: 72px;
-  min-width: 72px;
+  width: 78px;
+  min-width: 78px;
   line-height: 0;
+  overflow: hidden;
 }
 
 .search-result-cover img {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.search-result-cover .collection-cover-badge--thumb {
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 3px 0;
+  justify-content: center;
+  box-sizing: border-box;
 }

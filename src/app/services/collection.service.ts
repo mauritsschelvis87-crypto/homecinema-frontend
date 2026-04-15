@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Film } from './film.service';
+import { normalizeFilmData } from '../utils/film-normalization';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ export class CollectionService {
   constructor() {
     const stored = localStorage.getItem('collection');
     if (stored) {
-      this.collection = JSON.parse(stored);
-      this.collection$.next(this.collection);
+      this.collection = JSON.parse(stored).map((film: Film) => normalizeFilmData(film));
+      this.persistCollection();
     }
   }
 
@@ -24,7 +25,7 @@ export class CollectionService {
   addToCollection(film: Film) {
     if (!this.collection.find((f) => f.id === film.id)) {
       this.collection.push({
-        ...film,
+        ...normalizeFilmData(film),
         userRating: film.userRating ?? null,
       });
       this.persistCollection();
@@ -38,7 +39,7 @@ export class CollectionService {
     }
 
     this.collection[index] = {
-      ...film,
+      ...normalizeFilmData(film),
       userRating: film.userRating ?? this.collection[index].userRating ?? null,
     };
     this.persistCollection();

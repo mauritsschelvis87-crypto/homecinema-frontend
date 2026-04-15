@@ -1,6 +1,6 @@
 .header-criterion {
   position: fixed;
-  top: 1.6rem;
+  top: 1rem;
   right: 0;
   left: auto;
   transform: none;
@@ -23,35 +23,33 @@
   position: relative;
 }
 
-a.shop-link,
-a.btn-news {
+.nav-text-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-right: 0.85rem;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+a.nav-text-link {
   display: inline-block;
-  text-align: right;
   color: var(--color-primary-text);
   font-weight: 600;
   text-decoration: none;
   font-size: 1.1rem;
   transition: color 0.3s ease;
   white-space: nowrap;
+  min-width: 0;
 }
 
-a.shop-link:hover,
-a.btn-news:hover {
+a.nav-text-link:hover {
   color: var(--color-header-hover);
 }
 
-.btn-news {
-  background: none;
-  border: none;
-  color: var(--color-primary-text);
-  font-style: italic;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  text-decoration: none;
-  text-align: right;
-  display: inline-block;
+a.nav-text-link.nav-text-link--active {
+  color: var(--color-secundary-text);
 }
 
 .icon-btn {
@@ -72,6 +70,10 @@ a.btn-news:hover {
 .icon-btn.cart-btn:hover svg,
 .icon-btn.account-btn:hover svg {
   stroke: grey;
+}
+
+.icon-btn.icon-btn--active svg {
+  stroke: var(--color-secundary-text);
 }
 
 .icon-btn.hamburger-btn svg {
@@ -144,18 +146,28 @@ a.btn-news:hover {
 }
 
 .search-suggestion-cover {
-  width: 42px;
-  min-width: 42px;
+  width: 50px;
+  min-width: 50px;
   display: block;
+  overflow: hidden;
 }
 
 .search-suggestion-link img {
   width: 100%;
-  height: 62px;
+  height: auto;
   object-fit: contain;
   display: block;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  background-color: var(--color-cover-surface);
+  background-color: transparent;
+}
+
+.search-suggestion-cover .collection-cover-badge--thumb {
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 3px 0;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .search-suggestion-text {
@@ -178,13 +190,13 @@ a.btn-news:hover {
 
 .hamburger-menu {
   position: fixed;
-  top: 4.6rem;
+  top: 4rem;
   right: 0;
   background-color: rgba(20, 20, 20, 0.4);
   width: 90%;
   max-width: 360px;
   height: calc(100vh - 5rem);
-  padding: 2rem 1.5rem;
+  padding: 1.35rem 1.5rem 2rem;
   transform: translateY(100%);
   transition: transform 0.3s ease-in-out;
   z-index: 10000;
@@ -229,7 +241,7 @@ a.btn-news:hover {
   color: var(--color-secundary-text);
   font-weight: 600;
   text-transform: uppercase;
-  margin: 2rem 0 1rem 0;
+  margin: 1.35rem 0 1rem 0;
   padding-bottom: 0.5rem;
 }
 
@@ -252,6 +264,7 @@ a.btn-news:hover {
 .hamburger-menu ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .hamburger-menu ul li {
@@ -269,22 +282,39 @@ a.btn-news:hover {
   color: var(--color-header-hover);
 }
 
+.hamburger-menu ul li.account-auth-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hamburger-menu ul li.account-auth-links span {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .header-criterion {
-    top: 1rem;
+    top: 0.75rem;
     padding: 0.5rem;
     max-width: 95%;
   }
 
-  .shop-link,
-  .btn-news {
-    font-size: 1rem;
+  .nav-text-links {
+    gap: 0.45rem;
+    margin-right: 0.35rem;
+  }
+
+  .nav-text-link {
+    font-size: 0.88rem;
   }
 
   .hamburger-menu {
+    top: 3.8rem;
     right: 1rem;
     width: 100%;
-    padding: 1.5rem;
+    padding: 1.2rem 1.5rem 1.5rem;
   }
 
   .search-bar {

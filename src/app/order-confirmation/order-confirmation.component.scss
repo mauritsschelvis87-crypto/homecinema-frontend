@@ -1,5 +1,5 @@
 .top-spacing {
-  height: 100px;
+  height: var(--page-top-spacing);
 }
 
 .confirmation-page {
@@ -13,6 +13,7 @@
   background-color: #fafafa;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   border: 1px solid #ececec;
+  margin-top: var(--page-surface-gap);
   padding: 56px 48px;
   text-align: center;
 

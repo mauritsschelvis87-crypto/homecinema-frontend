@@ -9,12 +9,12 @@
 }
 
 .top-spacing {
-  height: 100px;
+  height: var(--page-top-spacing);
 }
 
 .cart-container {
   flex: 1;
-  margin: 0 auto 100px;
+  margin: var(--page-surface-gap) auto 100px;
   display: flex;
   flex-direction: column;
   gap: 24px;

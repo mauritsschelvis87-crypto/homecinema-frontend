@@ -3,9 +3,38 @@
   </nav>
 
   <nav class="nav-right">
-    <a routerLink="/shopping" class="shop-link">{{ 'Shop the collections' | translate }}</a>
-
-    <a routerLink="/news" class="btn-news" [attr.aria-label]="'News' | translate" (click)="closeMenu()">{{ 'News' | translate }}</a>
+    <div class="nav-text-links">
+      <a
+        routerLink="/shopping"
+        routerLinkActive="nav-text-link--active"
+        [routerLinkActiveOptions]="activeNavLinkOptions"
+        class="nav-text-link"
+        [attr.aria-label]="'Shop' | translate"
+        (click)="closeMenu()"
+      >
+        {{ 'Shop' | translate }}
+      </a>
+      <a
+        routerLink="/wishlist"
+        routerLinkActive="nav-text-link--active"
+        [routerLinkActiveOptions]="activeNavLinkOptions"
+        class="nav-text-link"
+        [attr.aria-label]="'Wishlist' | translate"
+        (click)="closeMenu()"
+      >
+        {{ 'Wishlist' | translate }}
+      </a>
+      <a
+        routerLink="/collection"
+        routerLinkActive="nav-text-link--active"
+        [routerLinkActiveOptions]="activeNavLinkOptions"
+        class="nav-text-link"
+        [attr.aria-label]="'Collection' | translate"
+        (click)="closeMenu()"
+      >
+        {{ 'Collection' | translate }}
+      </a>
+    </div>
 
     <button class="icon-btn search-btn" [attr.aria-label]="'Search' | translate" (click)="toggleSearch()">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2"
@@ -41,14 +70,20 @@
             </span>
             <span class="search-suggestion-text">
               <strong>{{ film.title }}</strong>
-              <small>{{ film.year }} • {{ film.director }}</small>
+              <small>{{ film.year }} • {{ film.director }}<span *ngIf="getFilmRegionValue(film) as region"> • Region {{ region }}</span></small>
             </span>
           </button>
         </li>
       </ul>
     </div>
 
-    <a routerLink="/account" class="icon-btn account-btn" [attr.aria-label]="'Account' | translate">
+    <a
+      routerLink="/account"
+      routerLinkActive="icon-btn--active"
+      [routerLinkActiveOptions]="activeNavLinkOptions"
+      class="icon-btn account-btn"
+      [attr.aria-label]="'Account' | translate"
+    >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round" width="18" height="18" viewBox="0 0 24 24">
         <circle cx="12" cy="7" r="4" />
@@ -56,7 +91,13 @@
       </svg>
     </a>
 
-    <a routerLink="/cart" class="icon-btn cart-btn" [attr.aria-label]="'Cart' | translate">
+    <a
+      routerLink="/cart"
+      routerLinkActive="icon-btn--active"
+      [routerLinkActiveOptions]="activeNavLinkOptions"
+      class="icon-btn cart-btn"
+      [attr.aria-label]="'Cart' | translate"
+    >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round" width="18" height="18" viewBox="0 0 24 24">
         <circle cx="7" cy="20" r="2" />
@@ -82,14 +123,18 @@
     <h1>{{ 'The Collection' | translate }}</h1>
     <li><a routerLink="/shopping" (click)="closeMenu()">{{ 'Shop the collection' | translate }}</a></li>
     <li><a routerLink="/explore" (click)="closeMenu()">{{ 'Explore History' | translate }}</a></li>
-    <li><a routerLink="/boxsets/special-edition" (click)="closeMenu()">{{ 'Special Edition Boxsets' | translate }}</a></li>
+    <li><a routerLink="/boxsets/special-edition" (click)="closeMenu()">{{ 'Special Edition Box Sets' | translate }}</a></li>
+    <li><a routerLink="/gift-code" (click)="closeMenu()">{{ 'Gift Cards' | translate }}</a></li>
 
     <h1>{{ 'Account' | translate }}</h1>
-    <li><a routerLink="/wishlist" (click)="closeMenu()">{{ 'Wishlist' | translate }}</a></li>
-    <li><a routerLink="/collection" (click)="closeMenu()">{{ 'Collection' | translate }}</a></li>
+    <li class="account-auth-links">
+      <a routerLink="/account" (click)="closeMenu()">{{ 'Login & Register' | translate }}</a>
+    </li>
+    <li><a routerLink="/news" (click)="closeMenu()">{{ 'Ratings' | translate }}</a></li>
 
     <h1>Other</h1>
     <li><a routerLink="/faq" (click)="closeMenu()">{{ 'FAQ' | translate }}</a></li>
+    <li><a routerLink="/news" (click)="closeMenu()">{{ 'News' | translate }}</a></li>
     <li><a routerLink="/about" (click)="closeMenu()">{{ 'About' | translate }}</a></li>
   </ul>
 </nav>

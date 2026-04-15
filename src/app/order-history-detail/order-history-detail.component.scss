@@ -7,12 +7,15 @@
 }
 
 .top-spacing {
-  height: 100px;
+  height: var(--page-top-spacing);
 }
 
 .order-detail-container {
   flex: 1;
-  margin: 0 auto 100px;
+  margin: var(--page-surface-gap) auto 100px;
+  display: flex;
+  flex-direction: column;
+  min-height: min(70vh, 760px);
 }
 
 .order-title {
@@ -25,7 +28,25 @@
 .order-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+  margin-bottom: 0;
+}
+
+.order-table .quantity-column {
+  width: 204px;
+}
+
+.order-table .total-column {
+  width: 120px;
+}
+
+.items-scroll {
+  width: 100%;
+  max-height: min(48vh, 420px);
+  overflow-y: auto;
   margin-bottom: 32px;
+  padding-right: 0.25rem;
+  box-sizing: border-box;
 }
 
 .order-table th,
@@ -49,6 +70,11 @@
   text-align: right;
 }
 
+.order-table th:nth-child(2),
+.order-table td:nth-child(2) {
+  text-align: center;
+}
+
 .order-table td {
   vertical-align: top;
 }
@@ -70,11 +96,11 @@
   width: 100%;
   min-width: 0;
   max-width: none;
-  height: 108px;
+  height: auto;
   object-fit: contain;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   display: block;
-  background-color: var(--color-cover-surface);
+  background-color: transparent;
 }
 
 .product-details {
@@ -104,7 +130,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-top: auto;
   margin-bottom: 24px;
+  margin-left: auto;
+  width: 100%;
+  max-width: 320px;
 }
 
 .summary-line {
@@ -122,8 +152,9 @@
 
 .bottom-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+  margin-top: 0;
   padding: 16px 0 0;
   border-top: 1px solid #e0e0e0;
 }
@@ -160,9 +191,5 @@
 
   .product-info {
     align-items: flex-start;
-  }
-
-  .bottom-actions {
-    justify-content: center;
   }
 }

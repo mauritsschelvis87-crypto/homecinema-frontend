@@ -36,6 +36,18 @@
       </select>
 
       <select
+        [(ngModel)]="filters.region"
+        name="region"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Region</option>
+        <option *ngFor="let region of regionOptions" [value]="region">
+          {{ region }}
+        </option>
+      </select>
+
+      <select
         [(ngModel)]="filters.director"
         name="director"
         class="filter-select"
@@ -130,7 +142,7 @@
       >
         <div class="film-cover cover-with-collection-badge">
           <img [src]="film.imageUrl" [alt]="film.title" />
-          <span class="collection-cover-badge" aria-hidden="true"></span>
+          <span *ngIf="showGrid" class="collection-cover-badge" aria-hidden="true"></span>
         </div>
         <div class="film-info">
           <h3 class="film-title">{{ truncateTitle(film.title) }}</h3>
@@ -148,7 +160,8 @@
           </div>
         </div>
       </a>
-      <div class="collection-card-rating" aria-label="Rate this film">
+      <div class="collection-card-rating" [class.collection-card-rating--compact]="!showGrid" aria-label="Rate this film">
+        <span *ngIf="!showGrid" class="collection-inline-badge" aria-hidden="true">Collection</span>
         <button
           *ngFor="let star of ratingStars"
           type="button"

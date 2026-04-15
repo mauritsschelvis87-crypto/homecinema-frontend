@@ -5,8 +5,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 100px 0 40px;
+  padding: var(--page-top-spacing) 0 40px;
   box-sizing: border-box;
+}
+
+.boxset-status {
+  width: min(1080px, calc(100% - 48px));
+  max-width: 1080px;
+  color: #f5f5f5;
+  padding: 0 0 20px;
 }
 
 .boxset-page {
@@ -22,11 +29,11 @@
 .page-content {
   width: min(1080px, calc(100% - 48px));
   max-width: 1080px;
-  background-color: #fafafa;
+  background-color: #f9f9f9;
   color: black;
-  padding: 20px;
-  margin-top: 0;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  margin-top: var(--page-surface-gap);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   --media-slider-width: clamp(320px, 44vw, 560px);
   --media-slider-height: clamp(180px, 24vw, 315px);
@@ -79,42 +86,54 @@
 }
 
 .film-image-container {
-  position: relative;
   flex: 0 0 285px;
-  width: 285px;
-  aspect-ratio: 2 / 3;
-  height: auto;
-  overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-cover-surface);
+  justify-content: flex-start;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+    margin: 0 auto;
+  }
+}
+
+.film-image-frame {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  max-width: 285px;
+  line-height: 0;
 
   @media (max-width: 768px) {
     width: 100%;
     max-width: 285px;
-    height: auto;
-    margin: 0 auto;
   }
 }
 
 .film-image {
   width: 100%;
-  height: 100%;
+  max-width: 285px;
+  height: auto;
   object-fit: contain;
   object-position: center;
   display: block;
-  margin-left: 0;
-  background-color: var(--color-cover-surface);
+  background-color: transparent;
 }
 
 .right-side-wrapper {
   flex: 1 1 400px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-self: flex-start;
 }
 
 .specs-container {
   background-color: #f9f9f9;
   text-align: left;
+  box-sizing: border-box;
+  height: 100%;
+  padding-bottom: 72px;
 }
 
 .boxset-description {
@@ -127,6 +146,7 @@
 
 .specs-list {
   list-style: disc;
+  margin: 0;
   padding-left: 16px;
   color: #444;
   font-size: 0.875rem;
@@ -141,9 +161,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  margin: 0;
   justify-content: flex-start;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 
 .media-section {
@@ -250,10 +272,18 @@
 
   .right-side-wrapper {
     width: 100%;
+    height: auto !important;
     margin-top: 20px;
   }
 
+  .specs-container {
+    height: auto;
+    padding-bottom: 0;
+  }
+
   .actions {
+    position: static;
+    margin-top: 30px;
     justify-content: center;
   }
 }

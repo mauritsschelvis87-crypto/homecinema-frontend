@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Film } from './film.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { normalizeFilmData } from '../utils/film-normalization';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
@@ -106,14 +107,20 @@ export class WishlistService {
 
   private getStoredSpecialWishlist(): Film[] {
     const stored = localStorage.getItem(this.specialWishlistStorageKey);
-    return stored ? JSON.parse(stored) : [];
+    return stored ? JSON.parse(stored).map((film: Film) => normalizeFilmData(film)) : [];
   }
 
   private persistSpecialWishlist(items: Film[]): void {
-    localStorage.setItem(this.specialWishlistStorageKey, JSON.stringify(items));
+    localStorage.setItem(
+      this.specialWishlistStorageKey,
+      JSON.stringify(items.map((film) => normalizeFilmData(film)))
+    );
   }
 
   private mergeWishlist(serverFilms: Film[]): Film[] {
-    return [...serverFilms, ...this.getStoredSpecialWishlist()];
+    return [
+      ...serverFilms.map((film) => normalizeFilmData(film)),
+      ...this.getStoredSpecialWishlist(),
+    ];
   }
 }

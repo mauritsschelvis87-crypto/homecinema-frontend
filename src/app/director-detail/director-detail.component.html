@@ -43,64 +43,64 @@
 
           <div class="right-side-wrapper">
             <div class="specs-container">
+              @if (films.length > 0) {
+                <p class="collection-summary">
+                  You own <strong>{{ ownedFilmCount }}</strong> out of <strong>{{ films.length }}</strong>
+                  available movies from {{ director.name || directorName }}.
+                </p>
+              }
+
               <ul class="specs-list">
-                <li><strong>Director:</strong> {{ director.name }}</li>
-                <li><strong>Born:</strong> {{ director.birthPlace }} ({{ director.birthYear }})</li>
-                @if (director.deathYear) {
-                  <li><strong>Died:</strong> {{ director.deathYear }}</li>
+                @if (director.bornLine || director.diedLine) {
+                  @if (director.bornLine) {
+                    <li><strong>Born:</strong> {{ director.bornLine }}</li>
+                  }
+                  @if (director.diedLine) {
+                    <li><strong>Died:</strong> {{ director.diedLine }}</li>
+                  }
+                } @else if (director.infoLine) {
+                  <li>{{ director.infoLine }}</li>
+                } @else if (director.people?.length) {
+                  @for (person of director.people; track person.name) {
+                    <li>
+                      <strong>{{ person.name }}</strong>
+                      born: {{ person.birthPlace || '?' }} {{ person.birthYear || '?' }};
+                      died: {{ person.deathDate || person.deathYear || '?' }}
+                    </li>
+                  }
+                } @else {
+                  <li><strong>Born:</strong> {{ director.birthPlace }} ({{ director.birthYear }})</li>
+                  @if (director.deathYear) {
+                    <li><strong>Died:</strong> {{ director.deathYear }}</li>
+                  }
                 }
                 <li><strong>Education:</strong> {{ director.education }}</li>
               </ul>
               <p class="bio">{{ director.bio }}</p>
+
+              @if (films.length > 0) {
+                <div class="director-actions">
+                  <a
+                    class="btn btn-discography"
+                    routerLink="/shopping"
+                    [queryParams]="discographyQueryParams"
+                  >
+                    Filmography
+                  </a>
+                </div>
+              }
             </div>
           </div>
         </div>
-      </section>
 
-      @if (films.length > 0) {
-        <section class="films-section">
-          <div class="film-grid" aria-label="Director films">
-            @for (film of films; track film.id) {
-              <div class="film-card-shell">
-                <a
-                  class="film-card-link"
-                  [routerLink]="['/product', film.id]"
-                  [attr.aria-label]="'View ' + film.title"
-                >
-                  <div class="film-cover cover-with-collection-badge">
-                    <img [src]="film.imageUrl" [alt]="film.title" />
-                    @if (isInCollection(film.id)) {
-                      <span class="collection-cover-badge" aria-hidden="true"></span>
-                    }
-                  </div>
-                  <div class="film-info">
-                    <h3 class="film-title">{{ truncateTitle(film.title) }}</h3>
-                    <div class="meta-info">
-                      <p>{{ film.director }}</p>
-                      <p>{{ film.year }}</p>
-                    </div>
-                  </div>
-                </a>
-                @if (isInCollection(film.id)) {
-                  <div class="collection-card-rating" aria-label="Rate this film">
-                    @for (star of ratingStars; track star) {
-                      <button
-                        type="button"
-                        class="rating-star"
-                        [class.filled]="isStarFilled(film, star)"
-                        [attr.aria-label]="'Rate ' + film.title + ' ' + star + ' stars'"
-                        (click)="setRating($event, film, star)"
-                      >
-                        ★
-                      </button>
-                    }
-                  </div>
-                }
-              </div>
-            }
+        @if (mediaItems.length > 0) {
+          <div class="media-section" aria-label="Director media">
+          <div class="media-slider-wrapper">
+            <app-media-slider [items]="mediaItems" [showArrows]="mediaItems.length > 1"></app-media-slider>
           </div>
-        </section>
-      }
+          </div>
+        }
+      </section>
     }
   </div>
 </div>

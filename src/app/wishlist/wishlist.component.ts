@@ -6,6 +6,7 @@ import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import { CollectionService } from '../services/collection.service';
+import { FilmRegionValue, getFilmRegion, matchesFilmSearch, normalizeFilmRegion } from '../utils/film-search';
 
 @Component({
   selector: 'app-wishlist',
@@ -23,6 +24,7 @@ import { CollectionService } from '../services/collection.service';
 export class WishlistComponent implements OnInit {
   readonly cardTitleMaxLength = 15;
   readonly ratingStars = [1, 2, 3, 4, 5];
+  readonly regionOptions: FilmRegionValue[] = ['A', 'B', 'Free'];
   wishlist: Film[] = [];
   filteredWishlist: Film[] = [];
   loading = false;
@@ -49,6 +51,7 @@ export class WishlistComponent implements OnInit {
   filters = {
     title: '',
     country: '',
+    region: '',
     director: '',
     year: '',
     type: '',
@@ -88,8 +91,9 @@ export class WishlistComponent implements OnInit {
   private applyFilters(): void {
     // 1) Filter films
     this.filteredWishlist = this.wishlist.filter(film =>
-      (!this.filters.title   || film.title.toLowerCase().includes(this.filters.title.toLowerCase())) &&
+      (!this.filters.title   || matchesFilmSearch(film, this.filters.title)) &&
       (!this.filters.country || film.country === this.filters.country) &&
+      (!this.filters.region  || getFilmRegion(film) === normalizeFilmRegion(this.filters.region)) &&
       (!this.filters.director|| film.director === this.filters.director) &&
       (!this.filters.year    || film.year.toString() === this.filters.year) &&
       (!this.filters.type    || film.type === this.filters.type) &&
@@ -136,7 +140,7 @@ export class WishlistComponent implements OnInit {
   }
 
   resetFilters(): void {
-    this.filters = { title:'', country:'', director:'', year:'', type:'', brand:'' };
+    this.filters = { title:'', country:'', region:'', director:'', year:'', type:'', brand:'' };
     this.filteredWishlist = [...this.wishlist];
     this.resetDropdowns();
   }
@@ -183,5 +187,9 @@ export class WishlistComponent implements OnInit {
 
   isStarFilled(film: Film, star: number): boolean {
     return star <= this.collectionService.getRating(film.id);
+  }
+
+  getFilmRegionValue(film: Film): FilmRegionValue | null {
+    return getFilmRegion(film);
   }
 }

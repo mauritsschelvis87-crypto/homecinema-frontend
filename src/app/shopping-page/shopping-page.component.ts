@@ -5,6 +5,8 @@ import { RouterLink }            from '@angular/router';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule }           from '@angular/forms';
 import { CollectionService } from '../services/collection.service';
+import { FilmRegionValue, getFilmRegion, matchesFilmSearch, normalizeFilmRegion } from '../utils/film-search';
+import { matchesDirectorSlug, reverseDirectorName } from '../utils/director-filter';
 
 @Component({
   selector: 'app-shopping-page',
@@ -16,6 +18,7 @@ import { CollectionService } from '../services/collection.service';
 export class ShoppingPageComponent implements OnInit {
   readonly cardTitleMaxLength = 15;
   readonly ratingStars = [1, 2, 3, 4, 5];
+  readonly regionOptions: FilmRegionValue[] = ['A', 'B', 'Free'];
   allFilms: Film[]      = [];
   filteredFilms: Film[] = [];
   visibleFilms: Film[]  = [];
@@ -39,6 +42,7 @@ export class ShoppingPageComponent implements OnInit {
   filters = {
     title:    '',
     country:  '',
+    region:   '',
     director: '',
     year:     '',
     type:     '',
@@ -47,6 +51,8 @@ export class ShoppingPageComponent implements OnInit {
   };
 
   silentOnly = false;
+  directorSlugFilter = '';
+  routeDirectorValue = '';
 
   showGrid   = true;
   batchSize  = 24;
@@ -75,7 +81,7 @@ export class ShoppingPageComponent implements OnInit {
         data.forEach(f => {
           f.country?.split(/[,/]/).map(c=>c.trim()).forEach(c=>c&&cSet.add(c));
           if (f.director) {
-            const rev = this.reverseName(f.director);
+            const rev = reverseDirectorName(f.director);
             this.directorMap.set(rev,f.director);
             dSet.add(rev);
           }
@@ -93,16 +99,7 @@ export class ShoppingPageComponent implements OnInit {
         this.resetDropdowns();
 
         this.route.queryParams.subscribe(params => {
-          if (params['silent'] !== undefined) {
-            this.silentOnly = params['silent']==='true';
-          }
-          if (params['colorOrBlackAndWhite']) {
-            this.filters.colorOrBlackAndWhite = params['colorOrBlackAndWhite'];
-          }
-          ['type','country','brand','year','director','title']
-            .forEach(fld => {
-              if (params[fld]) (this.filters as any)[fld] = params[fld];
-            });
+          this.applyRouteFilters(params);
           this.applyFilters();
           this.loading = false;
         });
@@ -115,12 +112,6 @@ export class ShoppingPageComponent implements OnInit {
   }
 
   normalizeTitle(t: string)   { return t.toLowerCase().replace(/^the\s+/i,''); }
-  reverseName(n: string)     {
-    const p = n.trim().split(' ');
-    if (p.length<2) return n;
-    const l = p.pop();
-    return `${l}, ${p.join(' ')}`;
-  }
   trackByFilmId(_:number, f:Film) { return f.id; }
 
   toggleSilentOnly() {
@@ -137,7 +128,13 @@ export class ShoppingPageComponent implements OnInit {
     return y===+flt;
   }
 
-  onFilterChange() { this.applyFilters(); }
+  onFilterChange() {
+    if (this.directorSlugFilter && this.filters.director !== this.routeDirectorValue) {
+      this.directorSlugFilter = '';
+      this.routeDirectorValue = '';
+    }
+    this.applyFilters();
+  }
 
   applyFilters() {
     this.filteredFilms = this.allFilms.filter(film => {
@@ -149,9 +146,10 @@ export class ShoppingPageComponent implements OnInit {
 
       return okSilent
         && okColor
-        && (!this.filters.title    || film.title.toLowerCase().includes(this.filters.title.toLowerCase()))
+        && (!this.filters.title    || matchesFilmSearch(film, this.filters.title))
         && (!this.filters.country  || countries.includes(this.filters.country))
-        && (!this.filters.director || film.director===selDir)
+        && (!this.filters.region   || getFilmRegion(film) === normalizeFilmRegion(this.filters.region))
+        && this.matchesDirectorFilter(film, selDir)
         && (!this.filters.year     || this.yearMatches(film.year,this.filters.year))
         && (!this.filters.type     || film.type===this.filters.type)
         && (!this.filters.brand    || film.brand?.name===this.filters.brand);
@@ -171,7 +169,7 @@ export class ShoppingPageComponent implements OnInit {
     this.filteredFilms.forEach(f => {
       f.country?.split(/[,/]/).map(c=>c.trim()).forEach(c=>c&&cSet.add(c));
       if (f.director) {
-        const rev = this.reverseName(f.director);
+        const rev = reverseDirectorName(f.director);
         dSet.add(rev);
         this.directorMap.set(rev,f.director);
       }
@@ -215,10 +213,12 @@ export class ShoppingPageComponent implements OnInit {
   }
 
   resetFilters() {
-    this.filters   = {
-      title:'', country:'', director:'', year:'', type:'', brand:'', colorOrBlackAndWhite:''
+    this.filters = {
+      title:'', country:'', region:'', director:'', year:'', type:'', brand:'', colorOrBlackAndWhite:''
     };
     this.silentOnly= false;
+    this.directorSlugFilter = '';
+    this.routeDirectorValue = '';
     this.filteredFilms = [...this.allFilms];
     this.resetDropdowns();
     this.resetVisibleFilms();
@@ -245,5 +245,62 @@ export class ShoppingPageComponent implements OnInit {
 
   isStarFilled(film: Film, star: number): boolean {
     return star <= this.collectionService.getRating(film.id);
+  }
+
+  getFilmRegionValue(film: Film): FilmRegionValue | null {
+    return getFilmRegion(film);
+  }
+
+  private applyRouteFilters(params: Record<string, string | undefined>): void {
+    this.filters = {
+      title: '',
+      country: '',
+      region: '',
+      director: '',
+      year: '',
+      type: '',
+      brand: '',
+      colorOrBlackAndWhite: ''
+    };
+    this.silentOnly = params['silent'] === 'true';
+    this.directorSlugFilter = params['directorSlug'] ?? '';
+
+    if (params['colorOrBlackAndWhite']) {
+      this.filters.colorOrBlackAndWhite = params['colorOrBlackAndWhite'];
+    }
+
+    ['type', 'country', 'region', 'brand', 'year', 'director', 'title', 'q']
+      .forEach(fld => {
+        if (params[fld]) {
+          if (fld === 'q') {
+            this.filters.title = params[fld]!;
+          } else {
+            (this.filters as any)[fld] = params[fld];
+          }
+        }
+      });
+
+    if (!this.filters.director && this.directorSlugFilter) {
+      this.filters.director = this.getDirectorFilterLabel(this.directorSlugFilter);
+    }
+
+    this.routeDirectorValue = this.filters.director;
+  }
+
+  private getDirectorFilterLabel(slug: string): string {
+    const exactMatch = this.uniqueDirectors.find(label => {
+      const directorName = this.directorMap.get(label);
+      return directorName ? matchesDirectorSlug(directorName, slug) : false;
+    });
+
+    return exactMatch ?? '';
+  }
+
+  private matchesDirectorFilter(film: Film, selectedDirector: string): boolean {
+    if (this.directorSlugFilter) {
+      return matchesDirectorSlug(film.director, this.directorSlugFilter);
+    }
+
+    return !this.filters.director || film.director === selectedDirector;
   }
 }

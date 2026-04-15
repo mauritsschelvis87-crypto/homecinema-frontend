@@ -14,6 +14,7 @@ export interface Film {
   genre: string;
   director: string;
   country: string;
+  region?: 'A' | 'B' | 'FREE';
   year: number;
   runtime: number;
   price: number;

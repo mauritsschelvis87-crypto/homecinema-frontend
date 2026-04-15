@@ -1,7 +1,7 @@
 :host {
   display: flex;
   justify-content: center;
-  padding-top: 100px;
+  padding-top: var(--page-top-spacing);
   background-color: var(--color-background);
   font-family: 'Segoe UI', sans-serif;
   color: #1a1a1a;
@@ -12,6 +12,7 @@
   width: 68%;
   background-color: #fafafa;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  margin-top: var(--page-surface-gap);
   padding: 3rem;
   box-sizing: border-box;
 }

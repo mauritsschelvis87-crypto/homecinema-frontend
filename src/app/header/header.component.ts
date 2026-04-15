@@ -1,20 +1,27 @@
 import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, RouterLink } from '@angular/router';
+import { IsActiveMatchOptions, Router, NavigationEnd, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FilmService, Film } from '../services/film.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '../services/collection.service';
+import { FilmRegionValue, getFilmRegion, matchesFilmSearch } from '../utils/film-search';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, FormsModule, NgIf, NgForOf, TranslatePipe],
+  imports: [RouterLink, RouterLinkActive, FormsModule, NgIf, NgForOf, TranslatePipe],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  public readonly activeNavLinkOptions: IsActiveMatchOptions = {
+    paths: 'exact',
+    queryParams: 'ignored',
+    matrixParams: 'ignored',
+    fragment: 'ignored',
+  };
   public menuOpen = false;
   public showSearch = false;
   public searchQuery = '';
@@ -71,17 +78,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSearchChange(): void {
-    const q = this.searchQuery.toLowerCase();
+    const q = this.searchQuery.trim();
     if (!q) {
       this.filteredFilms = [];
       return;
     }
-    this.filteredFilms = this.allFilms.filter(f =>
-      f.title.toLowerCase().includes(q) ||
-      f.director.toLowerCase().includes(q) ||
-      f.country.toLowerCase().includes(q) ||
-      f.year.toString().includes(q)
-    ).slice(0, 5);
+    this.filteredFilms = this.allFilms
+      .filter(f => matchesFilmSearch(f, q))
+      .slice(0, 5);
   }
 
   onSearch(): void {
@@ -93,7 +97,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.router.navigate(['/films', exact.id]);
     }
     else {
-      this.router.navigate(['/shopping'], { queryParams: { q } });
+      this.router.navigate(['/search'], { queryParams: { q } });
     }
 
     this.closeSearch();
@@ -107,6 +111,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isInCollection(filmId: number): boolean {
     return this.collectionService.isInCollection(filmId);
+  }
+
+  getFilmRegionValue(film: Film): FilmRegionValue | null {
+    return getFilmRegion(film);
   }
 
   closeSearch(): void {
