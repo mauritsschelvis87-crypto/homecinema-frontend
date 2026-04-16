@@ -147,17 +147,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/shopping']);
   }
 
-  setRating(rating: number): void {
+  setRating(event: MouseEvent, star: number): void {
     if (!this.isInCollection()) {
       return;
     }
 
+    const rating = this.resolveRatingFromPointer(event, star);
     this.collectionService.rateFilm(this.product.id, rating);
     this.product.userRating = rating;
   }
 
-  isStarFilled(star: number): boolean {
-    return star <= (this.product?.userRating ?? 0);
+  getStarFillPercentage(star: number): number {
+    return this.getFillPercentage(this.product?.userRating, star);
   }
 
   getProductRegion(): FilmRegionValue | null {
@@ -199,5 +200,21 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     this.syncImageHeight();
+  }
+
+  private resolveRatingFromPointer(event: MouseEvent, star: number): number {
+    const button = event.currentTarget as HTMLElement | null;
+    const bounds = button?.getBoundingClientRect();
+
+    if (!bounds) {
+      return star;
+    }
+
+    return event.clientX - bounds.left < bounds.width / 2 ? star - 0.5 : star;
+  }
+
+  private getFillPercentage(rating: number | null | undefined, star: number): number {
+    const normalized = (rating ?? 0) - (star - 1);
+    return Math.max(0, Math.min(100, normalized * 100));
   }
 }

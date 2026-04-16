@@ -144,11 +144,11 @@
           *ngFor="let star of ratingStars"
           type="button"
           class="rating-star"
-          [class.filled]="isStarFilled(film, star)"
-          [attr.aria-label]="'Rate ' + film.title + ' ' + star + ' stars'"
+          [style.--star-fill.%]="getStarFillPercentage(film, star)"
+          [attr.aria-label]="'Rate ' + film.title + ' up to ' + star + ' stars'"
           (click)="setRating($event, film, star)"
         >
-          ★
+          <span class="rating-star-icon" aria-hidden="true"></span>
         </button>
       </div>
     </div>

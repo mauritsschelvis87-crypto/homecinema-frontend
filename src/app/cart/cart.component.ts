@@ -4,16 +4,20 @@ import { AccountService } from '../services/account.service';
 import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
 import { ShippingCostService } from '../services/shipping-cost.service';
 import { Film } from '../services/film.service';
 import { Order, OrderRequest, OrderService } from '../services/order.service';
 import { Subscription } from 'rxjs';
 import { getDiscountSummaryLabel } from '../utils/discount-code-display';
 import { CollectionService } from '../services/collection.service';
+import { getShippingCountryCode } from '../utils/shipping-utils';
+import { getProductFragmentById, getProductLinkById } from '../utils/special-product-links';
+import { createFallbackMediaAssets, MediaAssets, MediaAssetsService } from '../services/media-assets.service';
+import { findGiftCardByFilmId } from '../giftcards-page/giftcard-catalog';
 
 interface Currency {
-  code: string;
+  code: 'EUR' | 'GBP';
+  symbol: '€' | '£';
   label: string;
   rate: number;
 }
@@ -29,21 +33,11 @@ export class CartComponent implements OnInit, OnDestroy {
   private static readonly invalidCodeMessage = 'The code is invalid.';
 
   cartItems: CartItem[] = [];
-  private readonly specialBoxsetSlugs: Record<number, string> = {
-    900001: 'bergman',
-    900002: 'wong-kar-wai',
-    900003: 'world-cinema-project',
-    900004: 'john-cassavetes',
-    900005: 'abbas-kiarostami',
-  };
-
   currencies: Currency[] = [
-    { code: '€', label: 'EUR - Euro', rate: 1 },
-    { code: '$', label: 'USD - US Dollar', rate: 1.1 },
-    { code: '£', label: 'GBP - British Pound', rate: 0.85 },
-    { code: '¥', label: 'JPY - Japanese Yen', rate: 140 },
+    { code: 'EUR', symbol: '€', label: 'EUR - Euro', rate: 1 },
+    { code: 'GBP', symbol: '£', label: 'GBP - Pound sterling', rate: 0.86935 },
   ];
-  selectedCurrency: string = '€';
+  selectedCurrency: Currency['code'] = 'EUR';
 
   giftCodeInput: string = '';
   isGiftCodeApplied: boolean = false;
@@ -55,6 +49,7 @@ export class CartComponent implements OnInit, OnDestroy {
   previewErrorMessage = '';
   previewLoading = false;
   pricingPreview: Order | null = null;
+  mediaAssets: MediaAssets = createFallbackMediaAssets();
 
   shippingCost: number = 0;
   country: string = '';
@@ -67,10 +62,15 @@ export class CartComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private shippingCostService: ShippingCostService,
     private orderService: OrderService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private mediaAssetsService: MediaAssetsService
   ) {}
 
   ngOnInit(): void {
+    this.mediaAssetsService.getMediaAssets().subscribe((assets) => {
+      this.mediaAssets = assets;
+    });
+
     this.cartService.getCartItems().subscribe(items => {
       this.cartItems = items;
       this.calculateTotalWeight();
@@ -106,7 +106,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   updateShippingCost(): void {
-    const countryCode = COUNTRY_NAME_TO_CODE[this.country];
+    const countryCode = getShippingCountryCode(this.country);
     if (!countryCode) {
       this.shippingCost = 8.99;
       return;
@@ -202,28 +202,30 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   getProductLink(product: Film): string[] {
-    return product.id >= 900000
-      ? ['/boxsets/special-edition']
-      : ['/films', product.id.toString()];
+    return getProductLinkById(product.id);
   }
 
   getProductFragment(product: Film): string | undefined {
-    return this.specialBoxsetSlugs[product.id] ?? undefined;
+    return getProductFragmentById(product.id);
+  }
+
+  getProductImageUrl(product: Film): string {
+    const giftCard = findGiftCardByFilmId(product.id);
+
+    if (!giftCard) {
+      return product.imageUrl;
+    }
+
+    return this.mediaAssets.gifts[giftCard.assetKey] ?? giftCard.assetKey;
   }
 
   isInCollection(productId: number): boolean {
     return this.collectionService.isInCollection(productId);
   }
 
-  convertPrice(priceInEuro: number): string {
-    const currency = this.currencies.find(c => c.code === this.selectedCurrency);
-    if (!currency) return priceInEuro.toFixed(2);
-    const converted = priceInEuro * currency.rate;
-    return converted.toFixed(2);
-  }
-
-  onCurrencyChange(): void {
-    // Niks nodig hier voor nu
+  formatPrice(priceInEuro: number): string {
+    const currency = this.currencies.find((item) => item.code === this.selectedCurrency) ?? this.currencies[0];
+    return `${currency.symbol} ${(priceInEuro * currency.rate).toFixed(2)}`;
   }
 
   applyGiftCode(): void {

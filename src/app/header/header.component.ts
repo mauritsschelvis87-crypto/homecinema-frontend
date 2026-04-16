@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IsActiveMatchOptions, Router, NavigationEnd, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FilmService, Film } from '../services/film.service';
@@ -6,7 +6,9 @@ import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '../services/collection.service';
-import { FilmRegionValue, getFilmRegion, matchesFilmSearch } from '../utils/film-search';
+import { FilmRegionValue, getFilmRegion, getFilmSearchScore } from '../utils/film-search';
+import { findGiftCardByFilmId, getGiftCardSearchFilms } from '../giftcards-page/giftcard-catalog';
+import { getProductFragmentById, getProductLinkById } from '../utils/special-product-links';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +30,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public allFilms: Film[] = [];
   public filteredFilms: Film[] = [];
 
+  @ViewChild('searchInput')
+  private searchInput?: ElementRef<HTMLInputElement>;
+
   @Output() menuToggle = new EventEmitter<boolean>();
   private routerSubscription!: Subscription;
   private searchOpenTimeout?: ReturnType<typeof setTimeout>;
@@ -48,15 +53,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleMenu(): void {
-    this.menuOpen = !this.menuOpen;
     if (this.menuOpen) {
-      this.closeSearch();
+      this.closeMenu();
+      return;
     }
-    this.menuToggle.emit(this.menuOpen);
+
+    if (this.showSearch) {
+      this.clearSearchOpenTimeout();
+      this.showSearch = false;
+      this.searchQuery = '';
+      this.filteredFilms = [];
+    }
+
+    this.menuOpen = true;
+    this.emitPanelState();
   }
+
   closeMenu(): void {
     this.menuOpen = false;
-    this.menuToggle.emit(this.menuOpen);
+    this.emitPanelState();
   }
 
   toggleSearch(): void {
@@ -66,11 +81,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     if (this.menuOpen) {
-      this.closeMenu();
+      this.menuOpen = false;
       this.clearSearchOpenTimeout();
       this.searchOpenTimeout = setTimeout(() => {
         this.openSearch();
-      }, 220);
+      }, 300);
       return;
     }
 
@@ -84,8 +99,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return;
     }
     this.filteredFilms = this.allFilms
-      .filter(f => matchesFilmSearch(f, q))
-      .slice(0, 5);
+      .map((film) => ({ film, score: getFilmSearchScore(film, q) }))
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score || a.film.title.localeCompare(b.film.title))
+      .map(({ film }) => film);
   }
 
   onSearch(): void {
@@ -94,18 +111,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     const exact = this.allFilms.find(f => f.title.toLowerCase() === q.toLowerCase());
     if (exact) {
-      this.router.navigate(['/films', exact.id]);
+      this.goToProduct(exact.id);
     }
     else {
       this.router.navigate(['/search'], { queryParams: { q } });
+      this.closeSearch();
     }
-
-    this.closeSearch();
   }
 
 
-  goToFilm(id: number): void {
-    this.router.navigate(['/films', id]);
+  goToProduct(id: number): void {
+    this.router.navigate(getProductLinkById(id), { fragment: getProductFragmentById(id) });
     this.closeSearch();
   }
 
@@ -117,18 +133,63 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return getFilmRegion(film);
   }
 
+  getSuggestionTitle(film: Film): string {
+    const giftCard = findGiftCardByFilmId(film.id);
+
+    if (!giftCard) {
+      return film.title;
+    }
+
+    return giftCard.category === 'gift-a-movie'
+      ? `Gift a ${giftCard.formatLabel}`
+      : giftCard.title;
+  }
+
+  getSuggestionSubtitle(film: Film): string {
+    const giftCard = findGiftCardByFilmId(film.id);
+
+    if (giftCard) {
+      const regionLabel = giftCard.regionCode === 'EU'
+        ? 'European countries (no UK)'
+        : 'United Kingdom (UK)';
+
+      return giftCard.category === 'gift-a-movie'
+        ? `${giftCard.categoryLabel} • ${giftCard.priceLabel} • ${regionLabel}`
+        : `${giftCard.categoryLabel} • ${regionLabel}`;
+    }
+
+    const region = this.getFilmRegionValue(film);
+
+    return region
+      ? `${film.year} • ${film.director} • Region ${region}`
+      : `${film.year} • ${film.director}`;
+  }
+
+  getGiftCardRegionCode(film: Film): 'EU' | 'UK' | null {
+    return findGiftCardByFilmId(film.id)?.regionCode ?? null;
+  }
+
   closeSearch(): void {
     this.clearSearchOpenTimeout();
     this.showSearch = false;
     this.searchQuery = '';
     this.filteredFilms = [];
+    this.emitPanelState();
   }
 
   private openSearch(): void {
     this.showSearch = true;
     if (!this.allFilms.length) {
-      this.filmService.getAllFilms().subscribe(films => this.allFilms = films);
+      this.filmService.getAllFilms().subscribe((films) => {
+        this.allFilms = [...films, ...getGiftCardSearchFilms()];
+      });
     }
+
+    this.emitPanelState();
+
+    setTimeout(() => {
+      this.searchInput?.nativeElement.focus();
+    });
   }
 
   private clearSearchOpenTimeout(): void {
@@ -136,6 +197,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       clearTimeout(this.searchOpenTimeout);
       this.searchOpenTimeout = undefined;
     }
+  }
+
+  private emitPanelState(): void {
+    this.menuToggle.emit(this.menuOpen || this.showSearch);
   }
 
   ngOnDestroy(): void {

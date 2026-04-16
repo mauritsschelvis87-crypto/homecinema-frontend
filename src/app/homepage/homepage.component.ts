@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgIf, NgStyle } from '@angular/common';
+import { MediaAssets, MediaAssetsService, createFallbackMediaAssets } from '../services/media-assets.service';
 
 @Component({
   selector: 'app-homepage',
@@ -10,10 +11,12 @@ import { NgForOf, NgIf } from '@angular/common';
   imports: [
     RouterLink,
     NgIf,
+    NgStyle,
   ]
 })
 export class HomepageComponent implements OnInit {
   currentIndex = 0;
+  mediaAssets: MediaAssets = createFallbackMediaAssets();
 
   sections = [
     'comedy-hero',
@@ -26,9 +29,13 @@ export class HomepageComponent implements OnInit {
 
   private isScrolling = false;
 
-  constructor() {}
+  constructor(private mediaAssetsService: MediaAssetsService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.mediaAssetsService.getMediaAssets().subscribe((assets) => {
+      this.mediaAssets = assets;
+    });
+  }
 
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
@@ -78,5 +85,10 @@ export class HomepageComponent implements OnInit {
       this.currentIndex--;
       this.scrollToCurrentSection();
     }
+  }
+
+  heroBackgroundStyle(assetPath: string): Record<string, string> {
+    const imageUrl = this.mediaAssets.stills[assetPath];
+    return imageUrl ? { 'background-image': `url('${imageUrl}')` } : {};
   }
 }

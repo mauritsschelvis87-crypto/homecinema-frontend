@@ -4,6 +4,8 @@ import { OrderService, Order } from '../services/order.service';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { getDiscountSummaryLabel } from '../utils/discount-code-display';
 import { CollectionService } from '../services/collection.service';
+import { createFallbackMediaAssets, MediaAssets, MediaAssetsService } from '../services/media-assets.service';
+import { findGiftCardByFilmId } from '../giftcards-page/giftcard-catalog';
 
 @Component({
   selector: 'app-order-history-detail',
@@ -15,14 +17,20 @@ export class OrderHistoryDetailComponent implements OnInit {
   order: Order | null = null;
   isLoading = true;
   error: string | null = null;
+  mediaAssets: MediaAssets = createFallbackMediaAssets();
 
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private mediaAssetsService: MediaAssetsService
   ) {}
 
   ngOnInit(): void {
+    this.mediaAssetsService.getMediaAssets().subscribe((assets) => {
+      this.mediaAssets = assets;
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.orderService.getOrderById(+id).subscribe({
@@ -107,6 +115,16 @@ export class OrderHistoryDetailComponent implements OnInit {
     ].filter((code): code is string => Boolean(code));
 
     return [...new Set(codes)];
+  }
+
+  getProductImageUrl(product: { id: number | string; imageUrl: string }): string {
+    const giftCard = findGiftCardByFilmId(Number(product.id));
+
+    if (!giftCard) {
+      return product.imageUrl;
+    }
+
+    return this.mediaAssets.gifts[giftCard.assetKey] ?? giftCard.assetKey;
   }
 
   isInCollection(filmId: number | string): boolean {

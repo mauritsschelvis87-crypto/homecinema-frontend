@@ -63,21 +63,72 @@ function getRegionQuery(rawQuery: string): RegionQuery {
 }
 
 export function matchesFilmSearch(film: Film, rawQuery: string): boolean {
+  return getFilmSearchScore(film, rawQuery) > 0;
+}
+
+export function getFilmSearchScore(film: Film, rawQuery: string): number {
   const query = rawQuery.trim().toLowerCase();
   if (!query) {
-    return false;
+    return 0;
   }
 
   const regionQuery = getRegionQuery(rawQuery);
   if (regionQuery) {
-    return getFilmRegion(film) === regionQuery;
+    return getFilmRegion(film) === regionQuery ? 100 : 0;
   }
 
-  return film.title.toLowerCase().includes(query)
-    || film.director.toLowerCase().includes(query)
-    || film.country.toLowerCase().includes(query)
-    || film.year.toString().includes(query)
-    || film.brand?.name?.toLowerCase().includes(query)
-    || film.type.toLowerCase().includes(query)
-    || getFilmRegion(film)?.toLowerCase() === query;
+  const title = film.title.toLowerCase();
+  const director = film.director.toLowerCase();
+  const country = film.country.toLowerCase();
+  const brand = film.brand?.name?.toLowerCase() ?? '';
+  const type = film.type.toLowerCase();
+  const genre = film.genre.toLowerCase();
+  const description = film.description.toLowerCase();
+  const year = film.year.toString();
+  const region = getFilmRegion(film)?.toLowerCase() ?? '';
+  const searchTerms = film.searchTerms ?? [];
+
+  let score = 0;
+
+  score += getFieldSearchScore(title, query, 120, 90, 70);
+  score += getFieldSearchScore(director, query, 60, 45, 35);
+  score += getFieldSearchScore(genre, query, 55, 40, 30);
+  score += getFieldSearchScore(type, query, 50, 35, 25);
+  score += getFieldSearchScore(brand, query, 45, 30, 20);
+  score += getFieldSearchScore(country, query, 40, 25, 15);
+  score += getFieldSearchScore(description, query, 20, 0, 10);
+  score += getFieldSearchScore(year, query, 30, 0, 20);
+  score += getFieldSearchScore(region, query, 30, 0, 20);
+
+  for (const term of searchTerms) {
+    score += getFieldSearchScore(term.toLowerCase(), query, 70, 50, 40);
+  }
+
+  return score;
+}
+
+function getFieldSearchScore(
+  value: string,
+  query: string,
+  exactScore: number,
+  startsWithScore: number,
+  includesScore: number
+): number {
+  if (!value) {
+    return 0;
+  }
+
+  if (value === query) {
+    return exactScore;
+  }
+
+  if (value.startsWith(query)) {
+    return startsWithScore;
+  }
+
+  if (value.includes(query)) {
+    return includesScore;
+  }
+
+  return 0;
 }

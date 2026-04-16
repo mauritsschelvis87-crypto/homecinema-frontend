@@ -19,6 +19,8 @@ import { CartComponent } from './cart/cart.component';
 import { AccountComponent } from './account/account.component';
 import { OrderHistoryDetailComponent } from './order-history-detail/order-history-detail.component';
 import { BoxsetDetailComponent } from './boxset-detail/boxset-detail.component';
+import { GiftcardsPageComponent } from './giftcards-page/giftcards-page.component';
+import { GiftcardDetailComponent } from './giftcard-detail/giftcard-detail.component';
 
 const canAccessAccount: CanMatchFn = () => {
   const auth = inject(LoginService);
@@ -44,7 +46,10 @@ export const routes: Routes = [
   { path: 'boxsets/special-edition', component: BoxsetDetailComponent },
   { path: 'films/:id', component: ProductDetailComponent },
   { path: 'order-history-detail/:id', component: OrderHistoryDetailComponent },
-  { path: 'gift-code', component: GiftCodeComponent },
+  { path: 'giftcards', component: GiftcardsPageComponent },
+  { path: 'giftcards/item/:slug', component: GiftcardDetailComponent },
+  { path: 'giftcards/:category', component: GiftcardsPageComponent },
+  { path: 'gift-code', redirectTo: 'giftcards', pathMatch: 'full' },
   { path: 'gift-a-movie', component: GiftMovieComponent },
   { path: 'search', component: SearchComponent },
   { path: 'faq', component: FaqComponent },

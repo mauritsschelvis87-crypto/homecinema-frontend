@@ -7,6 +7,9 @@ import {RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import { CollectionService } from '../services/collection.service';
 import { FilmRegionValue, getFilmRegion, matchesFilmSearch, normalizeFilmRegion } from '../utils/film-search';
+import { getProductFragmentById, getProductLinkById } from '../utils/special-product-links';
+import { createFallbackMediaAssets, MediaAssets, MediaAssetsService } from '../services/media-assets.service';
+import { findGiftCardByFilmId } from '../giftcards-page/giftcard-catalog';
 
 @Component({
   selector: 'app-wishlist',
@@ -28,13 +31,7 @@ export class WishlistComponent implements OnInit {
   wishlist: Film[] = [];
   filteredWishlist: Film[] = [];
   loading = false;
-  private readonly specialBoxsetSlugs: Record<number, string> = {
-    900001: 'bergman',
-    900002: 'wong-kar-wai',
-    900003: 'world-cinema-project',
-    900004: 'john-cassavetes',
-    900005: 'abbas-kiarostami',
-  };
+  mediaAssets: MediaAssets = createFallbackMediaAssets();
 
   allCountries: string[] = [];
   allDirectors: string[] = [];
@@ -63,11 +60,16 @@ export class WishlistComponent implements OnInit {
   constructor(
     private wishlistService: WishlistService,
     private cartService: CartService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private mediaAssetsService: MediaAssetsService
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
+    this.mediaAssetsService.getMediaAssets().subscribe((assets) => {
+      this.mediaAssets = assets;
+    });
+
     this.wishlistService.loadWishlistFromServer();
     this.wishlistService.wishlist$.subscribe(films => {
       this.loading = false;
@@ -159,13 +161,21 @@ export class WishlistComponent implements OnInit {
   }
 
   getFilmLink(film: Film): string[] {
-    return film.id >= 900000
-      ? ['/boxsets/special-edition']
-      : ['/product', film.id.toString()];
+    return getProductLinkById(film.id);
   }
 
   getFilmFragment(film: Film): string | undefined {
-    return this.specialBoxsetSlugs[film.id] ?? undefined;
+    return getProductFragmentById(film.id);
+  }
+
+  getFilmImageUrl(film: Film): string {
+    const giftCard = findGiftCardByFilmId(film.id);
+
+    if (!giftCard) {
+      return film.imageUrl;
+    }
+
+    return this.mediaAssets.gifts[giftCard.assetKey] ?? giftCard.assetKey;
   }
 
   truncateTitle(title: string): string {
@@ -178,18 +188,35 @@ export class WishlistComponent implements OnInit {
     return this.collectionService.isInCollection(filmId);
   }
 
-  setRating(event: Event, film: Film, rating: number): void {
+  setRating(event: MouseEvent, film: Film, star: number): void {
     event.preventDefault();
     event.stopPropagation();
+    const rating = this.resolveRatingFromPointer(event, star);
     this.collectionService.rateFilm(film.id, rating);
     film.userRating = rating;
   }
 
-  isStarFilled(film: Film, star: number): boolean {
-    return star <= this.collectionService.getRating(film.id);
+  getStarFillPercentage(film: Film, star: number): number {
+    return this.getFillPercentage(this.collectionService.getRating(film.id), star);
   }
 
   getFilmRegionValue(film: Film): FilmRegionValue | null {
     return getFilmRegion(film);
+  }
+
+  private resolveRatingFromPointer(event: MouseEvent, star: number): number {
+    const button = event.currentTarget as HTMLElement | null;
+    const bounds = button?.getBoundingClientRect();
+
+    if (!bounds) {
+      return star;
+    }
+
+    return event.clientX - bounds.left < bounds.width / 2 ? star - 0.5 : star;
+  }
+
+  private getFillPercentage(rating: number | null | undefined, star: number): number {
+    const normalized = (rating ?? 0) - (star - 1);
+    return Math.max(0, Math.min(100, normalized * 100));
   }
 }

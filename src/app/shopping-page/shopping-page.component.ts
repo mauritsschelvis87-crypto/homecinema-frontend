@@ -236,15 +236,16 @@ export class ShoppingPageComponent implements OnInit {
     return this.collectionService.isInCollection(filmId);
   }
 
-  setRating(event: Event, film: Film, rating: number): void {
+  setRating(event: MouseEvent, film: Film, star: number): void {
     event.preventDefault();
     event.stopPropagation();
+    const rating = this.resolveRatingFromPointer(event, star);
     this.collectionService.rateFilm(film.id, rating);
     film.userRating = rating;
   }
 
-  isStarFilled(film: Film, star: number): boolean {
-    return star <= this.collectionService.getRating(film.id);
+  getStarFillPercentage(film: Film, star: number): number {
+    return this.getFillPercentage(this.collectionService.getRating(film.id), star);
   }
 
   getFilmRegionValue(film: Film): FilmRegionValue | null {
@@ -302,5 +303,21 @@ export class ShoppingPageComponent implements OnInit {
     }
 
     return !this.filters.director || film.director === selectedDirector;
+  }
+
+  private resolveRatingFromPointer(event: MouseEvent, star: number): number {
+    const button = event.currentTarget as HTMLElement | null;
+    const bounds = button?.getBoundingClientRect();
+
+    if (!bounds) {
+      return star;
+    }
+
+    return event.clientX - bounds.left < bounds.width / 2 ? star - 0.5 : star;
+  }
+
+  private getFillPercentage(rating: number | null | undefined, star: number): number {
+    const normalized = (rating ?? 0) - (star - 1);
+    return Math.max(0, Math.min(100, normalized * 100));
   }
 }

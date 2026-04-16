@@ -3,7 +3,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FilmService, Film } from '../services/film.service';
 import { CommonModule } from '@angular/common';
 import { CollectionService } from '../services/collection.service';
-import { matchesFilmSearch } from '../utils/film-search';
+import { getFilmSearchScore } from '../utils/film-search';
+import { getGiftCardSearchFilms } from '../giftcards-page/giftcard-catalog';
+import { getProductFragmentById, getProductLinkById } from '../utils/special-product-links';
 
 @Component({
   selector: 'app-search',
@@ -27,17 +29,29 @@ export class SearchComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.query = (params['q'] || '').toLowerCase();
       this.filmService.getAllFilms().subscribe(films => {
-        this.allFilms = films;
+        this.allFilms = [...films, ...getGiftCardSearchFilms()];
         this.filterResults();
       });
     });
   }
 
   filterResults(): void {
-    this.results = this.allFilms.filter(f => matchesFilmSearch(f, this.query));
+    this.results = this.allFilms
+      .map((film) => ({ film, score: getFilmSearchScore(film, this.query) }))
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score || a.film.title.localeCompare(b.film.title))
+      .map(({ film }) => film);
   }
 
   isInCollection(filmId: number): boolean {
     return this.collectionService.isInCollection(filmId);
+  }
+
+  getProductLink(productId: number): string[] {
+    return getProductLinkById(productId);
+  }
+
+  getProductFragment(productId: number): string | undefined {
+    return getProductFragmentById(productId);
   }
 }

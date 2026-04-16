@@ -19,7 +19,7 @@
         <tr *ngFor="let item of order.orderItems">
           <td class="product-info">
             <span class="product-image-wrap">
-              <img [src]="item.film.imageUrl" [alt]="item.film.title" class="product-image" />
+              <img [src]="getProductImageUrl(item.film)" [alt]="item.film.title" class="product-image" />
             </span>
             <div class="product-details">
               <div class="product-title">{{ item.film.title }}</div>

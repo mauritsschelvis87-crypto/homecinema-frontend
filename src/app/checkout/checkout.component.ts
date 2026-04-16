@@ -6,10 +6,8 @@ import { AccountService } from '../services/account.service';
 import { Order, OrderService, OrderRequest } from '../services/order.service';
 import { DecimalPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
-
-import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
-import { SHIPPING_COSTS } from '../constants/shipping-costs';
 import { getDiscountSummaryLabel } from '../utils/discount-code-display';
+import { EU_COUNTRIES, getShippingCountryCode, getShippingCountryName, getShippingCostByCountryValue } from '../utils/shipping-utils';
 
 @Component({
   selector: 'app-checkout',
@@ -35,7 +33,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   baseShippingCost = 0;
   private previewSubscription?: Subscription;
 
-  euCountries = Object.entries(COUNTRY_NAME_TO_CODE).map(([name, code]) => ({ name, code }));
+  euCountries = EU_COUNTRIES;
 
   paymentOptions = [
     { value: 'creditcard', label: 'Credit Card' },
@@ -79,7 +77,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (this.username) {
       this.accountService.getUser(this.username).subscribe({
         next: user => {
-          const countryCode = user.address?.country ?? '';
+          const countryCode = getShippingCountryCode(user.address?.country);
           this.checkoutForm.patchValue({
             email: user.email ?? '',
             street: user.address?.street ?? '',
@@ -100,8 +98,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   updateShippingCost(): void {
-    const selectedCode = this.checkoutForm.get('country')?.value;
-    this.baseShippingCost = SHIPPING_COSTS[selectedCode] ?? 0;
+    const selectedCode = getShippingCountryCode(this.checkoutForm.get('country')?.value);
+    this.baseShippingCost = getShippingCostByCountryValue(selectedCode) ?? 0;
 
     const weightSurcharge = this.calculateWeightSurcharge(this.totalWeight);
 
@@ -155,12 +153,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.orderErrorMessage = '';
 
     if (this.username) {
+      const countryName = getShippingCountryName(this.checkoutForm.value.country);
+      if (!countryName) {
+        this.orderErrorMessage = 'Select a supported European shipping country.';
+        return;
+      }
+
       const addressUpdateData = {
         email: this.username,
         street: this.checkoutForm.value.street,
         postalCode: this.checkoutForm.value.postalCode,
         city: this.checkoutForm.value.city,
-        country: this.checkoutForm.value.country
+        country: countryName
       };
 
       this.accountService.updateUser(addressUpdateData).subscribe({

@@ -15,16 +15,6 @@ import { matchesDirectorSlug, reverseDirectorName } from '../utils/director-filt
   styleUrl: './director-detail.component.scss'
 })
 export class DirectorDetailComponent implements OnInit {
-  private readonly exploreDirectorImages: Record<string, string> = {
-    'jean-luc-godard': '/assets/directors/jean_luc_godard.jpg',
-    'powell-pressburger': '/assets/directors/michael_powell.jpg',
-    'akira-kurosawa': '/assets/directors/akira_kurosawa.jpg',
-    'jean-renoir': '/assets/directors/jean_renoir.jpg',
-    'andrei-tarkovsky': '/assets/directors/andrei_tarkovsky.jpg',
-    'friedrich-murnau': '/assets/directors/murnau.jpg',
-    'friedrich-w-murnau': '/assets/directors/murnau.jpg',
-  };
-
   director: Director | undefined;
   films: Film[] = [];
   mediaItems: MediaItem[] = [];
@@ -66,7 +56,7 @@ export class DirectorDetailComponent implements OnInit {
   }
 
   get directorImage(): string {
-    return this.exploreDirectorImages[this.currentSlug] || this.director?.image || '';
+    return this.director?.image || '';
   }
 
   get discographyQueryParams(): { directorSlug: string; director?: string } {

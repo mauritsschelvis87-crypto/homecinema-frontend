@@ -29,6 +29,7 @@ export interface Film {
   stills: string[];
   silent: boolean;
   userRating?: number | null;
+  searchTerms?: string[];
 }
 
 @Injectable({

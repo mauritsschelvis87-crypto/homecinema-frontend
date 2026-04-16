@@ -39,7 +39,7 @@
       />
 
       <select id="country" formControlName="country" required>
-        <option value="" disabled selected>Select Country</option>
+        <option value="" disabled>Select European Country</option>
         <option *ngFor="let country of euCountries" [value]="country.code">
           {{ country.name }}
         </option>

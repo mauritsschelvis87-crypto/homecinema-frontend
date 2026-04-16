@@ -44,39 +44,6 @@
       </svg>
     </button>
 
-    <div *ngIf="showSearch" class="search-bar">
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        [placeholder]="'Zoek op titel, regisseur, land of jaar' | translate"
-        (input)="onSearchChange()"
-        (keyup.enter)="onSearch()"
-        autofocus
-      />
-      <ul *ngIf="filteredFilms.length" class="search-suggestions">
-        <li *ngFor="let film of filteredFilms">
-          <button
-            type="button"
-            class="search-suggestion-link"
-            (click)="goToFilm(film.id)"
-          >
-            <span class="search-suggestion-cover cover-with-collection-badge">
-              <img [src]="film.imageUrl" alt="{{film.title}}" width="40" height="60" />
-              <span
-                *ngIf="isInCollection(film.id)"
-                class="collection-cover-badge collection-cover-badge--thumb"
-                aria-hidden="true"
-              ></span>
-            </span>
-            <span class="search-suggestion-text">
-              <strong>{{ film.title }}</strong>
-              <small>{{ film.year }} • {{ film.director }}<span *ngIf="getFilmRegionValue(film) as region"> • Region {{ region }}</span></small>
-            </span>
-          </button>
-        </li>
-      </ul>
-    </div>
-
     <a
       routerLink="/account"
       routerLinkActive="icon-btn--active"
@@ -117,6 +84,52 @@
   </nav>
 </header>
 
+<section class="search-slider" [class.open]="showSearch" [attr.aria-hidden]="!showSearch" aria-label="Quick search">
+  <div class="search-slider-content">
+    <input
+      #searchInput
+      type="text"
+      [(ngModel)]="searchQuery"
+      [disabled]="!showSearch"
+      [placeholder]="'Zoek op titel, regisseur, land of jaar' | translate"
+      (input)="onSearchChange()"
+      (keyup.enter)="onSearch()"
+    />
+
+    <ul *ngIf="showSearch && filteredFilms.length" class="search-suggestions">
+      <li *ngFor="let film of filteredFilms">
+        <button
+          type="button"
+          class="search-suggestion-link"
+          (click)="goToProduct(film.id)"
+        >
+          <span class="search-suggestion-cover cover-with-collection-badge">
+            <img [src]="film.imageUrl" alt="{{ getSuggestionTitle(film) }}" width="40" height="60" />
+            <span
+              *ngIf="getGiftCardRegionCode(film) as giftCardRegion"
+              class="search-suggestion-region-logo"
+              [class.search-suggestion-region-logo--eu]="giftCardRegion === 'EU'"
+              [class.search-suggestion-region-logo--uk]="giftCardRegion === 'UK'"
+              [attr.aria-label]="giftCardRegion === 'EU' ? 'EU gift card' : 'UK gift card'"
+            >
+              {{ giftCardRegion }}
+            </span>
+            <span
+              *ngIf="isInCollection(film.id)"
+              class="collection-cover-badge collection-cover-badge--thumb"
+              aria-hidden="true"
+            ></span>
+          </span>
+          <span class="search-suggestion-text">
+            <strong>{{ getSuggestionTitle(film) }}</strong>
+            <small>{{ getSuggestionSubtitle(film) }}</small>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</section>
+
 <nav class="hamburger-menu" [class.open]="menuOpen">
   <a class="vertical-text" routerLink="/about" (click)="closeMenu()">{{ 'Home Cinema Project' | translate }}</a>
   <ul>
@@ -124,7 +137,7 @@
     <li><a routerLink="/shopping" (click)="closeMenu()">{{ 'Shop the collection' | translate }}</a></li>
     <li><a routerLink="/explore" (click)="closeMenu()">{{ 'Explore History' | translate }}</a></li>
     <li><a routerLink="/boxsets/special-edition" (click)="closeMenu()">{{ 'Special Edition Box Sets' | translate }}</a></li>
-    <li><a routerLink="/gift-code" (click)="closeMenu()">{{ 'Gift Cards' | translate }}</a></li>
+    <li><a routerLink="/giftcards" (click)="closeMenu()">{{ 'Gift Cards' | translate }}</a></li>
 
     <h1>{{ 'Account' | translate }}</h1>
     <li class="account-auth-links">

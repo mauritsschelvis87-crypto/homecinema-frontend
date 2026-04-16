@@ -3,7 +3,12 @@
   <h2 *ngIf="!results.length">Geen resultaten voor "{{ query }}"</h2>
 
   <div class="film-list">
-    <a *ngFor="let film of results" [routerLink]="['/product', film.id]" class="film-item">
+    <a
+      *ngFor="let film of results"
+      [routerLink]="getProductLink(film.id)"
+      [fragment]="getProductFragment(film.id)"
+      class="film-item"
+    >
       <span class="search-result-cover cover-with-collection-badge">
         <img [src]="film.imageUrl" alt="{{film.title}}" />
         <span

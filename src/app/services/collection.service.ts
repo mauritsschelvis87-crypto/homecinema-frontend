@@ -7,6 +7,9 @@ import { normalizeFilmData } from '../utils/film-normalization';
   providedIn: 'root',
 })
 export class CollectionService {
+  private static readonly minRating = 0.5;
+  private static readonly maxRating = 5;
+  private static readonly ratingStep = 0.5;
   private collection: Film[] = [];
   private collection$ = new BehaviorSubject<Film[]>([]);
 
@@ -60,7 +63,7 @@ export class CollectionService {
 
   rateFilm(filmId: number, rating: number): void {
     const index = this.collection.findIndex(f => f.id === filmId);
-    if (index === -1 || rating < 1 || rating > 5) {
+    if (index === -1 || !this.isValidRating(rating)) {
       return;
     }
 
@@ -75,5 +78,13 @@ export class CollectionService {
   private persistCollection(): void {
     this.collection$.next([...this.collection]);
     localStorage.setItem('collection', JSON.stringify(this.collection));
+  }
+
+  private isValidRating(rating: number): boolean {
+    if (rating < CollectionService.minRating || rating > CollectionService.maxRating) {
+      return false;
+    }
+
+    return Number.isInteger(rating / CollectionService.ratingStep);
   }
 }

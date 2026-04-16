@@ -7,9 +7,7 @@ import { Router, RouterLink } from '@angular/router';
 import { OrderService } from '../services/order.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService, AuthResponse } from '../services/auth.service';
-
-import { COUNTRY_NAME_TO_CODE } from '../constants/country-code-mapping';
-import { SHIPPING_COSTS } from '../constants/shipping-costs';
+import { EU_COUNTRIES, getShippingCountryCode, getShippingCountryName, getShippingCostByCountryValue } from '../utils/shipping-utils';
 
 interface Order {
   id: number;
@@ -88,11 +86,7 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedLanguage = localStorage.getItem('language') ?? this.translate.currentLang ?? 'en';
-    this.countries = Object.entries(COUNTRY_NAME_TO_CODE).map(([name, code]) => ({
-      name,
-      code,
-      shippingCost: SHIPPING_COSTS[code] ?? 0,
-    }));
+    this.countries = EU_COUNTRIES;
 
     const storedEmail = localStorage.getItem('username');
     const token = this.authService.getStoredToken();
@@ -191,9 +185,9 @@ export class AccountComponent implements OnInit {
           country: user.address?.country || this.defaultAddress.country,
         };
 
-        const countryCode = COUNTRY_NAME_TO_CODE[this.address.country];
+        const countryCode = getShippingCountryCode(this.address.country);
         this.selectedCountryCode = countryCode ?? '';
-        this.shippingCost = countryCode ? SHIPPING_COSTS[countryCode] ?? null : null;
+        this.shippingCost = getShippingCostByCountryValue(countryCode);
       },
       error: (err) => {
         console.error('Error fetching user/address:', err);
@@ -205,9 +199,7 @@ export class AccountComponent implements OnInit {
   saveAddress() {
     if (!this.currentUser?.username || !this.selectedCountryCode) return;
 
-    const countryName = Object.entries(COUNTRY_NAME_TO_CODE).find(
-      ([_, code]) => code === this.selectedCountryCode
-    )?.[0];
+    const countryName = getShippingCountryName(this.selectedCountryCode);
 
     if (!countryName) {
       this.addressMessage = '❌ Invalid country selected.';
@@ -233,11 +225,7 @@ export class AccountComponent implements OnInit {
   }
 
   updateShippingCost() {
-    if (!this.selectedCountryCode) {
-      this.shippingCost = null;
-      return;
-    }
-    this.shippingCost = SHIPPING_COSTS[this.selectedCountryCode] ?? null;
+    this.shippingCost = getShippingCostByCountryValue(this.selectedCountryCode);
   }
 
   loadOrders(email: string) {

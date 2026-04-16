@@ -171,7 +171,7 @@
         [attr.aria-label]="'View ' + film.title"
       >
         <div class="film-cover cover-with-collection-badge">
-          <img [src]="film.imageUrl" [alt]="film.title" />
+          <img [src]="getFilmImageUrl(film)" [alt]="film.title" />
           <span *ngIf="showGrid && isInCollection(film.id)" class="collection-cover-badge" aria-hidden="true"></span>
         </div>
         <div class="film-info">
@@ -197,11 +197,11 @@
           *ngFor="let star of ratingStars"
           type="button"
           class="rating-star"
-          [class.filled]="isStarFilled(film, star)"
-          [attr.aria-label]="'Rate ' + film.title + ' ' + star + ' stars'"
+          [style.--star-fill.%]="getStarFillPercentage(film, star)"
+          [attr.aria-label]="'Rate ' + film.title + ' up to ' + star + ' stars'"
           (click)="setRating($event, film, star)"
         >
-          ★
+          <span class="rating-star-icon" aria-hidden="true"></span>
         </button>
       </div>
     </div>

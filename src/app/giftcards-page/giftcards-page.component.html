@@ -1,0 +1,137 @@
+<div class="top-spacing"></div>
+
+<div class="shopping-page-container">
+  <section class="filters-container" aria-label="Gift card filters">
+    <form class="filter-bar" novalidate>
+      <input
+        type="text"
+        placeholder="Search by amount"
+        [(ngModel)]="filters.title"
+        name="title"
+        class="filter-input"
+        (ngModelChange)="onFilterChange()"
+      />
+
+      <select
+        [(ngModel)]="filters.currency"
+        name="currency"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Currency</option>
+        <option value="EUR">Euro</option>
+        <option value="GBP">Pound</option>
+      </select>
+
+      <select
+        [(ngModel)]="filters.category"
+        name="category"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Category</option>
+        <option value="physical">Gift Card</option>
+        <option value="gift-a-movie">Gift a Movie</option>
+      </select>
+
+      <select
+        [(ngModel)]="filters.format"
+        name="format"
+        class="filter-select"
+        (change)="onFilterChange()"
+      >
+        <option value="">Format</option>
+        <option value="DVD">DVD</option>
+        <option value="Blu-ray">Blu-ray</option>
+        <option value="4K UHD">4K UHD</option>
+      </select>
+
+      <button type="button" class="filter-button" (click)="resetFilters()">
+        Reset
+      </button>
+
+      <button
+        type="button"
+        class="filter-icon-button"
+        (click)="toggleView()"
+        [attr.aria-label]="showGrid ? 'Switch to list view' : 'Switch to grid view'"
+        title="Toggle view"
+      >
+        <svg *ngIf="showGrid; else listIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        <ng-template #listIcon>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </ng-template>
+      </button>
+    </form>
+  </section>
+
+  <section class="no-results-section" *ngIf="filteredGiftCards.length === 0" aria-live="polite">
+    No gifts found.
+  </section>
+
+  <section
+    *ngIf="filteredGiftCards.length > 0"
+    [ngClass]="{ 'film-grid': showGrid, 'film-list': !showGrid }"
+    aria-label="Gift card catalogue"
+  >
+    <article class="film-card-shell giftcard-card-shell" *ngFor="let giftCard of filteredGiftCards; trackBy: trackByGiftCardId">
+      <a
+        class="film-card-link giftcard-card-link"
+        [routerLink]="['/giftcards/item', giftCard.slug]"
+        [attr.aria-label]="'View ' + giftCard.title"
+      >
+        <div class="giftcard-media">
+          <div class="film-cover giftcard-cover">
+            <ng-container *ngIf="giftImageUrl(giftCard) as giftImageUrl; else gradientGiftArt">
+              <img
+                class="giftcard-cover-image"
+                [src]="giftImageUrl"
+                [alt]="giftCard.title + ' ' + giftCard.categoryLabel"
+                loading="lazy"
+              />
+            </ng-container>
+
+            <ng-template #gradientGiftArt>
+              <div
+                class="giftcard-cover-art"
+                [style.--giftcard-start]="giftCard.gradientStart"
+                [style.--giftcard-end]="giftCard.gradientEnd"
+              >
+                <span class="giftcard-cover-chip">{{ giftCard.categoryLabel }}</span>
+                <span class="giftcard-cover-brand">Home Cinema Project</span>
+                <span class="giftcard-cover-amount">{{ giftCard.coverLabel }}</span>
+              </div>
+            </ng-template>
+          </div>
+          <span
+            class="giftcard-region-strip"
+            [class.giftcard-region-strip--uk]="giftCard.regionCode === 'UK'"
+            [attr.aria-label]="giftCard.regionCode === 'EU' ? 'Europe gift' : 'United Kingdom gift'"
+          >
+            {{ giftCard.regionCode }}
+          </span>
+        </div>
+
+        <div class="film-info">
+          <h3 class="film-title">{{ giftCard.title }}</h3>
+          <div class="meta-info">
+            <p>{{ giftCard.categoryLabel }}</p>
+            <p>{{ giftCard.priceLabel }}</p>
+          </div>
+        </div>
+      </a>
+    </article>
+  </section>
+</div>

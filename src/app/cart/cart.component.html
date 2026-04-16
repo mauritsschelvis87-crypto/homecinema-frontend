@@ -22,7 +22,7 @@
             <td class="product-info">
               <a [routerLink]="getProductLink(item.product)" [fragment]="getProductFragment(item.product)" class="product-image-link">
                 <span class="product-image-wrap">
-                  <img [src]="item.product.imageUrl" alt="{{ item.product.title }}" class="product-image" />
+                  <img [src]="getProductImageUrl(item.product)" alt="{{ item.product.title }}" class="product-image" />
                 </span>
               </a>
               <div class="product-details">
@@ -41,7 +41,7 @@
               </div>
             </td>
 
-            <td>€ {{ (item.product.price * item.quantity).toFixed(2) }}</td>
+            <td>{{ formatPrice(item.product.price * item.quantity) }}</td>
           </tr>
           </tbody>
         </table>
@@ -99,22 +99,22 @@
         <div class="summary-card">
           <div class="summary-row">
             <span>Subtotal:</span>
-            <span>{{ selectedCurrency }} {{ convertPrice(getDisplayedSubtotal()) }}</span>
+            <span>{{ formatPrice(getDisplayedSubtotal()) }}</span>
           </div>
 
           <div class="summary-row">
             <span>Shipping:</span>
-            <span>{{ selectedCurrency }} {{ convertPrice(shippingCost) }}</span>
+            <span>{{ formatPrice(shippingCost) }}</span>
           </div>
 
           <div *ngIf="hasDiscountPreview()" class="summary-row summary-row--discount">
             <span>{{ getDiscountLabel() }}</span>
-            <span>-{{ selectedCurrency }} {{ convertPrice(getDisplayedDiscountAmount()) }}</span>
+            <span>-{{ formatPrice(getDisplayedDiscountAmount()) }}</span>
           </div>
 
           <div class="summary-row summary-row--final">
             <span>Total Price:</span>
-            <span>{{ selectedCurrency }} {{ convertPrice(getTotalPriceAfterDiscount()) }}</span>
+            <span>{{ formatPrice(getTotalPriceAfterDiscount()) }}</span>
           </div>
         </div>
 
@@ -122,9 +122,9 @@
         <p *ngIf="previewErrorMessage" class="summary-error">{{ previewErrorMessage }}</p>
 
         <div class="currency-selector">
-          <label for="currency" class="visually-hidden">Select Currency</label>
-          <select id="currency" [(ngModel)]="selectedCurrency" (change)="onCurrencyChange()">
-            <option *ngFor="let c of currencies" [value]="c.code">{{ c.label }}</option>
+          <label for="currency" class="visually-hidden">Select currency</label>
+          <select id="currency" [(ngModel)]="selectedCurrency">
+            <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.label }}</option>
           </select>
         </div>
       </div>

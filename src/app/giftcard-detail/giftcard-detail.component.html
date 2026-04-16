@@ -1,0 +1,90 @@
+<div class="page-gray-screen">
+  <div class="detail-status" *ngIf="loading">Loading gift details...</div>
+  <div class="detail-status" *ngIf="error">This gift card could not be loaded.</div>
+
+  <div class="page-content" *ngIf="!loading && !error && giftCard && giftFilm">
+    <div class="film-page-title-row">
+      <h1 class="film-page-title">{{ detailTitle }}</h1>
+      <div class="share-icons-inline">
+        <a
+          [href]="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl"
+          target="_blank"
+          aria-label="Share on Facebook"
+        >
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a
+          [href]="'https://twitter.com/intent/tweet?url=' + shareUrl + '&text=Take%20a%20look%20at%20this%20gift!'"
+          target="_blank"
+          aria-label="Share on X"
+        >
+          <i class="fab fa-x-twitter"></i>
+        </a>
+        <a
+          [href]="'https://wa.me/?text=' + shareUrl"
+          target="_blank"
+          aria-label="Share on WhatsApp"
+        >
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="film-details-wrapper">
+      <div class="left-side-wrapper">
+        <div class="film-image-container">
+          <div #giftMediaStack class="gift-image-stack">
+            <div class="film-image-frame">
+              <img
+                [src]="giftFilm.imageUrl"
+                [alt]="detailTitle"
+                class="film-image"
+                (load)="syncMediaHeight()"
+              />
+            </div>
+            <div
+              class="gift-detail-region-strip"
+              [class.gift-detail-region-strip--uk]="giftCard.regionCode === 'UK'"
+            >
+              {{ giftCard.regionCode }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-side-wrapper" [style.height.px]="detailMediaHeight || null">
+        <div class="specs-container">
+          <p class="gift-description">{{ detailDescription }}</p>
+
+          <ul class="specs-list">
+            <li><strong>Category:</strong> {{ detailCategoryLabel }}</li>
+            <li><strong>Region:</strong> {{ detailRegionLabel }}</li>
+            <li><strong>Currency:</strong> {{ giftCard.currencyLabel }}</li>
+            <li><strong>Delivery:</strong> {{ detailDeliveryLabel }}</li>
+            <li><strong>Price:</strong> {{ giftCard.priceLabel }}</li>
+          </ul>
+
+          <div class="actions">
+            <button (click)="addToCart()" class="btn btn-cart">Add to Cart</button>
+
+            <button
+              (click)="toggleWishlist()"
+              (mouseenter)="wishlistHover = true"
+              (mouseleave)="wishlistHover = false"
+              class="btn btn-wishlist"
+              [ngClass]="{ 'in-wishlist': isInWishlist() }"
+            >
+              {{
+                wishlistClickLock
+                  ? (isInWishlist() ? '★ In your wishlist' : 'Add to Wishlist')
+                  : (wishlistHover
+                    ? (isInWishlist() ? 'Remove' : 'Add to Wishlist')
+                    : (isInWishlist() ? '★ In your wishlist' : 'Add to Wishlist'))
+              }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

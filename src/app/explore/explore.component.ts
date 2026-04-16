@@ -1,16 +1,18 @@
 import { Component, AfterViewInit, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { NgIf, NgStyle } from '@angular/common';
+import { MediaAssets, MediaAssetsService, createFallbackMediaAssets } from '../services/media-assets.service';
 
 @Component({
   selector: 'app-explore',
   standalone: true,
-  imports: [RouterLink, NgIf],
+  imports: [RouterLink, NgIf, NgStyle],
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss']
 })
 export class ExploreComponent implements AfterViewInit {
   public currentIndex = 0;
+  public mediaAssets: MediaAssets = createFallbackMediaAssets();
 
   public sections = [
     'split-feature-hero-1',
@@ -20,6 +22,12 @@ export class ExploreComponent implements AfterViewInit {
   ];
 
   private isScrolling = false;
+
+  constructor(private mediaAssetsService: MediaAssetsService) {
+    this.mediaAssetsService.getMediaAssets().subscribe((assets) => {
+      this.mediaAssets = assets;
+    });
+  }
 
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
@@ -97,5 +105,10 @@ export class ExploreComponent implements AfterViewInit {
       left?.classList.add('slide-in');
       right?.classList.add('slide-in');
     }, 50);
+  }
+
+  public splitBackgroundStyle(assetPath: string): Record<string, string> {
+    const imageUrl = this.mediaAssets.directors[assetPath];
+    return imageUrl ? { 'background-image': `url('${imageUrl}')` } : {};
   }
 }
