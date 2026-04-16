@@ -6,6 +6,10 @@ import { CollectionService } from '../services/collection.service';
 import { getFilmSearchScore } from '../utils/film-search';
 import { getGiftCardSearchFilms } from '../giftcards-page/giftcard-catalog';
 import { getProductFragmentById, getProductLinkById } from '../utils/special-product-links';
+import {
+  getSearchResultDetails,
+  getSearchResultTitle,
+} from '../utils/search-result-display';
 
 @Component({
   selector: 'app-search',
@@ -53,5 +57,13 @@ export class SearchComponent implements OnInit {
 
   getProductFragment(productId: number): string | undefined {
     return getProductFragmentById(productId);
+  }
+
+  getResultTitle(film: Film): string {
+    return getSearchResultTitle(film);
+  }
+
+  getResultDetails(film: Film): string[] {
+    return getSearchResultDetails(film);
   }
 }

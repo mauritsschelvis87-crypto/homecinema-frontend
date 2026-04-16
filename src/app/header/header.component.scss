@@ -1,3 +1,7 @@
+:host {
+  --header-panel-slide-transition: transform 0.3s ease-in-out;
+}
+
 .header-criterion {
   position: fixed;
   top: 1rem;
@@ -96,8 +100,8 @@ a.nav-text-link.nav-text-link--active {
   max-width: 360px;
   height: calc(100vh - 5rem);
   padding: 1.35rem 1.5rem 2rem;
-  transform: translateY(-120%);
-  transition: transform 0.3s ease-in-out;
+  transform: translateY(100%);
+  transition: var(--header-panel-slide-transition);
   z-index: 10020;
   pointer-events: none;
   overflow: hidden;
@@ -113,6 +117,7 @@ a.nav-text-link.nav-text-link--active {
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .search-slider input {
@@ -141,6 +146,10 @@ a.nav-text-link.nav-text-link--active {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 0.2rem;
+  scrollbar-gutter: stable;
 }
 
 .search-suggestion-link {
@@ -201,6 +210,7 @@ a.nav-text-link.nav-text-link--active {
 }
 
 .search-suggestion-text small {
+  display: block;
   font-size: 0.8rem;
   color: #666;
   line-height: 1.3;
@@ -216,7 +226,7 @@ a.nav-text-link.nav-text-link--active {
   height: calc(100vh - 5rem);
   padding: 1.35rem 1.5rem 2rem;
   transform: translateY(100%);
-  transition: transform 0.3s ease-in-out;
+  transition: var(--header-panel-slide-transition);
   z-index: 10000;
 }
 

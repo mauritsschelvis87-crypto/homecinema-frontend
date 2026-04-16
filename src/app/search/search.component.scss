@@ -20,3 +20,13 @@
   justify-content: center;
   box-sizing: border-box;
 }
+
+.info-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.info-details p {
+  margin: 0;
+}

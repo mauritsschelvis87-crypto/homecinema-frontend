@@ -14,6 +14,7 @@ import { getShippingCountryCode } from '../utils/shipping-utils';
 import { getProductFragmentById, getProductLinkById } from '../utils/special-product-links';
 import { createFallbackMediaAssets, MediaAssets, MediaAssetsService } from '../services/media-assets.service';
 import { findGiftCardByFilmId } from '../giftcards-page/giftcard-catalog';
+import { getProductDisplayBrand, getProductDisplayTitle, getProductDisplayType } from '../utils/product-display';
 
 interface Currency {
   code: 'EUR' | 'GBP';
@@ -217,6 +218,18 @@ export class CartComponent implements OnInit, OnDestroy {
     }
 
     return this.mediaAssets.gifts[giftCard.assetKey] ?? giftCard.assetKey;
+  }
+
+  getProductDisplayTitle(product: Film): string {
+    return getProductDisplayTitle(product);
+  }
+
+  getProductDisplayBrand(product: Film): string {
+    return getProductDisplayBrand(product);
+  }
+
+  getProductDisplayType(product: Film): string {
+    return getProductDisplayType(product);
   }
 
   isInCollection(productId: number): boolean {

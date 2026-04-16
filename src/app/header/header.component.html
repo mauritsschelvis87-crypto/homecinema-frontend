@@ -106,15 +106,6 @@
           <span class="search-suggestion-cover cover-with-collection-badge">
             <img [src]="film.imageUrl" alt="{{ getSuggestionTitle(film) }}" width="40" height="60" />
             <span
-              *ngIf="getGiftCardRegionCode(film) as giftCardRegion"
-              class="search-suggestion-region-logo"
-              [class.search-suggestion-region-logo--eu]="giftCardRegion === 'EU'"
-              [class.search-suggestion-region-logo--uk]="giftCardRegion === 'UK'"
-              [attr.aria-label]="giftCardRegion === 'EU' ? 'EU gift card' : 'UK gift card'"
-            >
-              {{ giftCardRegion }}
-            </span>
-            <span
               *ngIf="isInCollection(film.id)"
               class="collection-cover-badge collection-cover-badge--thumb"
               aria-hidden="true"
@@ -122,7 +113,7 @@
           </span>
           <span class="search-suggestion-text">
             <strong>{{ getSuggestionTitle(film) }}</strong>
-            <small>{{ getSuggestionSubtitle(film) }}</small>
+            <small *ngFor="let detail of getSuggestionDetails(film)">{{ detail }}</small>
           </span>
         </button>
       </li>

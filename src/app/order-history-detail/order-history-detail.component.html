@@ -16,15 +16,28 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of order.orderItems">
+        <tr *ngFor="let item of order.orderItems; let itemIndex = index">
           <td class="product-info">
-            <span class="product-image-wrap">
-              <img [src]="getProductImageUrl(item.film)" [alt]="item.film.title" class="product-image" />
-            </span>
+            <input
+              *ngIf="returnRequestMode"
+              type="checkbox"
+              [checked]="isReturnItemSelected(itemIndex)"
+              [attr.aria-label]="'Select ' + getProductDisplayTitle(item.film) + ' for return request'"
+              (change)="onReturnItemSelectionChange(itemIndex, $event)"
+            />
+            <a
+              [routerLink]="getProductLink(item.film)"
+              [fragment]="getProductFragment(item.film)"
+              class="product-image-link"
+            >
+              <span class="product-image-wrap">
+                <img [src]="getProductImageUrl(item.film)" [alt]="getProductDisplayTitle(item.film)" class="product-image" />
+              </span>
+            </a>
             <div class="product-details">
-              <div class="product-title">{{ item.film.title }}</div>
-              <div class="product-brand">{{ item.film.brand.name }}</div>
-              <div class="product-type">{{ item.film.type || 'Onbekend' }}</div>
+              <div class="product-title">{{ getProductDisplayTitle(item.film) }}</div>
+              <div class="product-brand">{{ getProductDisplayBrand(item.film) }}</div>
+              <div class="product-type">{{ getProductDisplayType(item.film) }}</div>
             </div>
           </td>
           <td>{{ item.quantity }}</td>
@@ -37,6 +50,13 @@
   <div class="purchase-summary">
     <p class="summary-line"><strong>Purchase date:</strong> {{ order.orderDate | date:'medium' }}</p>
     <p class="summary-line"><strong>Subtotal:</strong> € {{ getSubtotal().toFixed(2) }}</p>
+    <p *ngIf="returnRequestMode" class="summary-line">
+      <strong>Selected for return:</strong> {{ getSelectedReturnItemCount() }}
+    </p>
+    <p *ngIf="submittedReturnItemCount !== null" class="summary-line">
+      <strong>Return request submitted:</strong>
+      {{ submittedReturnItemCount }} item{{ submittedReturnItemCount === 1 ? '' : 's' }}
+    </p>
     <p *ngIf="hasDiscount()" class="summary-line summary-line--discount">
       <strong>{{ getDiscountLabel() }}</strong> (€ {{ getDiscountAmount().toFixed(2) }})
     </p>
@@ -48,7 +68,21 @@
   </div>
 
   <div class="bottom-actions">
-    <button type="button" class="back-button">Return Request</button>
+    <button *ngIf="!returnRequestMode" type="button" class="back-button" (click)="toggleReturnRequestMode()">
+      Return Request
+    </button>
+    <button *ngIf="returnRequestMode" type="button" class="back-button" (click)="cancelReturnRequest()">
+      Cancel
+    </button>
+    <button
+      *ngIf="returnRequestMode"
+      type="button"
+      class="back-button"
+      [disabled]="getSelectedReturnItemCount() === 0"
+      (click)="submitReturnRequest()"
+    >
+      Submit
+    </button>
   </div>
 
 </div>

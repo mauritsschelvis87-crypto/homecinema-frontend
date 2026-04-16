@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { OrderService, Order } from '../services/order.service';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { getDiscountSummaryLabel } from '../utils/discount-code-display';
 import { CollectionService } from '../services/collection.service';
 import { createFallbackMediaAssets, MediaAssets, MediaAssetsService } from '../services/media-assets.service';
 import { findGiftCardByFilmId } from '../giftcards-page/giftcard-catalog';
+import { getProductDisplayBrand, getProductDisplayTitle, getProductDisplayType } from '../utils/product-display';
+import { getProductFragmentById, getProductLinkById } from '../utils/special-product-links';
 
 @Component({
   selector: 'app-order-history-detail',
   templateUrl: './order-history-detail.component.html',
-  imports: [NgIf, DatePipe, NgForOf],
+  imports: [NgIf, DatePipe, NgForOf, RouterLink],
   styleUrl: './order-history-detail.component.scss',
 })
 export class OrderHistoryDetailComponent implements OnInit {
@@ -18,6 +20,9 @@ export class OrderHistoryDetailComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
   mediaAssets: MediaAssets = createFallbackMediaAssets();
+  returnRequestMode = false;
+  submittedReturnItemCount: number | null = null;
+  private selectedReturnItemIndexes = new Set<number>();
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +41,7 @@ export class OrderHistoryDetailComponent implements OnInit {
       this.orderService.getOrderById(+id).subscribe({
         next: (data) => {
           this.order = data;
+          this.resetReturnRequestState();
 
           this.order.orderItems.forEach(item => {
             if (!item.film.brand) {
@@ -54,6 +60,7 @@ export class OrderHistoryDetailComponent implements OnInit {
           const localOrder = this.orderService.getLocalOrderById(+id);
           if (localOrder) {
             this.order = localOrder;
+            this.resetReturnRequestState();
             this.isLoading = false;
             return;
           }
@@ -127,7 +134,78 @@ export class OrderHistoryDetailComponent implements OnInit {
     return this.mediaAssets.gifts[giftCard.assetKey] ?? giftCard.assetKey;
   }
 
+  getProductLink(product: { id: number | string }): string[] {
+    return getProductLinkById(Number(product.id));
+  }
+
+  getProductFragment(product: { id: number | string }): string | undefined {
+    return getProductFragmentById(Number(product.id));
+  }
+
+  getProductDisplayTitle(product: { id: number | string; title: string; type?: string; brand?: { name: string } }): string {
+    return getProductDisplayTitle(product);
+  }
+
+  getProductDisplayBrand(product: { id: number | string; title: string; type?: string; brand?: { name: string } }): string {
+    return getProductDisplayBrand(product);
+  }
+
+  getProductDisplayType(product: { id: number | string; title: string; type?: string; brand?: { name: string } }): string {
+    return getProductDisplayType(product);
+  }
+
+  toggleReturnRequestMode(): void {
+    this.returnRequestMode = !this.returnRequestMode;
+    this.submittedReturnItemCount = null;
+
+    if (!this.returnRequestMode) {
+      this.selectedReturnItemIndexes.clear();
+    }
+  }
+
+  cancelReturnRequest(): void {
+    this.returnRequestMode = false;
+    this.selectedReturnItemIndexes.clear();
+  }
+
+  onReturnItemSelectionChange(index: number, event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.checked) {
+      this.selectedReturnItemIndexes.add(index);
+      return;
+    }
+
+    this.selectedReturnItemIndexes.delete(index);
+  }
+
+  isReturnItemSelected(index: number): boolean {
+    return this.selectedReturnItemIndexes.has(index);
+  }
+
+  getSelectedReturnItemCount(): number {
+    return this.selectedReturnItemIndexes.size;
+  }
+
+  submitReturnRequest(): void {
+    const selectedCount = this.getSelectedReturnItemCount();
+
+    if (!selectedCount) {
+      return;
+    }
+
+    this.submittedReturnItemCount = selectedCount;
+    this.returnRequestMode = false;
+    this.selectedReturnItemIndexes.clear();
+  }
+
   isInCollection(filmId: number | string): boolean {
     return this.collectionService.isInCollection(Number(filmId));
+  }
+
+  private resetReturnRequestState(): void {
+    this.returnRequestMode = false;
+    this.submittedReturnItemCount = null;
+    this.selectedReturnItemIndexes.clear();
   }
 }

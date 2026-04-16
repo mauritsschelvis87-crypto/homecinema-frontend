@@ -10,7 +10,7 @@
       class="film-item"
     >
       <span class="search-result-cover cover-with-collection-badge">
-        <img [src]="film.imageUrl" alt="{{film.title}}" />
+        <img [src]="film.imageUrl" alt="{{ getResultTitle(film) }}" />
         <span
           *ngIf="isInCollection(film.id)"
           class="collection-cover-badge collection-cover-badge--thumb"
@@ -18,8 +18,10 @@
         ></span>
       </span>
       <div class="info">
-        <h3>{{ film.title }}</h3>
-        <p>{{ film.year }} • {{ film.director }}</p>
+        <h3>{{ getResultTitle(film) }}</h3>
+        <div class="info-details">
+          <p *ngFor="let detail of getResultDetails(film)">{{ detail }}</p>
+        </div>
       </div>
     </a>
   </div>

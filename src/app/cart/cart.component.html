@@ -22,15 +22,15 @@
             <td class="product-info">
               <a [routerLink]="getProductLink(item.product)" [fragment]="getProductFragment(item.product)" class="product-image-link">
                 <span class="product-image-wrap">
-                  <img [src]="getProductImageUrl(item.product)" alt="{{ item.product.title }}" class="product-image" />
+                  <img [src]="getProductImageUrl(item.product)" alt="{{ getProductDisplayTitle(item.product) }}" class="product-image" />
                 </span>
               </a>
               <div class="product-details">
                 <a [routerLink]="getProductLink(item.product)" [fragment]="getProductFragment(item.product)" class="product-title">
-                  {{ item.product.title }}
+                  {{ getProductDisplayTitle(item.product) }}
                 </a>
-                <div class="product-brand">{{ item.product.brand.name }}</div>
-                <div class="product-type">{{ item.product.type }}</div>
+                <div class="product-brand">{{ getProductDisplayBrand(item.product) }}</div>
+                <div class="product-type">{{ getProductDisplayType(item.product) }}</div>
               </div>
             </td>
 
