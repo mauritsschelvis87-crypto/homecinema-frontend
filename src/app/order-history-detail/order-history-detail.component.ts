@@ -20,9 +20,6 @@ export class OrderHistoryDetailComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
   mediaAssets: MediaAssets = createFallbackMediaAssets();
-  returnRequestMode = false;
-  submittedReturnItemCount: number | null = null;
-  private selectedReturnItemIndexes = new Set<number>();
 
   constructor(
     private route: ActivatedRoute,
@@ -37,30 +34,29 @@ export class OrderHistoryDetailComponent implements OnInit {
     });
 
     const id = this.route.snapshot.paramMap.get('id');
+
     if (id) {
       this.orderService.getOrderById(+id).subscribe({
         next: (data) => {
           this.order = data;
-          this.resetReturnRequestState();
 
           this.order.orderItems.forEach(item => {
             if (!item.film.brand) {
               item.film.brand = { name: 'Onbekend' };
             }
+
             if (!item.film.type) {
               item.film.type = 'Onbekend';
             }
-
-
           });
 
           this.isLoading = false;
         },
-        error: (err) => {
+        error: () => {
           const localOrder = this.orderService.getLocalOrderById(+id);
+
           if (localOrder) {
             this.order = localOrder;
-            this.resetReturnRequestState();
             this.isLoading = false;
             return;
           }
@@ -81,7 +77,10 @@ export class OrderHistoryDetailComponent implements OnInit {
       return this.order.subtotalPrice;
     }
 
-    return this.order.orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return this.order.orderItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
   }
 
   getDiscountAmount(): number {
@@ -93,7 +92,10 @@ export class OrderHistoryDetailComponent implements OnInit {
       return this.order.discountAmount;
     }
 
-    return Math.max(0, this.getSubtotal() - (this.order.totalPrice ?? this.getSubtotal()));
+    return Math.max(
+      0,
+      this.getSubtotal() - (this.order.totalPrice ?? this.getSubtotal())
+    );
   }
 
   getPaidAmount(): number {
@@ -142,70 +144,34 @@ export class OrderHistoryDetailComponent implements OnInit {
     return getProductFragmentById(Number(product.id));
   }
 
-  getProductDisplayTitle(product: { id: number | string; title: string; type?: string; brand?: { name: string } }): string {
+  getProductDisplayTitle(product: {
+    id: number | string;
+    title: string;
+    type?: string;
+    brand?: { name: string };
+  }): string {
     return getProductDisplayTitle(product);
   }
 
-  getProductDisplayBrand(product: { id: number | string; title: string; type?: string; brand?: { name: string } }): string {
+  getProductDisplayBrand(product: {
+    id: number | string;
+    title: string;
+    type?: string;
+    brand?: { name: string };
+  }): string {
     return getProductDisplayBrand(product);
   }
 
-  getProductDisplayType(product: { id: number | string; title: string; type?: string; brand?: { name: string } }): string {
+  getProductDisplayType(product: {
+    id: number | string;
+    title: string;
+    type?: string;
+    brand?: { name: string };
+  }): string {
     return getProductDisplayType(product);
-  }
-
-  toggleReturnRequestMode(): void {
-    this.returnRequestMode = !this.returnRequestMode;
-    this.submittedReturnItemCount = null;
-
-    if (!this.returnRequestMode) {
-      this.selectedReturnItemIndexes.clear();
-    }
-  }
-
-  cancelReturnRequest(): void {
-    this.returnRequestMode = false;
-    this.selectedReturnItemIndexes.clear();
-  }
-
-  onReturnItemSelectionChange(index: number, event: Event): void {
-    const input = event.target as HTMLInputElement;
-
-    if (input.checked) {
-      this.selectedReturnItemIndexes.add(index);
-      return;
-    }
-
-    this.selectedReturnItemIndexes.delete(index);
-  }
-
-  isReturnItemSelected(index: number): boolean {
-    return this.selectedReturnItemIndexes.has(index);
-  }
-
-  getSelectedReturnItemCount(): number {
-    return this.selectedReturnItemIndexes.size;
-  }
-
-  submitReturnRequest(): void {
-    const selectedCount = this.getSelectedReturnItemCount();
-
-    if (!selectedCount) {
-      return;
-    }
-
-    this.submittedReturnItemCount = selectedCount;
-    this.returnRequestMode = false;
-    this.selectedReturnItemIndexes.clear();
   }
 
   isInCollection(filmId: number | string): boolean {
     return this.collectionService.isInCollection(Number(filmId));
-  }
-
-  private resetReturnRequestState(): void {
-    this.returnRequestMode = false;
-    this.submittedReturnItemCount = null;
-    this.selectedReturnItemIndexes.clear();
   }
 }

@@ -79,6 +79,7 @@
     text-decoration: none;
     text-align: center;
     outline: none;
+    min-width: 0; /* Voorkom overflow in flex */
   }
 
   .film-cover {
@@ -112,6 +113,7 @@
     padding: 0 10px 10px;
     color: black;
     box-sizing: border-box;
+    min-width: 0; /* Cruciaal voor text-overflow ellipsis in flex containers */
   }
 
   .film-title {
@@ -121,6 +123,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
 
     @media (max-width: 600px) {
       font-size: 1.1rem;
@@ -130,6 +133,8 @@
   .meta-info {
     font-size: 1rem;
     color: #666;
+    width: 100%;
+    overflow: hidden;
 
     p {
       margin: 0.1rem 0;
@@ -137,6 +142,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      width: 100%;
     }
 
     @media (max-width: 600px) {

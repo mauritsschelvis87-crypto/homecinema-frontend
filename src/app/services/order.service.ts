@@ -20,6 +20,7 @@ export interface Film {
 }
 
 export interface OrderItem {
+  id?: number;
   film: Film;
   quantity: number;
   price: number;

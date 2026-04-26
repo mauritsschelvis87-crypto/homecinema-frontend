@@ -1,5 +1,5 @@
 <div class="media-slider">
-  @if (showArrows) {
+  @if (shouldShowArrows) {
     <button class="media-arrow-btn media-arrow-btn-prev" (click)="prev()" aria-label="Previous media">
       <svg
         width="28"
@@ -24,9 +24,11 @@
   @if (items.length) {
     <div class="media-content">
       @switch (items[currentIndex].type) {
+
         @case ('image') {
           <img [src]="items[currentIndex].url" alt="Media image" />
         }
+
         @case ('video') {
           <iframe
             [src]="items[currentIndex].url | safeUrl"
@@ -36,11 +38,12 @@
             height="315"
           ></iframe>
         }
+
       }
     </div>
   }
 
-  @if (showArrows) {
+  @if (shouldShowArrows) {
     <button class="media-arrow-btn media-arrow-btn-next" (click)="next()" aria-label="Next media">
       <svg
         width="28"
