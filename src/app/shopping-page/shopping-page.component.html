@@ -28,7 +28,7 @@
         (change)="onFilterChange()"
       >
         <option value="">Region</option>
-        <option *ngFor="let region of regionOptions" [value]="region">{{ region }}</option>
+        <option *ngFor="let region of filteredRegions" [value]="region">{{ region }}</option>
       </select>
       <select
         [(ngModel)]="filters.director"

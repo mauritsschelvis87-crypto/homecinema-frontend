@@ -18,7 +18,7 @@ import { matchesDirectorSlug, reverseDirectorName } from '../utils/director-filt
 export class ShoppingPageComponent implements OnInit {
   readonly cardTitleMaxLength = 15;
   readonly ratingStars = [1, 2, 3, 4, 5];
-  readonly regionOptions: FilmRegionValue[] = ['A', 'B', 'Free'];
+
   allFilms: Film[]      = [];
   filteredFilms: Film[] = [];
   visibleFilms: Film[]  = [];
@@ -28,6 +28,7 @@ export class ShoppingPageComponent implements OnInit {
 
   uniqueCountries: string[] = [];
   uniqueDirectors: string[] = [];
+  uniqueRegions: FilmRegionValue[] = [];
   directorMap    = new Map<string,string>();
   uniqueYears: number[]     = [];
   uniqueTypes: string[]     = [];
@@ -35,6 +36,7 @@ export class ShoppingPageComponent implements OnInit {
 
   filteredCountries: string[] = [];
   filteredDirectors: string[] = [];
+  filteredRegions: FilmRegionValue[] = [];
   filteredYears: number[]     = [];
   filteredTypes: string[]     = [];
   filteredBrands: string[]    = [];
@@ -74,6 +76,7 @@ export class ShoppingPageComponent implements OnInit {
         // extract master filter sets
         const cSet = new Set<string>();
         const dSet = new Set<string>();
+        const rSet = new Set<FilmRegionValue>();
         const ySet = new Set<number>();
         const tSet = new Set<string>();
         const bSet = new Set<string>();
@@ -85,6 +88,9 @@ export class ShoppingPageComponent implements OnInit {
             this.directorMap.set(rev,f.director);
             dSet.add(rev);
           }
+          const reg = getFilmRegion(f);
+          if (reg) rSet.add(reg);
+
           ySet.add(f.year);
           f.type && tSet.add(f.type);
           f.brand?.name && bSet.add(f.brand.name);
@@ -92,6 +98,7 @@ export class ShoppingPageComponent implements OnInit {
 
         this.uniqueCountries  = [...cSet].sort();
         this.uniqueDirectors  = [...dSet].sort();
+        this.uniqueRegions    = [...rSet].sort();
         this.uniqueYears      = [...ySet].sort((a,b)=>a-b);
         this.uniqueTypes      = [...tSet].sort();
         this.uniqueBrands     = [...bSet].sort();
@@ -162,6 +169,7 @@ export class ShoppingPageComponent implements OnInit {
   updateFilteredOptions() {
     const cSet= new Set<string>(),
       dSet= new Set<string>(),
+      rSet= new Set<FilmRegionValue>(),
       ySet= new Set<number>(),
       tSet= new Set<string>(),
       bSet= new Set<string>();
@@ -173,6 +181,9 @@ export class ShoppingPageComponent implements OnInit {
         dSet.add(rev);
         this.directorMap.set(rev,f.director);
       }
+      const reg = getFilmRegion(f);
+      if (reg) rSet.add(reg);
+
       ySet.add(f.year);
       f.type && tSet.add(f.type);
       f.brand?.name && bSet.add(f.brand.name);
@@ -180,6 +191,7 @@ export class ShoppingPageComponent implements OnInit {
 
     this.filteredCountries  = [...cSet].sort();
     this.filteredDirectors  = [...dSet].sort();
+    this.filteredRegions    = [...rSet].sort();
     this.filteredYears      = [...ySet].sort((a,b)=>a-b);
     this.filteredTypes      = [...tSet].sort();
     this.filteredBrands     = [...bSet].sort();
@@ -207,6 +219,7 @@ export class ShoppingPageComponent implements OnInit {
   resetDropdowns() {
     this.filteredCountries  = [...this.uniqueCountries];
     this.filteredDirectors  = [...this.uniqueDirectors];
+    this.filteredRegions    = [...this.uniqueRegions];
     this.filteredYears      = [...this.uniqueYears];
     this.filteredTypes      = [...this.uniqueTypes];
     this.filteredBrands     = [...this.uniqueBrands];
