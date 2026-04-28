@@ -73,13 +73,7 @@
 </div>
 
 <ng-template #loadingOrError>
-  <div class="recommendation-container page-shell" *ngIf="!isLoading; else loadingState">
+  <div class="recommendation-container page-shell" *ngIf="!isLoading">
     <p class="status-message">{{ error }}</p>
-  </div>
-</ng-template>
-
-<ng-template #loadingState>
-  <div class="status-shell">
-    <p class="status-message">Loading recommendations...</p>
   </div>
 </ng-template>

@@ -14,11 +14,12 @@ import { CartService } from './services/cart.service';
 import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { DevSessionService } from './services/dev-session.service';
+import { LoadingMessageComponent } from './loading-message/loading-message.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, RouterModule, NgIf],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, RouterModule, NgIf, LoadingMessageComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

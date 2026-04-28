@@ -96,10 +96,6 @@
     </form>
   </section>
 
-  <section class="loading-section" *ngIf="loading" aria-live="polite" aria-busy="true">
-    Loading films...
-  </section>
-
   <section class="no-results-section" *ngIf="!loading && filteredFilms.length === 0" aria-live="polite">
     No films found.
   </section>
