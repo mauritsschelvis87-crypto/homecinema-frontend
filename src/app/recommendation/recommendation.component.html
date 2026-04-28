@@ -1,0 +1,85 @@
+<div class="top-spacing"></div>
+
+<div class="recommendation-container page-shell" *ngIf="!isLoading && !error; else loadingOrError">
+  <div class="items-scroll">
+    <table class="recommendation-table">
+      <colgroup>
+        <col class="product-column" />
+        <col class="reason-column" />
+        <col class="rating-column" />
+      </colgroup>
+
+      <thead>
+      <tr>
+        <th>Product</th>
+        <th class="reason-header">Reason</th>
+        <th>Community rating</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let item of recommendations; trackBy: trackByFilmId">
+        <td class="product-info">
+          <a
+            [routerLink]="getFilmLink(item.film)"
+            [fragment]="getFilmFragment(item.film)"
+            class="product-image-link"
+          >
+            <span class="product-image-wrap">
+              <img
+                [src]="item.film.imageUrl"
+                [alt]="item.film.title"
+                class="product-image"
+                [class.product-image--cover]="shouldUseCoverFit(item.film)"
+              />
+            </span>
+          </a>
+
+          <div class="product-details">
+            <div class="product-title">{{ truncateText(item.film.title, titleMaxLength) }}</div>
+            <div class="product-meta">
+              <span>{{ truncateText(item.film.director, directorMaxLength) }}</span>
+              <span>{{ item.film.country }}</span>
+              <span>{{ item.film.year }}</span>
+            </div>
+          </div>
+        </td>
+
+        <td class="reason-cell">
+          <div class="product-reason">{{ item.reason }}</div>
+        </td>
+
+        <td class="rating-cell">
+          <div class="community-rating" aria-label="Community rating">
+            <span
+              *ngFor="let star of ratingStars"
+              class="rating-star"
+              [style.--star-fill.%]="getStarFillPercentage(item.film, star)"
+              aria-hidden="true"
+            >
+              <span class="rating-star-icon"></span>
+            </span>
+          </div>
+          <div class="community-rating-count">{{ item.film.communityRatingCount ?? 0 }} ratings</div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="scramble-actions">
+    <button type="button" class="action-button action-button--inline" (click)="scramble()">Scramble</button>
+  </div>
+</div>
+
+<ng-template #loadingOrError>
+  <div class="recommendation-container page-shell" *ngIf="!isLoading; else loadingState">
+    <p class="status-message">{{ error }}</p>
+  </div>
+</ng-template>
+
+<ng-template #loadingState>
+  <div class="status-shell">
+    <p class="status-message">Loading recommendations...</p>
+  </div>
+</ng-template>

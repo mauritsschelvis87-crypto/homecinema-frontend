@@ -11,6 +11,7 @@ import { ShoppingPageComponent } from './shopping-page/shopping-page.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { AboutComponent } from './about/about.component';
 import { CollectionComponent } from './collection/collection.component';
+import { RecommendationComponent } from './recommendation/recommendation.component';
 import { NewsComponent } from './news/news.component';
 import { ExploreComponent } from './explore/explore.component';
 import { DirectorDetailComponent } from './director-detail/director-detail.component';
@@ -38,6 +39,7 @@ export const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'about', component: AboutComponent },
   { path: 'collection', component: CollectionComponent },
+  { path: 'recommendation', component: RecommendationComponent },
   { path: 'news', component: NewsComponent },
   { path: 'explore', component: ExploreComponent },
   { path: 'director/:slugs', component: DirectorDetailComponent },

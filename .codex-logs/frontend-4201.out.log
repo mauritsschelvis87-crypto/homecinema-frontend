@@ -1,0 +1,24 @@
+[33m>[39m Building...
+[32m√[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                        [2m | [22m[36m819.75 kB[39m[2m | [22m
+[32mchunk-727ZXXHW.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m4.46 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                      [2m | [22m  [36m3.84 kB[39m[2m | [22m
+[32mchunk-USKZMO7R.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m2.90 kB[39m[2m | [22m
+[32mchunk-CZJLB7T5.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m1.08 kB[39m[2m | [22m
+[32mchunk-YQ5JZSZD.js[39m  [2m | [22m[2m-[22m                           [2m | [22m[36m409 bytes[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                   [2m | [22m[36m140 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m               [2m | [22m[1m832.59 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m
+[32mchunk-L2246AQ7.js[39m  [2m | [22m[2morder-confirmation-component[22m[2m | [22m [36m11.45 kB[39m[2m | [22m
+[32mchunk-APPHUGC3.js[39m  [2m | [22m[2mlogin-component[22m             [2m | [22m  [36m7.56 kB[39m[2m | [22m
+[32mchunk-K6TDL4M3.js[39m  [2m | [22m[2msplash-screen-component[22m     [2m | [22m  [36m3.35 kB[39m[2m | [22m
+
+Application bundle generation complete. [6.543 seconds] - 2026-04-28T10:05:35.979Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4201[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m

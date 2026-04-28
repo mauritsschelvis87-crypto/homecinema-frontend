@@ -29,6 +29,8 @@ export interface Film {
   stills: string[];
   silent: boolean;
   userRating?: number | null;
+  averageCommunityRating?: number; // Nieuw veld
+  communityRatingCount?: number; // Nieuw veld
   searchTerms?: string[];
 }
 
