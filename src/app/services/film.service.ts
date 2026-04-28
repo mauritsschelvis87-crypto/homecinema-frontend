@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface Brand {
@@ -29,8 +29,8 @@ export interface Film {
   stills: string[];
   silent: boolean;
   userRating?: number | null;
-  averageCommunityRating?: number; // Nieuw veld
-  communityRatingCount?: number; // Nieuw veld
+  averageCommunityRating?: number;
+  communityRatingCount?: number;
   searchTerms?: string[];
 }
 
@@ -40,13 +40,33 @@ export interface Film {
 export class FilmService {
   private apiUrl = `${environment.apiUrl}/films`;
 
+  private filmsCache: Film[] | null = null;
+
   constructor(private http: HttpClient) {}
 
   getAllFilms(): Observable<Film[]> {
-    return this.http.get<Film[]>(this.apiUrl);
+    if (this.filmsCache) {
+      return of(this.filmsCache);
+    }
+
+    return this.http.get<Film[]>(this.apiUrl).pipe(
+      tap((films) => {
+        this.filmsCache = films;
+      })
+    );
   }
 
   getFilmById(id: string): Observable<Film> {
+    const cachedFilm = this.filmsCache?.find((film) => film.id === Number(id));
+
+    if (cachedFilm) {
+      return of(cachedFilm);
+    }
+
     return this.http.get<Film>(`${this.apiUrl}/${id}`);
+  }
+
+  clearCache(): void {
+    this.filmsCache = null;
   }
 }
