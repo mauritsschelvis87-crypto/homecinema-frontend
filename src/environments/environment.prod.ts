@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:26856/api',
+  apiUrl: 'https://webshop-films-backend-2.onrender.com/api',
   devSession: {
     enabled: false,
     email: '',
