@@ -22,6 +22,7 @@ export class ExploreComponent implements AfterViewInit {
   ];
 
   private isScrolling = false;
+  private readonly mobileBreakpoint = 768;
 
   constructor(private mediaAssetsService: MediaAssetsService) {
     this.mediaAssetsService.getMediaAssets().subscribe((assets) => {
@@ -33,7 +34,13 @@ export class ExploreComponent implements AfterViewInit {
   onWheel(event: WheelEvent) {
     if (this.isScrolling) return;
 
-    if (event.deltaY > 0 && this.currentIndex < this.sections.length - 1) {
+    if (!this.isMobileView()) {
+      event.preventDefault();
+    }
+
+    const targets = this.getScrollTargets();
+
+    if (event.deltaY > 0 && this.currentIndex < targets.length - 1) {
       this.currentIndex++;
       this.scrollToCurrentSection();
     } else if (event.deltaY < 0 && this.currentIndex > 0) {
@@ -47,7 +54,7 @@ export class ExploreComponent implements AfterViewInit {
   }
 
   scrollDown(): void {
-    if (this.currentIndex < this.sections.length - 1) {
+    if (this.currentIndex < this.getScrollTargets().length - 1) {
       this.currentIndex++;
       this.scrollToCurrentSection();
     }
@@ -62,15 +69,8 @@ export class ExploreComponent implements AfterViewInit {
 
   private scrollToCurrentSection(): void {
     this.isScrolling = true;
-
-    const sectionClass = this.sections[this.currentIndex];
-    let element: Element | null;
-
-    if (sectionClass === 'footer') {
-      element = document.querySelector('footer.site-footer');
-    } else {
-      element = document.querySelector(`section.${sectionClass}`);
-    }
+    const targets = this.getScrollTargets();
+    const element = targets[this.currentIndex] ?? null;
 
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -80,7 +80,7 @@ export class ExploreComponent implements AfterViewInit {
 
     setTimeout(() => {
       this.isScrolling = false;
-    }, 700);
+    }, this.isMobileView() ? 700 : 300);
   }
 
   private triggerSlideInAnimation(): void {
@@ -110,5 +110,42 @@ export class ExploreComponent implements AfterViewInit {
   public splitBackgroundStyle(assetPath: string): Record<string, string> {
     const imageUrl = this.mediaAssets.directors[assetPath];
     return imageUrl ? { 'background-image': `url('${imageUrl}')` } : {};
+  }
+
+  private getScrollTargets(): Element[] {
+    if (this.isMobileView()) {
+      const targets: Element[] = [];
+
+      this.sections.forEach((sectionClass) => {
+        if (sectionClass === 'footer') {
+          const footer = document.querySelector('footer.site-footer');
+          if (footer) targets.push(footer);
+          return;
+        }
+
+        const section = document.querySelector(`section.${sectionClass}`);
+        const left = section?.querySelector('.split-left');
+        const right = section?.querySelector('.split-right');
+
+        if (left) targets.push(left);
+        if (right) targets.push(right);
+      });
+
+      return targets;
+    }
+
+    return this.sections
+      .map((sectionClass) => {
+        if (sectionClass === 'footer') {
+          return document.querySelector('footer.site-footer');
+        }
+
+        return document.querySelector(`section.${sectionClass}`);
+      })
+      .filter((element): element is Element => element !== null);
+  }
+
+  private isMobileView(): boolean {
+    return typeof window !== 'undefined' && window.innerWidth <= this.mobileBreakpoint;
   }
 }

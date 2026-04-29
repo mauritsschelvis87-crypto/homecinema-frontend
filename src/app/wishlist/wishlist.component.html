@@ -13,14 +13,14 @@
         placeholder="Search by title"
         [(ngModel)]="filters.title"
         name="title"
-        class="filter-input"
+        class="filter-input filter-input--title"
         (ngModelChange)="onFilterChange()"
       />
 
       <select
         [(ngModel)]="filters.country"
         name="country"
-        class="filter-select"
+        class="filter-select filter-select--country"
         (change)="onFilterChange()"
       >
         <option value="">Country</option>
@@ -32,7 +32,7 @@
       <select
         [(ngModel)]="filters.region"
         name="region"
-        class="filter-select"
+        class="filter-select filter-select--region"
         (change)="onFilterChange()"
       >
         <option value="">Region</option>
@@ -44,7 +44,7 @@
       <select
         [(ngModel)]="filters.director"
         name="director"
-        class="filter-select"
+        class="filter-select filter-select--director"
         (change)="onFilterChange()"
       >
         <option value="">Director</option>
@@ -56,7 +56,7 @@
       <select
         [(ngModel)]="filters.year"
         name="year"
-        class="filter-select"
+        class="filter-select filter-select--year"
         (change)="onFilterChange()"
       >
         <option value="">Year</option>
@@ -68,7 +68,7 @@
       <select
         [(ngModel)]="filters.type"
         name="type"
-        class="filter-select"
+        class="filter-select filter-select--format"
         (change)="onFilterChange()"
       >
         <option value="">Format</option>
@@ -80,7 +80,7 @@
       <select
         [(ngModel)]="filters.brand"
         name="brand"
-        class="filter-select"
+        class="filter-select filter-select--label"
         (change)="onFilterChange()"
       >
         <option value="">Label</option>
@@ -91,7 +91,7 @@
 
       <button
         type="button"
-        class="filter-button"
+        class="filter-button filter-button--reset"
         (click)="resetFilters()"
       >
         Reset
@@ -99,7 +99,7 @@
 
       <button
         type="button"
-        class="filter-icon-button"
+        class="filter-icon-button filter-icon-button--view"
         (click)="toggleView()"
         [attr.aria-label]="showGrid ? 'Switch to list view' : 'Switch to grid view'"
         title="Toggle view"

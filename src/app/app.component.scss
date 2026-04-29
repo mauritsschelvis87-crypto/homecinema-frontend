@@ -63,17 +63,21 @@
 }
 
 @media (max-width: 768px) {
-  .app-logo {
-    top: 0.2rem;
-    left: 0.2rem;
-    width: min(230px, calc(100vw - 0.4rem));
-    height: 48px;
+  .main-content {
+    overflow-x: hidden;
 
-    img {
-      top: -39px;
-      left: -80px;
-      height: 132px;
+    &.shifted,
+    &.homepage-route.shifted,
+    &.menu-align-route.shifted,
+    &.special-edition-route.shifted,
+    &.director-detail-route.shifted {
+      transform: none;
+      width: 100%;
     }
+  }
+
+  .app-logo {
+    display: none;
   }
 }
 

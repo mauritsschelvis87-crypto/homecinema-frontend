@@ -122,8 +122,19 @@
 
 @media (max-width: 768px) {
   :host-context(.main-content.explore-route.shifted) .split-container {
-    width: calc(100% - 205px);
-    max-width: calc(100% - 205px);
+    width: 100%;
+    max-width: 100%;
     transform: none;
+  }
+
+  .split-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .split-left,
+  .split-right {
+    min-height: 100vh;
   }
 }

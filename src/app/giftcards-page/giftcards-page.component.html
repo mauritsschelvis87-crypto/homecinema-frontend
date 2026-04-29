@@ -15,7 +15,7 @@
       <select
         [(ngModel)]="filters.currency"
         name="currency"
-        class="filter-select"
+        class="filter-select filter-select--currency"
         (change)="onFilterChange()"
       >
         <option value="">Currency</option>
@@ -26,7 +26,7 @@
       <select
         [(ngModel)]="filters.category"
         name="category"
-        class="filter-select"
+        class="filter-select filter-select--category"
         (change)="onFilterChange()"
       >
         <option value="">Category</option>
@@ -37,7 +37,7 @@
       <select
         [(ngModel)]="filters.format"
         name="format"
-        class="filter-select"
+        class="filter-select filter-select--format"
         (change)="onFilterChange()"
       >
         <option value="">Format</option>
@@ -46,13 +46,13 @@
         <option value="4K UHD">4K UHD</option>
       </select>
 
-      <button type="button" class="filter-button" (click)="resetFilters()">
+      <button type="button" class="filter-button filter-button--reset" (click)="resetFilters()">
         Reset
       </button>
 
       <button
         type="button"
-        class="filter-icon-button"
+        class="filter-icon-button filter-icon-button--view"
         (click)="toggleView()"
         [attr.aria-label]="showGrid ? 'Switch to list view' : 'Switch to grid view'"
         title="Toggle view"

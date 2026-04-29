@@ -19,37 +19,39 @@
 
       <tbody>
       <tr *ngFor="let item of recommendations; trackBy: trackByFilmId">
-        <td class="product-info">
-          <a
-            [routerLink]="getFilmLink(item.film)"
-            [fragment]="getFilmFragment(item.film)"
-            class="product-image-link"
-          >
-            <span class="product-image-wrap">
-              <img
-                [src]="item.film.imageUrl"
-                [alt]="item.film.title"
-                class="product-image"
-                [class.product-image--cover]="shouldUseCoverFit(item.film)"
-              />
-            </span>
-          </a>
+        <td class="product-cell" data-label="Product">
+          <div class="product-info">
+            <a
+              [routerLink]="getFilmLink(item.film)"
+              [fragment]="getFilmFragment(item.film)"
+              class="product-image-link"
+            >
+              <span class="product-image-wrap">
+                <img
+                  [src]="item.film.imageUrl"
+                  [alt]="item.film.title"
+                  class="product-image"
+                  [class.product-image--cover]="shouldUseCoverFit(item.film)"
+                />
+              </span>
+            </a>
 
-          <div class="product-details">
-            <div class="product-title">{{ truncateText(item.film.title, titleMaxLength) }}</div>
-            <div class="product-meta">
-              <span>{{ truncateText(item.film.director, directorMaxLength) }}</span>
-              <span>{{ item.film.country }}</span>
-              <span>{{ item.film.year }}</span>
+            <div class="product-details">
+              <div class="product-title">{{ truncateText(item.film.title, titleMaxLength) }}</div>
+              <div class="product-meta">
+                <span>{{ truncateText(item.film.director, directorMaxLength) }}</span>
+                <span>{{ item.film.country }}</span>
+                <span>{{ item.film.year }}</span>
+              </div>
             </div>
           </div>
         </td>
 
-        <td class="reason-cell">
+        <td class="reason-cell" data-label="Reason">
           <div class="product-reason">{{ item.reason }}</div>
         </td>
 
-        <td class="rating-cell">
+        <td class="rating-cell" data-label="Community rating">
           <div class="community-rating" aria-label="Community rating">
             <span
               *ngFor="let star of ratingStars"

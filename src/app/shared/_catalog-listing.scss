@@ -49,8 +49,8 @@
     }
 
     @media (max-width: 600px) {
-      grid-template-columns: 1fr;
-      gap: 20px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
   }
 
@@ -69,6 +69,10 @@
 
     @media (max-width: 992px) {
       max-width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      min-height: 284px;
     }
 
     &:hover,
@@ -124,6 +128,10 @@
     color: black;
     box-sizing: border-box;
     min-width: 0; /* Voor ellipsis */
+
+    @media (max-width: 600px) {
+      padding: 8px;
+    }
   }
 
   .film-title {
@@ -136,7 +144,7 @@
     width: 100%;
 
     @media (max-width: 600px) {
-      font-size: 1.1rem;
+      font-size: 0.98rem;
     }
   }
 
@@ -156,7 +164,7 @@
     }
 
     @media (max-width: 600px) {
-      font-size: 0.9rem;
+      font-size: 0.82rem;
     }
   }
 
@@ -168,6 +176,11 @@
     margin-top: -4px;
     padding: 0 0 12px;
     background-color: #ececec;
+
+    @media (max-width: 600px) {
+      min-height: 26px;
+      padding: 0 0 8px;
+    }
   }
 
   .filter-bar {
@@ -282,7 +295,69 @@
 
   @media (max-width: 600px) {
     .filter-bar {
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .filter-input,
+    .filter-select,
+    .filter-button,
+    .filter-icon-button {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    .filter-input--title {
+      order: 1;
+      grid-column: 1 / -1;
+    }
+
+    .filter-select--director {
+      order: 2;
+      grid-column: span 2;
+    }
+
+    .filter-select--country {
+      order: 3;
+      grid-column: span 2;
+    }
+
+    .filter-select--year {
+      order: 4;
+      grid-column: span 2;
+    }
+
+    .filter-select--format {
+      order: 5;
+      grid-column: span 2;
+    }
+
+    .filter-select--region {
+      order: 6;
+      grid-column: span 2;
+    }
+
+    .filter-select--label {
+      order: 7;
+      grid-column: span 2;
+    }
+
+    .filter-button--reset {
+      order: 8;
+      grid-column: span 3;
+    }
+
+    .filter-icon-button--view {
+      order: 9;
+      grid-column: span 3;
+      display: inline-flex;
+      width: 100%;
+      min-width: 0;
     }
   }
 
@@ -395,6 +470,11 @@
     padding: 0;
     cursor: pointer;
     transition: transform 0.2s ease;
+
+    @media (max-width: 600px) {
+      width: 1rem;
+      height: 1rem;
+    }
 
     &:hover,
     &:focus {
