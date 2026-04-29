@@ -441,3 +441,40 @@ Application bundle generation failed. [0.001 seconds] - 2026-04-29T15:09:45.348Z
         ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [39m[22m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                        [2m | [22m[36m889.37 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                      [2m | [22m  [36m5.74 kB[39m[2m | [22m
+[32mchunk-XISFOMD3.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m4.46 kB[39m[2m | [22m
+[32mchunk-BMPEUFIR.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m2.90 kB[39m[2m | [22m
+[32mchunk-CZJLB7T5.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m1.08 kB[39m[2m | [22m
+[32mchunk-Q5T4TILT.js[39m  [2m | [22m[2m-[22m                           [2m | [22m[36m409 bytes[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                   [2m | [22m[36m140 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m               [2m | [22m[1m904.11 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m
+[32mchunk-GQ4DWZE7.js[39m  [2m | [22m[2morder-confirmation-component[22m[2m | [22m [36m12.32 kB[39m[2m | [22m
+[32mchunk-CNNHP5RD.js[39m  [2m | [22m[2mlogin-component[22m             [2m | [22m  [36m7.56 kB[39m[2m | [22m
+[32mchunk-K6TDL4M3.js[39m  [2m | [22m[2msplash-screen-component[22m     [2m | [22m  [36m3.35 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.966 seconds] - 2026-04-29T17:53:28.717Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m[2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m [2m | [22m[36m893.40 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.305 seconds] - 2026-04-29T17:53:48.535Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m[2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m [2m | [22m[36m893.54 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.386 seconds] - 2026-04-29T17:55:00.568Z
+
+Component update sent to client(s).
