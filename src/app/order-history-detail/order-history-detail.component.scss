@@ -167,3 +167,121 @@
     align-items: flex-start;
   }
 }
+
+@media (max-width: 768px) {
+  .top-spacing {
+    height: 24px !important;
+  }
+
+  .order-detail-container.page-shell {
+    width: calc(100% - 20px);
+    min-height: auto;
+    margin-top: 0 !important;
+    margin-bottom: 72px;
+    padding: 12px;
+  }
+
+  .items-scroll {
+    max-height: none;
+    overflow: visible;
+    margin-bottom: 20px;
+    padding-right: 0;
+  }
+
+  .order-table,
+  .order-table colgroup,
+  .order-table thead,
+  .order-table tbody,
+  .order-table tr,
+  .order-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .order-table colgroup,
+  .order-table thead {
+    display: none;
+  }
+
+  .order-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .order-table tr {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .order-table td {
+    padding: 0;
+    border: 0;
+    text-align: left !important;
+  }
+
+  .order-table td + td {
+    margin-top: 12px;
+  }
+
+  .order-table td.product-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .order-table td.product-info::before,
+  .order-table td:nth-child(2)::before,
+  .order-table td:nth-child(3)::before {
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .order-table td.product-info::before {
+    content: "Product";
+  }
+
+  .order-table td:nth-child(2)::before {
+    content: "Quantity";
+  }
+
+  .order-table td:nth-child(3)::before {
+    content: "Total";
+  }
+
+  .product-image-wrap {
+    width: 72px;
+    min-width: 72px;
+    height: 92px;
+  }
+
+  .product-details {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .product-title,
+  .product-brand,
+  .product-type {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .purchase-summary {
+    align-items: stretch;
+    max-width: 100%;
+    margin-bottom: 0;
+  }
+
+  .summary-line {
+    text-align: left;
+  }
+}
