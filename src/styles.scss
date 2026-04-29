@@ -204,8 +204,19 @@ html, body {
     height: 60px !important;
   }
 
-  app-root .main-content:not(.homepage-route):not(.explore-route) .shopping-page-container {
+  app-root .main-content:not(.homepage-route):not(.explore-route) app-shopping-page .shopping-page-container,
+  app-root .main-content:not(.homepage-route):not(.explore-route) app-wishlist .shopping-page-container,
+  app-root .main-content:not(.homepage-route):not(.explore-route) app-collection .shopping-page-container,
+  app-root .main-content:not(.homepage-route):not(.explore-route) app-giftcards-page .shopping-page-container {
     padding-top: 60px !important;
+  }
+
+  app-root .main-content:not(.homepage-route):not(.explore-route) app-order-history-detail .top-spacing {
+    height: 40px !important;
+  }
+
+  app-root .main-content:not(.homepage-route):not(.explore-route) app-account .shopping-page-container {
+    padding-top: 0 !important;
   }
 
   app-root .main-content:not(.homepage-route):not(.explore-route) .filters-container,

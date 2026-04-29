@@ -1,6 +1,9 @@
-<div class="top-spacing"></div>
+<div class="top-spacing" [class.top-spacing--catalog]="cartItems.length === 0"></div>
 
-<div class="shopping-page-container">
+<div
+  class="shopping-page-container"
+  [class.shopping-page-container--empty]="cartItems.length === 0"
+>
   <div class="cart-container page-shell" *ngIf="cartItems.length > 0">
     <ng-container>
       <div class="items-scroll">
@@ -138,11 +141,12 @@
   </div>
 
   <div
-    class="wishlist-empty empty-cart-shell page-shell"
+    class="wishlist-empty cart-container"
     *ngIf="cartItems.length === 0"
     aria-live="polite"
   >
     <h2 class="empty-title">Your cart is empty</h2>
-    <a routerLink="/shopping" class="empty-button hero-button">Shop Now</a>
+    <p class="empty-text">You haven’t added any films to your cart yet.</p>
+    <a routerLink="/shopping" class="empty-button">Browse Films</a>
   </div>
 </div>

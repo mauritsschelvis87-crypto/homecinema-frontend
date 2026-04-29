@@ -170,13 +170,13 @@
 
 @media (max-width: 768px) {
   .top-spacing {
-    height: 24px !important;
+    height: 40px !important;
   }
 
   .order-detail-container.page-shell {
     width: calc(100% - 20px);
     min-height: auto;
-    margin-top: 0 !important;
+    margin-top: 2px !important;
     margin-bottom: 72px;
     padding: 12px;
   }

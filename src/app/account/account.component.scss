@@ -231,12 +231,12 @@ select.ng-invalid {
 
 @media (max-width: 768px) {
   .top-spacing {
-    height: 24px !important;
+    height: 60px !important;
   }
 
   .shopping-page-container {
     padding-top: 0 !important;
-    margin-top: -8px;
+    margin-top: 0;
   }
 
   .account-shell {
@@ -247,7 +247,7 @@ select.ng-invalid {
 
 @media (max-width: 600px) {
   .shopping-page-container {
-    margin-top: -10px;
+    margin-top: 0;
   }
 
   .account-grid {
