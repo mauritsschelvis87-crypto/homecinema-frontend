@@ -469,6 +469,10 @@
     display: block;
   }
 
+  .shopping-page-container--empty {
+    padding-top: 60px !important;
+  }
+
   .cart-container.page-shell {
     width: calc(100% - 20px);
     min-height: auto;
