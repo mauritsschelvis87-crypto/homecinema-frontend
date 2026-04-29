@@ -64,6 +64,8 @@
 
 @media (max-width: 768px) {
   .main-content {
+    --page-top-spacing: 72px;
+    --page-surface-gap: 0px;
     overflow-x: hidden;
 
     &.shifted,
@@ -73,6 +75,12 @@
     &.director-detail-route.shifted {
       transform: none;
       width: 100%;
+    }
+
+    &.homepage-route,
+    &.explore-route {
+      --page-top-spacing: 86px;
+      --page-surface-gap: 2px;
     }
   }
 

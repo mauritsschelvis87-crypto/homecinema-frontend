@@ -199,6 +199,28 @@ html, body {
   a {
     touch-action: manipulation;
   }
+
+  app-root .main-content:not(.homepage-route):not(.explore-route) .top-spacing {
+    height: 60px !important;
+  }
+
+  app-root .main-content:not(.homepage-route):not(.explore-route) .shopping-page-container {
+    padding-top: 60px !important;
+  }
+
+  app-root .main-content:not(.homepage-route):not(.explore-route) .filters-container,
+  app-root .main-content:not(.homepage-route):not(.explore-route) .account-shell,
+  app-root .main-content:not(.homepage-route):not(.explore-route) .cart-container,
+  app-root .main-content:not(.homepage-route):not(.explore-route) .director-intro,
+  app-root .main-content:not(.homepage-route):not(.explore-route) .confirmation-card,
+  app-root .main-content:not(.homepage-route):not(.explore-route) .page-content {
+    margin-top: 0 !important;
+  }
+
+  app-root .main-content:not(.homepage-route):not(.explore-route) app-checkout,
+  app-root .main-content:not(.homepage-route):not(.explore-route) .page-gray-screen {
+    padding-top: 60px !important;
+  }
 }
 
 @media (max-width: 480px) {

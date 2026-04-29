@@ -356,7 +356,7 @@ a.nav-text-link.nav-text-link--active {
   .hamburger-menu {
     position: fixed;
     top: calc(3.48rem - 1px);
-    right: 0.15rem;
+    right: calc(0.15rem - 1px);
     left: 0;
     width: auto;
     max-width: none;
@@ -379,7 +379,7 @@ a.nav-text-link.nav-text-link--active {
   .search-slider {
     position: fixed;
     top: calc(3.48rem - 1px);
-    right: 0.25rem;
+    right: calc(0.25rem - 1px);
     left: 0;
     width: auto;
     max-width: none;
@@ -475,7 +475,7 @@ a.nav-text-link.nav-text-link--active {
 
   .hamburger-menu {
     top: calc(3.28rem - 1px);
-    right: 0.15rem;
+    right: calc(0.15rem - 1px);
     left: 0;
     height: calc(100vh - 3.43rem);
     padding: calc(1rem - 1px) 1rem 1.25rem;
@@ -483,7 +483,7 @@ a.nav-text-link.nav-text-link--active {
 
   .search-slider {
     top: calc(3.28rem - 1px);
-    right: 0.15rem;
+    right: calc(0.15rem - 1px);
     left: 0;
     height: calc(100vh - 3.43rem);
     padding: calc(1rem - 1px) 0.75rem 1.25rem;
