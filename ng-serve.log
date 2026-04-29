@@ -223,3 +223,221 @@ Page reload sent to client(s).
 Application bundle generation complete. [0.535 seconds] - 2026-04-29T15:00:08.873Z
 
 Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.544 seconds] - 2026-04-29T15:07:40.679Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.ts:3:28:
+[37m      3 │ import { environment } from [32m'../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/interceptors/auth-token.interceptor.ts:2:28:
+[37m      2 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/interceptors/loading.interceptor.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/account.service.ts:6:28:
+[37m      6 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/auth.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/boxset.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/dev-session.service.ts:3:28:
+[37m      3 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/director.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/film.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/gift-code.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/gift-movie.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/login.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/media-assets.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/order.service.ts:5:28:
+[37m      5 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/wishlist.service.ts:5:28:
+[37m      5 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.001 seconds] - 2026-04-29T15:09:45.348Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.ts:3:28:
+[37m      3 │ import { environment } from [32m'../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/interceptors/auth-token.interceptor.ts:2:28:
+[37m      2 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/interceptors/loading.interceptor.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/account.service.ts:6:28:
+[37m      6 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/auth.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/boxset.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/dev-session.service.ts:3:28:
+[37m      3 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/director.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/film.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/gift-code.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/gift-movie.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/login.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/media-assets.service.ts:4:28:
+[37m      4 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/order.service.ts:5:28:
+[37m      5 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../environments/environment' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/wishlist.service.ts:5:28:
+[37m      5 │ import { environment } from [32m'../../environments/environment'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
