@@ -372,8 +372,8 @@
     grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
     grid-template-areas:
       "title title"
-      "image share"
       "status status"
+      "image share"
       "specs specs"
       "media media";
     column-gap: 16px;
@@ -406,7 +406,7 @@
     grid-area: status;
     width: 100%;
     max-width: 100%;
-    margin: 0;
+    margin: 0 0 6px;
   }
 
   .collection-status {
@@ -485,6 +485,7 @@
   .btn-collection {
     width: 100%;
     min-width: 0;
+    min-height: 44px;
   }
 
   .btn-cart,
@@ -494,6 +495,11 @@
 
   .btn-collection {
     grid-column: 1 / -1;
+  }
+
+  .btn-wishlist.in-wishlist,
+  .btn-collection.in-collection {
+    width: 100%;
   }
 
   .media-slider-wrapper {

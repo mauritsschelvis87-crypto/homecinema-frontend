@@ -251,29 +251,82 @@
 
 @media (max-width: 768px) {
   .page-content {
+    display: grid;
+    grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+    grid-template-areas:
+      "title title"
+      "image share"
+      "specs specs"
+      "media media";
     width: calc(100% - 32px);
-    padding: 16px;
+    padding: 16px 14px 20px;
+    column-gap: 16px;
+    row-gap: 10px;
   }
 
   .film-page-title-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    display: contents;
 
     .film-page-title {
-      margin-left: 0;
+      grid-area: title;
+      margin: 0 0 8px;
       font-size: 2rem;
+      line-height: 1.15;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
   }
 
-  .boxset-subtitle {
-    margin-left: 0;
+  .film-details-wrapper {
+    display: contents;
+    margin-bottom: 0;
+  }
+
+  .left-side-wrapper {
+    grid-area: image;
+    width: 100%;
+    max-width: 100%;
+    align-items: flex-start;
+  }
+
+  .film-image-container {
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+    margin: 0;
+  }
+
+  .film-image-frame {
+    width: min(56vw, 180px);
+    max-width: 180px;
+  }
+
+  .film-image {
+    max-width: 180px;
+  }
+
+  .share-icons-inline {
+    grid-area: share;
+    align-self: start;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.9rem;
+    margin: 0;
+  }
+
+  .film-page-title-row .share-icons-inline a {
+    font-size: 2.25rem;
+    line-height: 1;
   }
 
   .right-side-wrapper {
+    grid-area: specs;
     width: 100%;
     height: auto !important;
-    margin-top: 20px;
+    margin-top: 0;
   }
 
   .specs-container {
@@ -283,7 +336,51 @@
 
   .actions {
     position: static;
-    margin-top: 30px;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    justify-content: stretch;
+    margin-top: 24px;
+  }
+
+  .btn-cart,
+  .btn-wishlist,
+  .btn-collection,
+  .btn-wishlist.in-wishlist,
+  .btn-collection.in-collection {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+  }
+
+  .btn-collection {
+    grid-column: 1 / -1;
+  }
+
+  .media-section {
+    grid-area: media;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content {
+    grid-template-columns: minmax(0, 168px) minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 14px 12px 18px;
+  }
+
+  .film-page-title-row .film-page-title {
+    font-size: 1.38rem;
+  }
+
+  .film-image-frame {
+    width: min(54vw, 168px);
+    max-width: 168px;
+  }
+
+  .film-image {
+    max-width: 168px;
   }
 }
