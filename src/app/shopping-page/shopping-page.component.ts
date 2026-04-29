@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Film, FilmService }     from '../services/film.service';
+import { Film, FilmService, MOCK_FILM, MOCK_FILM_ID }     from '../services/film.service';
 import { ActivatedRoute }        from '@angular/router';
 import { RouterLink }            from '@angular/router';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
@@ -70,9 +70,13 @@ export class ShoppingPageComponent implements OnInit {
     this.filmService.getAllFilms().subscribe({
       next: data => {
         // sort by title ignoring leading “The ”
-        this.allFilms = data.sort((a,b) =>
+        const sortedFilms = [...data].sort((a,b) =>
           this.normalizeTitle(a.title).localeCompare(this.normalizeTitle(b.title))
         );
+        if (!sortedFilms.some((film) => film.id === MOCK_FILM_ID)) {
+          sortedFilms.splice(1, 0, MOCK_FILM);
+        }
+        this.allFilms = sortedFilms;
         // extract master filter sets
         const cSet = new Set<string>();
         const dSet = new Set<string>();
@@ -199,7 +203,10 @@ export class ShoppingPageComponent implements OnInit {
 
   resetVisibleFilms() {
     this.currentPage  = 1;
-    this.visibleFilms = this.filteredFilms.slice(0,this.batchSize);
+    const firstBatch = this.filteredFilms.slice(0, this.batchSize - 1);
+    this.visibleFilms = firstBatch.some((film) => film.id === MOCK_FILM_ID)
+      ? this.filteredFilms.slice(0, this.batchSize)
+      : [MOCK_FILM, ...firstBatch];
   }
 
   loadMore() {

@@ -17,6 +17,10 @@
   padding: 30px;
   margin-top: var(--page-surface-gap);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 1100px) {
+    width: 100%;
+  }
 }
 
 
@@ -29,10 +33,9 @@
   .film-page-title {
     font-size: 2.5rem;
     font-weight: 700;
-    margin: 0;
+    margin: 0 0 0 20px;
     color: black;
     flex-grow: 1;
-    margin-left: 20px;
   }
 
   .share-icons-inline {
@@ -151,7 +154,6 @@
   display: flex;
   gap: 40px;
   align-items: flex-start;
-  margin-bottom: 30px;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -260,7 +262,7 @@
 
   @media (max-width: 768px) {
     position: static;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 30px;
   }
 }
@@ -392,7 +394,7 @@
     grid-area: title;
     width: 100%;
     max-width: 100%;
-    margin: 0 0 10px;
+    margin: 0 0 14px;
     font-size: 1.6rem;
     line-height: 1.15;
     white-space: normal;
@@ -466,7 +468,7 @@
   .specs-container {
     width: 100%;
     max-width: 100%;
-    margin-top: -12px;
+    margin-top: -14px;
   }
 
   .actions {

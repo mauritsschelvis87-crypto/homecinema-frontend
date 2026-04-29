@@ -91,13 +91,34 @@
   outline: none;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 769px) {
   .confirmation-card {
+    width: min(100%, 1050px);
+    padding: 40px;
+    border: none;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .confirmation-page {
+    padding: 0 10px 72px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .confirmation-card {
+    width: 100%;
+    max-width: 100%;
     padding: 40px 24px;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .back-link {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }

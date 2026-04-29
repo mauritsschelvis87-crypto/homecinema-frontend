@@ -112,6 +112,14 @@ export class ExploreComponent implements AfterViewInit {
     return imageUrl ? { 'background-image': `url('${imageUrl}')` } : {};
   }
 
+  public hasMoreTargets(): boolean {
+    return this.currentIndex < this.getLastArrowTargetIndex();
+  }
+
+  public isLastTarget(): boolean {
+    return this.currentIndex >= this.getLastArrowTargetIndex();
+  }
+
   private getScrollTargets(): Element[] {
     if (this.isMobileView()) {
       const targets: Element[] = [];
@@ -147,5 +155,9 @@ export class ExploreComponent implements AfterViewInit {
 
   private isMobileView(): boolean {
     return typeof window !== 'undefined' && window.innerWidth <= this.mobileBreakpoint;
+  }
+
+  private getLastArrowTargetIndex(): number {
+    return Math.max(0, this.getScrollTargets().length - 2);
   }
 }

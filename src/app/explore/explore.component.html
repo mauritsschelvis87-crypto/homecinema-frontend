@@ -59,7 +59,7 @@
 </footer>
 
 
-<div class="bottom-controls" *ngIf="currentIndex < sections.length - 1">
+<div class="bottom-controls" *ngIf="hasMoreTargets()">
   <button
     class="scroll-arrow-btn"
     aria-label="Scroll up"
@@ -87,7 +87,7 @@
     class="scroll-arrow-btn"
     aria-label="Scroll down"
     (click)="scrollDown()"
-    [disabled]="currentIndex >= sections.length - 1"
+    [disabled]="isLastTarget()"
   >
     <svg
       width="40"

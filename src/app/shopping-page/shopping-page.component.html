@@ -96,10 +96,6 @@
     </form>
   </section>
 
-  <section class="no-results-section" *ngIf="!loading && filteredFilms.length === 0" aria-live="polite">
-    No films found.
-  </section>
-
   <section
     *ngIf="!loading && visibleFilms.length > 0"
     [ngClass]="{'film-grid': showGrid, 'film-list': !showGrid}"
