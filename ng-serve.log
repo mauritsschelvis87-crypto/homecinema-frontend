@@ -176,3 +176,50 @@ Component update sent to client(s).
 Application bundle generation complete. [0.378 seconds] - 2026-04-29T14:57:41.829Z
 
 Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.621 seconds] - 2026-04-29T14:58:48.261Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../services/film.service"' has no exported member 'MOCK_FILM'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shopping-page/shopping-page.component.ts:2:28:
+[37m      2 │ import { Film, FilmService, [32mMOCK_FILM[37m, MOCK_FILM_ID }     from '../...
+        ╵                             [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../services/film.service"' has no exported member 'MOCK_FILM_ID'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shopping-page/shopping-page.component.ts:2:39:
+[37m      2 │ ..., FilmService, MOCK_FILM, [32mMOCK_FILM_ID[37m }     from '../services/f...
+        ╵                              [32m~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                        [2m | [22m[36m888.91 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                      [2m | [22m  [36m5.74 kB[39m[2m | [22m
+[32mchunk-727ZXXHW.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m4.46 kB[39m[2m | [22m
+[32mchunk-USKZMO7R.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m2.90 kB[39m[2m | [22m
+[32mchunk-CZJLB7T5.js[39m  [2m | [22m[2m-[22m                           [2m | [22m  [36m1.08 kB[39m[2m | [22m
+[32mchunk-YQ5JZSZD.js[39m  [2m | [22m[2m-[22m                           [2m | [22m[36m409 bytes[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                   [2m | [22m[36m140 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m               [2m | [22m[1m903.64 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m
+[32mchunk-3PNAK2GL.js[39m  [2m | [22m[2morder-confirmation-component[22m[2m | [22m [36m12.32 kB[39m[2m | [22m
+[32mchunk-APPHUGC3.js[39m  [2m | [22m[2mlogin-component[22m             [2m | [22m  [36m7.56 kB[39m[2m | [22m
+[32mchunk-K6TDL4M3.js[39m  [2m | [22m[2msplash-screen-component[22m     [2m | [22m  [36m3.35 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.458 seconds] - 2026-04-29T14:58:58.752Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m[2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m [2m | [22m[36m889.11 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.535 seconds] - 2026-04-29T15:00:08.873Z
+
+Component update sent to client(s).
