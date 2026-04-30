@@ -23,7 +23,7 @@ import { Boxset, BoxsetService } from '../services/boxset.service';
 })
 export class BoxsetDetailComponent implements OnInit, AfterViewInit {
   readonly backendWakeupMessage = 'The backend might take a moment to wake up at first load....';
-  readonly loadingMessage = 'Loading';
+  readonly pageLoadingMessage = 'Loading the boxset page might take a bit longer.';
   readonly showDesktopBackendStatus = typeof window === 'undefined' || window.innerWidth > 768;
   wishlistHoverId: number | null = null;
   collectionHoverId: number | null = null;

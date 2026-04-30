@@ -229,7 +229,7 @@ html, body {
   }
 
   app-root .main-content:not(.homepage-route):not(.explore-route) app-checkout,
-  app-root .main-content:not(.homepage-route):not(.explore-route) .page-gray-screen {
+  app-root .main-content:not(.homepage-route):not(.explore-route):not(.director-detail-route) .page-gray-screen {
     padding-top: 60px !important;
   }
 }

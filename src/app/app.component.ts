@@ -1,3 +1,4 @@
+import { ViewportScroller, NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { environment } from '../environments/environment';
@@ -12,7 +13,6 @@ import translationsES from '../locale/es.json';
 import { RouterModule } from '@angular/router';
 import { CartService } from './services/cart.service';
 import { Subscription, switchMap } from 'rxjs';
-import { NgIf } from '@angular/common';
 import { CatalogSessionService } from './services/catalog-session.service';
 import { DevSessionService } from './services/dev-session.service';
 import { LoadingMessageComponent } from './loading-message/loading-message.component';
@@ -38,11 +38,13 @@ export class AppComponent implements OnInit, OnDestroy {
   public cartAnimation = false;
   private cartSub?: Subscription;
   private appBootstrapSub?: Subscription;
+  private routerEventsSub?: Subscription;
 
   constructor(
     private translate: TranslateService,
     private cartService: CartService,
     private router: Router,
+    private viewportScroller: ViewportScroller,
     private catalogSessionService: CatalogSessionService,
     private devSessionService: DevSessionService,
     private startupPreloadService: StartupPreloadService
@@ -55,6 +57,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     this.appBootstrapSub = this.devSessionService.ensureDevelopmentSession().pipe(
       switchMap(() => this.catalogSessionService.ensureCatalogSession()),
       switchMap(() => this.startupPreloadService.warmup())
@@ -69,15 +75,61 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isSpecialEditionRoute = this.isSpecialEditionPageRoute(this.router.url);
     this.isDirectorDetailRoute = this.isDirectorPageRoute(this.router.url);
 
-    this.router.events.subscribe(event => {
+    this.routerEventsSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isHomepage = this.isHomepageRoute(event.urlAfterRedirects);
         this.isExploreRoute = this.isExplorePageRoute(event.urlAfterRedirects);
         this.useMenuAlignment = this.shouldUseMenuAlignment(event.urlAfterRedirects);
         this.isSpecialEditionRoute = this.isSpecialEditionPageRoute(event.urlAfterRedirects);
         this.isDirectorDetailRoute = this.isDirectorPageRoute(event.urlAfterRedirects);
-        window.scrollTo(0, 0);
+        this.scheduleNavigationScrollReset(event.urlAfterRedirects);
       }
+    });
+  }
+
+  private scheduleNavigationScrollReset(url: string): void {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const shouldResetViewport = !url.includes('#');
+    const reset = () => {
+      if (shouldResetViewport) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+
+      this.resetScrollableContainers();
+    };
+
+    reset();
+    queueMicrotask(reset);
+    requestAnimationFrame(() => {
+      reset();
+      requestAnimationFrame(reset);
+    });
+    window.setTimeout(reset, 0);
+    window.setTimeout(reset, 120);
+  }
+
+  private resetScrollableContainers(): void {
+    const scrollableElements = Array.from(document.querySelectorAll<HTMLElement>('*')).filter((element) => {
+      if (element.scrollTop === 0 && element.scrollLeft === 0) {
+        return false;
+      }
+
+      const styles = window.getComputedStyle(element);
+      const canScrollY = /(auto|scroll)/.test(styles.overflowY) && element.scrollHeight > element.clientHeight;
+      const canScrollX = /(auto|scroll)/.test(styles.overflowX) && element.scrollWidth > element.clientWidth;
+
+      return canScrollY || canScrollX;
+    });
+
+    scrollableElements.forEach((element) => {
+      element.scrollTop = 0;
+      element.scrollLeft = 0;
     });
   }
 
@@ -137,5 +189,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.cartSub?.unsubscribe();
     this.appBootstrapSub?.unsubscribe();
+    this.routerEventsSub?.unsubscribe();
   }
 }

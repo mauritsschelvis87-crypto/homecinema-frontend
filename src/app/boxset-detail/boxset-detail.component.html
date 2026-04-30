@@ -1,6 +1,6 @@
 <div class="page-gray-screen">
   <div class="boxset-status" *ngIf="loading || (error && showDesktopBackendStatus)">
-    {{ loading ? (showDesktopBackendStatus ? backendWakeupMessage : loadingMessage) : backendWakeupMessage }}
+    {{ loading ? pageLoadingMessage : backendWakeupMessage }}
   </div>
   <ng-container *ngIf="!loading && !error">
     <section

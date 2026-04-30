@@ -17,7 +17,7 @@ import { forkJoin } from 'rxjs';
 })
 export class DirectorDetailComponent implements OnInit {
   readonly backendWakeupMessage = 'The backend might take a moment to wake up at first load....';
-  readonly loadingMessage = 'Loading';
+  readonly pageLoadingMessage = 'Loading the directors page might take a bit longer.';
   readonly showDesktopBackendStatus = typeof window === 'undefined' || window.innerWidth > 768;
   director: Director | undefined;
   films: Film[] = [];

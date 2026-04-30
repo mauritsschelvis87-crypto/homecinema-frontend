@@ -4,7 +4,7 @@
   <div class="director-page-container">
     @if (loading || (!loading && error && showDesktopBackendStatus)) {
       <div class="director-status">
-        {{ loading ? (showDesktopBackendStatus ? backendWakeupMessage : loadingMessage) : backendWakeupMessage }}
+        {{ loading ? pageLoadingMessage : backendWakeupMessage }}
       </div>
     }
 
