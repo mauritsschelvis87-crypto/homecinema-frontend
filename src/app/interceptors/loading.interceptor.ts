@@ -4,13 +4,10 @@ import { finalize } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoadingService } from '../services/loading.service';
 
-const LOADING_PATHS = ['/films', '/boxsets'];
-
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const loadingService = inject(LoadingService);
   const apiUrl = environment.apiUrl;
-  const isTrackedRequest =
-    req.url.startsWith(apiUrl) && LOADING_PATHS.some((path) => req.url.startsWith(`${apiUrl}${path}`));
+  const isTrackedRequest = req.method === 'GET' && req.url.startsWith(apiUrl);
 
   if (!isTrackedRequest) {
     return next(req);

@@ -11,9 +11,12 @@ import translationsFR from '../locale/fr.json';
 import translationsES from '../locale/es.json';
 import { RouterModule } from '@angular/router';
 import { CartService } from './services/cart.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { DevSessionService } from './services/dev-session.service';
+import { DirectorService } from './services/director.service';
+import { BoxsetService } from './services/boxset.service';
+import { FilmService } from './services/film.service';
 import { LoadingMessageComponent } from './loading-message/loading-message.component';
 
 @Component({
@@ -36,12 +39,16 @@ export class AppComponent implements OnInit, OnDestroy {
   public cartAnimation = false;
   private cartSub?: Subscription;
   private devSessionSub?: Subscription;
+  private catalogWarmupSub?: Subscription;
 
   constructor(
     private translate: TranslateService,
     private cartService: CartService,
     private router: Router,
-    private devSessionService: DevSessionService
+    private devSessionService: DevSessionService,
+    private filmService: FilmService,
+    private directorService: DirectorService,
+    private boxsetService: BoxsetService
   ) {
     this.initialiseTranslateService();
 
@@ -53,6 +60,14 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.devSessionSub = this.devSessionService.ensureDevelopmentSession().subscribe({
       error: err => console.error('Dev session bootstrap failed:', err),
+    });
+
+    this.catalogWarmupSub = forkJoin({
+      films: this.filmService.primeCache(),
+      directors: this.directorService.primeCache(),
+      boxsets: this.boxsetService.primeCache(),
+    }).subscribe({
+      error: err => console.error('Catalog bootstrap failed:', err),
     });
 
     this.isHomepage = this.isHomepageRoute(this.router.url);
@@ -129,5 +144,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.cartSub?.unsubscribe();
     this.devSessionSub?.unsubscribe();
+    this.catalogWarmupSub?.unsubscribe();
   }
 }

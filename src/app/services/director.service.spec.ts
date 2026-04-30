@@ -66,13 +66,13 @@ describe('DirectorService', () => {
       director = result;
     });
 
-    const request = httpTestingController.expectOne(`${environment.apiUrl}/directors/friedrich-murnau`);
-    request.flush(
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/directors`);
+    request.flush([
       createDirector({
         name: 'Friedrich W. Murnau',
         slug: 'friedrich-w-murnau',
-      })
-    );
+      }),
+    ]);
 
     expect(director?.slug).toBe('friedrich-w-murnau');
   });

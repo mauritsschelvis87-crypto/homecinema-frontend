@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { finalize, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { removeSessionCache, readSessionCache, writeSessionCache } from '../utils/session-cache';
 
 export interface Brand {
   id: number;
@@ -39,8 +40,10 @@ export interface Film {
 })
 export class FilmService {
   private apiUrl = `${environment.apiUrl}/films`;
+  private readonly storageKey = 'hcp-films-cache-v1';
 
-  private filmsCache: Film[] | null = null;
+  private filmsCache: Film[] | null = readSessionCache<Film[]>(this.storageKey);
+  private filmsRequest$?: Observable<Film[]>;
 
   constructor(private http: HttpClient) {}
 
@@ -49,24 +52,71 @@ export class FilmService {
       return of(this.filmsCache);
     }
 
-    return this.http.get<Film[]>(this.apiUrl).pipe(
+    if (this.filmsRequest$) {
+      return this.filmsRequest$;
+    }
+
+    this.filmsRequest$ = this.http.get<Film[]>(this.apiUrl).pipe(
       tap((films) => {
-        this.filmsCache = films;
-      })
+        this.setFilmsCache(films);
+      }),
+      finalize(() => {
+        this.filmsRequest$ = undefined;
+      }),
+      shareReplay(1)
     );
+
+    return this.filmsRequest$;
   }
 
   getFilmById(id: string): Observable<Film> {
-    const cachedFilm = this.filmsCache?.find((film) => film.id === Number(id));
+    const filmId = Number(id);
+    const cachedFilm = this.filmsCache?.find((film) => film.id === filmId);
 
     if (cachedFilm) {
       return of(cachedFilm);
     }
 
-    return this.http.get<Film>(`${this.apiUrl}/${id}`);
+    return this.getAllFilms().pipe(
+      map((films) => films.find((film) => film.id === filmId)),
+      switchMap((film) => {
+        if (film) {
+          return of(film);
+        }
+
+        return this.http.get<Film>(`${this.apiUrl}/${id}`).pipe(
+          tap((loadedFilm) => this.upsertFilmCache(loadedFilm))
+        );
+      })
+    );
+  }
+
+  primeCache(): Observable<Film[]> {
+    return this.getAllFilms();
   }
 
   clearCache(): void {
     this.filmsCache = null;
+    this.filmsRequest$ = undefined;
+    removeSessionCache(this.storageKey);
+  }
+
+  private setFilmsCache(films: Film[]): void {
+    this.filmsCache = [...films];
+    this.filmsRequest$ = undefined;
+    writeSessionCache(this.storageKey, this.filmsCache);
+  }
+
+  private upsertFilmCache(film: Film): void {
+    const currentFilms = this.filmsCache ? [...this.filmsCache] : [];
+    const existingIndex = currentFilms.findIndex((entry) => entry.id === film.id);
+
+    if (existingIndex >= 0) {
+      currentFilms[existingIndex] = film;
+    } else {
+      currentFilms.push(film);
+    }
+
+    this.setFilmsCache(currentFilms);
   }
 }

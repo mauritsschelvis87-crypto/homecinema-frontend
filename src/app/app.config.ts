@@ -7,6 +7,7 @@ import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 import { routes } from './app.routes';
 import { authTokenInterceptor } from './interceptors/auth-token.interceptor';
+import { backendWakeupInterceptor } from './interceptors/backend-wakeup.interceptor';
 import { loadingInterceptor } from './interceptors/loading.interceptor';
 
 export function playerFactory() {
@@ -18,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideTranslateService({ defaultLanguage: 'nl' }),
-    provideHttpClient(withFetch(), withInterceptors([authTokenInterceptor, loadingInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([authTokenInterceptor, loadingInterceptor, backendWakeupInterceptor])),
 
     provideLottieOptions({
       player: playerFactory,

@@ -19,6 +19,23 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-home-logo {
+  display: none;
+  align-items: center;
+  text-decoration: none;
+}
+
+.mobile-home-logo img {
+  display: block;
+  width: auto;
+  height: 40px;
+}
+
 .nav-right {
   display: flex;
   gap: 0.31rem;
@@ -339,9 +356,32 @@ a.nav-text-link.nav-text-link--active {
     right: 0;
     width: 100%;
     max-width: none;
+    justify-content: space-between;
     padding: 0.18rem 0.65rem 0.14rem;
     background-color: rgba(20, 20, 20, 0.94);
     box-sizing: border-box;
+  }
+
+  .nav-left {
+    position: relative;
+    flex: 0 0 132px;
+    width: 132px;
+    height: 50px;
+  }
+
+  .mobile-home-logo {
+    display: inline-flex;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 50px;
+    transform: translateY(-50%);
+    overflow: visible;
+  }
+
+  .mobile-home-logo img {
+    height: 80px;
+    transform: translateY(4px);
   }
 
   .nav-text-links {
@@ -471,6 +511,21 @@ a.nav-text-link.nav-text-link--active {
     max-width: none;
     padding: 0.14rem 0.5rem 0.1rem;
     background-color: rgba(20, 20, 20, 0.94);
+  }
+
+  .nav-left {
+    flex-basis: 120px;
+    width: 120px;
+    height: 46px;
+  }
+
+  .mobile-home-logo {
+    height: 46px;
+  }
+
+  .mobile-home-logo img {
+    height: 74px;
+    transform: translateY(3px);
   }
 
   .hamburger-menu {

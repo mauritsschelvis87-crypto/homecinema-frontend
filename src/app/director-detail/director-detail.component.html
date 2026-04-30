@@ -2,7 +2,11 @@
 
 <div class="page-gray-screen">
   <div class="director-page-container">
-    @if (director) {
+    @if (!loading && error) {
+      <div class="director-status">Director information could not be loaded right now.</div>
+    }
+
+    @if (!loading && !error && director) {
       <section class="director-intro">
         <div class="director-page-title-row">
           <h1 class="director-page-title">{{ director.name }}</h1>

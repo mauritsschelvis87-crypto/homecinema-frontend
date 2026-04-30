@@ -89,6 +89,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.openSearch();
   }
 
+  onHomeLogoClick(): void {
+    this.closeMenu();
+    this.closeSearch();
+  }
+
   onSearchChange(): void {
     const q = this.searchQuery.trim();
     if (!q) {

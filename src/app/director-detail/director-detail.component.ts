@@ -6,6 +6,7 @@ import { MediaItem, MediaSliderComponent } from '../media-slider/media-slider.co
 import { CollectionService } from '../services/collection.service';
 import { RouterLink } from '@angular/router';
 import { matchesDirectorSlug, reverseDirectorName } from '../utils/director-filter';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-director-detail',
@@ -21,6 +22,8 @@ export class DirectorDetailComponent implements OnInit {
   directorName = '';
   currentSlug = '';
   shareUrl = '';
+  loading = true;
+  error = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,22 +36,32 @@ export class DirectorDetailComponent implements OnInit {
     const slug =
       this.route.snapshot.paramMap.get('slug') ??
       this.route.snapshot.paramMap.get('slugs');
-    if (slug) {
-      this.currentSlug = slug;
-      this.shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-      this.directorService.getDirectorBySlug(slug).subscribe(d => {
-        this.director = d;
-        this.directorName = d?.name ?? this.directorName;
-      });
-
-      this.filmService.getAllFilms().subscribe(films => {
-        this.films = films.filter(f => this.matchesDirectorSlug(f.director, slug));
-        if (!this.directorName && this.films.length > 0) {
-          this.directorName = this.films[0].director;
-        }
-        this.mediaItems = this.buildMediaItems(this.films);
-      });
+    if (!slug) {
+      this.error = true;
+      this.loading = false;
+      return;
     }
+
+    this.currentSlug = slug;
+    this.shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+
+    forkJoin({
+      director: this.directorService.getDirectorBySlug(slug),
+      films: this.filmService.getAllFilms(),
+    }).subscribe({
+      next: ({ director, films }) => {
+        this.director = director;
+        this.films = films.filter((film) => this.matchesDirectorSlug(film.director, slug));
+        this.directorName = director?.name ?? this.films[0]?.director ?? '';
+        this.mediaItems = this.buildMediaItems(this.films);
+        this.error = !this.director;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = true;
+        this.loading = false;
+      },
+    });
   }
 
   private matchesDirectorSlug(directorName: string, slug: string): boolean {
