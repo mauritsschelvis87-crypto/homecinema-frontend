@@ -16,6 +16,9 @@ import { getProductFragmentById, getProductLinkById } from '../utils/special-pro
   styleUrl: './order-history-detail.component.scss',
 })
 export class OrderHistoryDetailComponent implements OnInit {
+  readonly backendWakeupMessage = 'The backend might take a moment to wake up at first load....';
+  readonly loadingMessage = 'Loading';
+  readonly showDesktopBackendStatus = typeof window === 'undefined' || window.innerWidth > 768;
   order: Order | null = null;
   isLoading = true;
   error: string | null = null;

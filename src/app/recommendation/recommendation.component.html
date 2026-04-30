@@ -75,7 +75,10 @@
 </div>
 
 <ng-template #loadingOrError>
-  <div class="recommendation-container page-shell" *ngIf="!isLoading">
-    <p class="status-message">{{ error }}</p>
+  <div class="recommendation-container page-shell" *ngIf="isLoading">
+    <p class="status-message">{{ showDesktopBackendStatus ? backendWakeupMessage : loadingMessage }}</p>
+  </div>
+  <div class="recommendation-container page-shell" *ngIf="!isLoading && showDesktopBackendStatus">
+    <p class="status-message">{{ backendWakeupMessage }}</p>
   </div>
 </ng-template>

@@ -1,5 +1,7 @@
 <div class="page-gray-screen">
-  <div class="boxset-status" *ngIf="error">Box sets could not be loaded right now.</div>
+  <div class="boxset-status" *ngIf="loading || (error && showDesktopBackendStatus)">
+    {{ loading ? (showDesktopBackendStatus ? backendWakeupMessage : loadingMessage) : backendWakeupMessage }}
+  </div>
   <ng-container *ngIf="!loading && !error">
     <section
       *ngFor="let boxset of boxsets; let i = index"

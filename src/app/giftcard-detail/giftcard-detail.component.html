@@ -1,6 +1,8 @@
 <div class="page-gray-screen">
-  <div class="detail-status" *ngIf="loading">Loading gift details...</div>
-  <div class="detail-status" *ngIf="error">This gift card could not be loaded.</div>
+  <div class="detail-status" *ngIf="loading">
+    {{ showDesktopBackendStatus ? backendWakeupMessage : loadingMessage }}
+  </div>
+  <div class="detail-status" *ngIf="error && showDesktopBackendStatus">{{ backendWakeupMessage }}</div>
 
   <div class="page-content" *ngIf="!loading && !error && giftCard && giftFilm">
     <div class="film-page-title-row">

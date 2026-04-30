@@ -22,6 +22,9 @@ import { Boxset, BoxsetService } from '../services/boxset.service';
   styleUrls: ['./boxset-detail.component.scss'],
 })
 export class BoxsetDetailComponent implements OnInit, AfterViewInit {
+  readonly backendWakeupMessage = 'The backend might take a moment to wake up at first load....';
+  readonly loadingMessage = 'Loading';
+  readonly showDesktopBackendStatus = typeof window === 'undefined' || window.innerWidth > 768;
   wishlistHoverId: number | null = null;
   collectionHoverId: number | null = null;
   wishlistClickLockId: number | null = null;

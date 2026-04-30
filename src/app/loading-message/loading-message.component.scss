@@ -11,8 +11,21 @@
   pointer-events: none;
 }
 
+.loading-text-mobile {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .loading-text {
+    top: 14px;
+    left: calc(50% - 24px);
+  }
+
+  .loading-text-desktop {
     display: none;
+  }
+
+  .loading-text-mobile {
+    display: inline;
   }
 }

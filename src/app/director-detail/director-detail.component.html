@@ -2,8 +2,10 @@
 
 <div class="page-gray-screen">
   <div class="director-page-container">
-    @if (!loading && error) {
-      <div class="director-status">Director information could not be loaded right now.</div>
+    @if (loading || (!loading && error && showDesktopBackendStatus)) {
+      <div class="director-status">
+        {{ loading ? (showDesktopBackendStatus ? backendWakeupMessage : loadingMessage) : backendWakeupMessage }}
+      </div>
     }
 
     @if (!loading && !error && director) {

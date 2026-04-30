@@ -15,6 +15,9 @@ import { GiftCardCatalogItem, findGiftCardBySlug, toGiftCardFilm } from '../gift
   styleUrls: ['./giftcard-detail.component.scss'],
 })
 export class GiftcardDetailComponent implements OnInit, OnDestroy {
+  readonly backendWakeupMessage = 'The backend might take a moment to wake up at first load....';
+  readonly loadingMessage = 'Loading';
+  readonly showDesktopBackendStatus = typeof window === 'undefined' || window.innerWidth > 768;
   loading = true;
   error = false;
   giftCard!: GiftCardCatalogItem;

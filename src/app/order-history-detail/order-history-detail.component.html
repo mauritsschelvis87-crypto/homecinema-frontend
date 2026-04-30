@@ -73,6 +73,6 @@
 </div>
 
 <ng-template #loadingOrError>
-  <div *ngIf="isLoading">Laden...</div>
-  <div *ngIf="error">{{ error }}</div>
+  <div *ngIf="isLoading">{{ showDesktopBackendStatus ? backendWakeupMessage : loadingMessage }}</div>
+  <div *ngIf="!isLoading && error && showDesktopBackendStatus">{{ backendWakeupMessage }}</div>
 </ng-template>

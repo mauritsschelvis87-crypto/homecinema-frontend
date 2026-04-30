@@ -7,3 +7,24 @@ computer. Using a different host than the one passed to the "--host" flag might 
 websocket connection issues. You might need to use "--disable-host-check" if that's the
 case.
     [39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIf is not used within the template of DirectorDetailComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/director-detail/director-detail.component.ts:15:46:
+[37m      15 │   imports: [RouterLink, MediaSliderComponent, [32mNgIf[37m],
+         ╵                                               [32m~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIf is not used within the template of DirectorDetailComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/director-detail/director-detail.component.ts:15:46:
+[37m      15 │   imports: [RouterLink, MediaSliderComponent, [32mNgIf[37m],
+         ╵                                               [32m~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIf is not used within the template of DirectorDetailComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/director-detail/director-detail.component.ts:15:46:
+[37m      15 │   imports: [RouterLink, MediaSliderComponent, [32mNgIf[37m],
+         ╵                                               [32m~~~~[0m
+
+[39m[22m

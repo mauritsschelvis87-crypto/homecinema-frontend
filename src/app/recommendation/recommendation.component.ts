@@ -15,6 +15,9 @@ import { getProductFragmentById, getProductLinkById } from '../utils/special-pro
   styleUrls: ['./recommendation.component.scss'],
 })
 export class RecommendationComponent implements OnInit {
+  readonly backendWakeupMessage = 'The backend might take a moment to wake up at first load....';
+  readonly loadingMessage = 'Loading';
+  readonly showDesktopBackendStatus = typeof window === 'undefined' || window.innerWidth > 768;
   readonly ratingStars = [1, 2, 3, 4, 5];
   readonly titleMaxLength = 38;
   readonly directorMaxLength = 26;

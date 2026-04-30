@@ -11,13 +11,12 @@ import translationsFR from '../locale/fr.json';
 import translationsES from '../locale/es.json';
 import { RouterModule } from '@angular/router';
 import { CartService } from './services/cart.service';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { NgIf } from '@angular/common';
+import { CatalogSessionService } from './services/catalog-session.service';
 import { DevSessionService } from './services/dev-session.service';
-import { DirectorService } from './services/director.service';
-import { BoxsetService } from './services/boxset.service';
-import { FilmService } from './services/film.service';
 import { LoadingMessageComponent } from './loading-message/loading-message.component';
+import { StartupPreloadService } from './services/startup-preload.service';
 
 @Component({
   selector: 'app-root',
@@ -38,17 +37,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public cartAnimation = false;
   private cartSub?: Subscription;
-  private devSessionSub?: Subscription;
-  private catalogWarmupSub?: Subscription;
+  private appBootstrapSub?: Subscription;
 
   constructor(
     private translate: TranslateService,
     private cartService: CartService,
     private router: Router,
+    private catalogSessionService: CatalogSessionService,
     private devSessionService: DevSessionService,
-    private filmService: FilmService,
-    private directorService: DirectorService,
-    private boxsetService: BoxsetService
+    private startupPreloadService: StartupPreloadService
   ) {
     this.initialiseTranslateService();
 
@@ -58,16 +55,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.devSessionSub = this.devSessionService.ensureDevelopmentSession().subscribe({
+    this.appBootstrapSub = this.devSessionService.ensureDevelopmentSession().pipe(
+      switchMap(() => this.catalogSessionService.ensureCatalogSession()),
+      switchMap(() => this.startupPreloadService.warmup())
+    ).subscribe({
+      next: () => undefined,
       error: err => console.error('Dev session bootstrap failed:', err),
-    });
-
-    this.catalogWarmupSub = forkJoin({
-      films: this.filmService.primeCache(),
-      directors: this.directorService.primeCache(),
-      boxsets: this.boxsetService.primeCache(),
-    }).subscribe({
-      error: err => console.error('Catalog bootstrap failed:', err),
     });
 
     this.isHomepage = this.isHomepageRoute(this.router.url);
@@ -143,7 +136,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.cartSub?.unsubscribe();
-    this.devSessionSub?.unsubscribe();
-    this.catalogWarmupSub?.unsubscribe();
+    this.appBootstrapSub?.unsubscribe();
   }
 }

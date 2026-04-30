@@ -28,12 +28,18 @@
   display: none;
   align-items: center;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .mobile-home-logo img {
   display: block;
   width: auto;
   height: 40px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .nav-right {
@@ -377,11 +383,22 @@ a.nav-text-link.nav-text-link--active {
     height: 50px;
     transform: translateY(-50%);
     overflow: visible;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
   }
 
   .mobile-home-logo img {
     height: 80px;
     transform: translateY(4px);
+  }
+
+  .mobile-home-logo:focus,
+  .mobile-home-logo:focus-visible,
+  .mobile-home-logo:active {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
   }
 
   .nav-text-links {

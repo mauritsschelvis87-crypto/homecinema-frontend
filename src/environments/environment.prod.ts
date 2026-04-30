@@ -12,4 +12,7 @@ export const environment = {
       country: '',
     },
   },
+  catalogSession: {
+    enabled: true,
+  },
 };

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, of, shareReplay } from 'rxjs';
+import { Observable, catchError, finalize, map, of, shareReplay, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { readSessionCache, writeSessionCache } from '../utils/session-cache';
 
 export interface MediaAssets {
   covers: Record<string, string>;
@@ -82,20 +83,39 @@ export function createFallbackMediaAssets(): MediaAssets {
 })
 export class MediaAssetsService {
   private readonly apiUrl = `${environment.apiUrl}/media-assets`;
-  private mediaAssets$?: Observable<MediaAssets>;
+  private readonly storageKey = 'hcp-media-assets-cache-v1';
+  private mediaAssetsCache: MediaAssets | null = readSessionCache<MediaAssets>(this.storageKey);
+  private mediaAssetsRequest$?: Observable<MediaAssets>;
 
   constructor(private http: HttpClient) {}
 
   getMediaAssets(): Observable<MediaAssets> {
-    if (!this.mediaAssets$) {
-      this.mediaAssets$ = this.http.get<MediaAssets>(this.apiUrl).pipe(
-        map((assets) => mergeMediaAssets(fallbackMediaAssets, assets)),
-        catchError(() => of(createFallbackMediaAssets())),
-        shareReplay(1)
-      );
+    if (this.mediaAssetsCache) {
+      return of(this.mediaAssetsCache);
     }
 
-    return this.mediaAssets$;
+    if (this.mediaAssetsRequest$) {
+      return this.mediaAssetsRequest$;
+    }
+
+    this.mediaAssetsRequest$ = this.http.get<MediaAssets>(this.apiUrl).pipe(
+      map((assets) => mergeMediaAssets(fallbackMediaAssets, assets)),
+      tap((assets) => {
+        this.mediaAssetsCache = assets;
+        writeSessionCache(this.storageKey, assets);
+      }),
+      catchError(() => of(createFallbackMediaAssets())),
+      finalize(() => {
+        this.mediaAssetsRequest$ = undefined;
+      }),
+      shareReplay(1)
+    );
+
+    return this.mediaAssetsRequest$;
+  }
+
+  primeCache(): Observable<MediaAssets> {
+    return this.getMediaAssets();
   }
 }
 
