@@ -69,19 +69,11 @@ export class AppComponent implements OnInit, OnDestroy {
       error: err => console.error('Dev session bootstrap failed:', err),
     });
 
-    this.isHomepage = this.isHomepageRoute(this.router.url);
-    this.isExploreRoute = this.isExplorePageRoute(this.router.url);
-    this.useMenuAlignment = this.shouldUseMenuAlignment(this.router.url);
-    this.isSpecialEditionRoute = this.isSpecialEditionPageRoute(this.router.url);
-    this.isDirectorDetailRoute = this.isDirectorPageRoute(this.router.url);
+    this.updateRouteState(this.router.url);
 
     this.routerEventsSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.isHomepage = this.isHomepageRoute(event.urlAfterRedirects);
-        this.isExploreRoute = this.isExplorePageRoute(event.urlAfterRedirects);
-        this.useMenuAlignment = this.shouldUseMenuAlignment(event.urlAfterRedirects);
-        this.isSpecialEditionRoute = this.isSpecialEditionPageRoute(event.urlAfterRedirects);
-        this.isDirectorDetailRoute = this.isDirectorPageRoute(event.urlAfterRedirects);
+        this.updateRouteState(event.urlAfterRedirects);
         this.scheduleNavigationScrollReset(event.urlAfterRedirects);
       }
     });
@@ -133,13 +125,25 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  private updateRouteState(url: string): void {
+    this.isHomepage = this.isHomepageRoute(url);
+    this.isExploreRoute = this.isExplorePageRoute(url);
+    this.useMenuAlignment = this.shouldUseMenuAlignment(url);
+    this.isSpecialEditionRoute = this.isSpecialEditionPageRoute(url);
+    this.isDirectorDetailRoute = this.isDirectorPageRoute(url);
+  }
+
+  private getPath(url: string): string {
+    return url.split('?')[0].split('#')[0];
+  }
+
   private isHomepageRoute(url: string): boolean {
-    const path = url.split('?')[0].split('#')[0];
+    const path = this.getPath(url);
     return path === '' || path === '/';
   }
 
   private shouldUseMenuAlignment(url: string): boolean {
-    const path = url.split('?')[0].split('#')[0];
+    const path = this.getPath(url);
 
     return path === ''
       || path === '/'
@@ -147,17 +151,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private isSpecialEditionPageRoute(url: string): boolean {
-    const path = url.split('?')[0].split('#')[0];
+    const path = this.getPath(url);
     return path === '/boxsets/special-edition';
   }
 
   private isDirectorPageRoute(url: string): boolean {
-    const path = url.split('?')[0].split('#')[0];
+    const path = this.getPath(url);
     return path.startsWith('/director/') || path.startsWith('/directors/');
   }
 
   private isExplorePageRoute(url: string): boolean {
-    const path = url.split('?')[0].split('#')[0];
+    const path = this.getPath(url);
     return path === '/explore';
   }
 
