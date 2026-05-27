@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:26856/api',
+  apiUrl: '/api', // Aangepast naar /api
   devSession: {
     enabled: true,
     email: 'test@test.com',

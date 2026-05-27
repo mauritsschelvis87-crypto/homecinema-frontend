@@ -15,13 +15,12 @@ import { CartService } from './services/cart.service';
 import { Subscription, switchMap } from 'rxjs';
 import { CatalogSessionService } from './services/catalog-session.service';
 import { DevSessionService } from './services/dev-session.service';
-import { LoadingMessageComponent } from './loading-message/loading-message.component';
 import { StartupPreloadService } from './services/startup-preload.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, RouterModule, NgIf, LoadingMessageComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, RouterModule, NgIf],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
