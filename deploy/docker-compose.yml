@@ -16,7 +16,9 @@ services:
       retries: 10
 
   backend:
-    image: ghcr.io/mauritsschelvis87-crypto/webshop-films-backend:latest
+    build:
+      context: ../FirstFullStackBackend
+    image: homecinema-backend-local:latest
     container_name: homecinema-backend
     restart: unless-stopped
     environment:
