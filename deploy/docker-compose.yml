@@ -9,16 +9,9 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-webshop-films-db}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
 
   backend:
-    build:
-      context: ../FirstFullStackBackend
-    image: homecinema-backend-local:latest
+    image: s1156856/homecinema-backend:latest
     container_name: homecinema-backend
     restart: unless-stopped
     environment:
@@ -28,11 +21,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       JWT_SECRET: ${JWT_SECRET:-eenHeelLangEnWillekeurigGeheimVoorDockerOntwikkeling12345!}
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
 
   frontend:
-    image: ghcr.io/mauritsschelvis87-crypto/homecinema-frontend:latest
+    image: s1156856/homecinema-frontend:latest
     container_name: homecinema-frontend
     restart: unless-stopped
     depends_on:
